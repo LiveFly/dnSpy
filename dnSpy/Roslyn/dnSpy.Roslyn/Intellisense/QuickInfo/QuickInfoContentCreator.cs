@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -62,7 +62,7 @@ namespace dnSpy.Roslyn.Intellisense.QuickInfo {
 		}
 
 		public IEnumerable<object> Create(QuickInfoItem item) {
-			if (item == null)
+			if (item is null)
 				throw new ArgumentNullException(nameof(item));
 
 			switch (item.Content.Type) {

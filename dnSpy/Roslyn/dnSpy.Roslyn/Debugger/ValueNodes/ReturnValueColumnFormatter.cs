@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -35,7 +35,7 @@ namespace dnSpy.Roslyn.Debugger.ValueNodes {
 			this.method = method;
 		}
 
-		public override bool FormatName(DbgEvaluationInfo evalInfo, IDbgTextWriter output, DbgDotNetFormatter formatter, DbgValueFormatterOptions options, CultureInfo cultureInfo) {
+		public override bool FormatName(DbgEvaluationInfo evalInfo, IDbgTextWriter output, DbgDotNetFormatter formatter, DbgValueFormatterOptions options, CultureInfo? cultureInfo) {
 			var formatString = dnSpy_Roslyn_Resources.LocalsWindow_MethodOrProperty_Returned;
 			const string pattern = "{0}";
 			int index = formatString.IndexOf(pattern);

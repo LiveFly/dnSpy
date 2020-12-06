@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -25,7 +25,7 @@ namespace dnSpy.Contracts.AsmEditor.Compiler {
 		/// <summary>
 		/// PDB file or null if it's an embedded PDB file
 		/// </summary>
-		public byte[] RawFile { get; }
+		public byte[]? RawFile { get; }
 
 		/// <summary>
 		/// Debug file format
@@ -37,7 +37,7 @@ namespace dnSpy.Contracts.AsmEditor.Compiler {
 		/// </summary>
 		/// <param name="format">Debug file format</param>
 		/// <param name="rawFile">Debug file data or null if it's an embedded PDB file</param>
-		public DebugFileResult(DebugFileFormat format, byte[] rawFile) {
+		public DebugFileResult(DebugFileFormat format, byte[]? rawFile) {
 			Format = format;
 			RawFile = rawFile;
 		}

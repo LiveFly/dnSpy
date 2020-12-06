@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -21,11 +21,11 @@ using System.IO;
 
 namespace dnSpy.Debugger.DotNet.Mono.Impl {
 	static class PortableExecutableFileHelpers {
-		public static bool IsGuiApp(string file) {
+		public static bool IsGuiApp(string? file) {
 			if (!File.Exists(file))
 				return false;
 			try {
-				using (var f = File.OpenRead(file)) {
+				using (var f = File.OpenRead(file!)) {
 					var r = new BinaryReader(f);
 					if (r.ReadUInt16() != 0x5A4D)
 						return false;

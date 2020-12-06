@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -30,7 +30,7 @@ namespace dnSpy.Contracts.Decompiler {
 		/// </summary>
 		public Parameter Parameter { get; }
 
-		IVariable ISourceVariable.Variable => Parameter;
+		IVariable? ISourceVariable.Variable => Parameter;
 		bool ISourceVariable.IsLocal => false;
 		bool ISourceVariable.IsParameter => true;
 		bool ISourceVariable.IsDecompilerGenerated => (Flags & SourceVariableFlags.DecompilerGenerated) != 0;
@@ -46,9 +46,9 @@ namespace dnSpy.Contracts.Decompiler {
 		public TypeSig Type { get; }
 
 		/// <summary>
-		/// Gets the hoisted field or null if it's not a hoisted local/parameter
+		/// Gets the hoisted field or null if it's not a hoisted parameter
 		/// </summary>
-		public FieldDef HoistedField { get; }
+		public FieldDef? HoistedField { get; }
 
 		/// <summary>
 		/// Gets the flags

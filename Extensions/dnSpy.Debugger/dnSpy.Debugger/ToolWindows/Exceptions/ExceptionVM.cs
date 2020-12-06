@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -76,7 +76,7 @@ namespace dnSpy.Debugger.ToolWindows.Exceptions {
 		static bool Equals(ReadOnlyCollection<DbgExceptionConditionSettings> a, ReadOnlyCollection<DbgExceptionConditionSettings> b) {
 			if (a == b)
 				return true;
-			if (a == null || b == null)
+			if (a is null || b is null)
 				return false;
 			if (a.Count != b.Count)
 				return false;

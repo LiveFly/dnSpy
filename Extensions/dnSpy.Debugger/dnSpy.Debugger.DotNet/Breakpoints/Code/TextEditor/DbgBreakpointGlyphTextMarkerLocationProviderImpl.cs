@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -25,7 +25,7 @@ using dnSpy.Contracts.Text.Editor;
 namespace dnSpy.Debugger.DotNet.Breakpoints.Code.TextEditor {
 	[ExportDbgBreakpointGlyphTextMarkerLocationProvider]
 	sealed class DbgBreakpointGlyphTextMarkerLocationProviderImpl : DbgBreakpointGlyphTextMarkerLocationProvider {
-		public override GlyphTextMarkerLocationInfo GetLocation(DbgCodeBreakpoint breakpoint) {
+		public override GlyphTextMarkerLocationInfo? GetLocation(DbgCodeBreakpoint breakpoint) {
 			if (breakpoint.Location is DbgDotNetCodeLocation loc) {
 				switch (loc.ILOffsetMapping) {
 				case DbgILOffsetMapping.Exact:

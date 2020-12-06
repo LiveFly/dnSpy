@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -25,7 +25,7 @@ namespace dnSpy.Debugger.ToolWindows.Memory {
 	static class HexEditorOptionsDefinitions {
 #pragma warning disable CS0169
 		[ExportHexEditorOptionsDefinition("res:HexEditorGroup_DebuggerMemory", PredefinedHexViewRoles.HexEditorGroupDebuggerMemory, AppSettingsConstants.GUID_HEX_EDITOR_DEBUGGER_MEMORY, typeof(HexEditorOptionsDefinitions))]
-		static readonly HexEditorOptionsDefinition defaultHexEditorOptionsDefinition;
+		static readonly HexEditorOptionsDefinition? defaultHexEditorOptionsDefinition;
 #pragma warning restore CS0169
 	}
 }

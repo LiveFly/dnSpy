@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -52,7 +52,7 @@ namespace dnSpy.Contracts.BackgroundImage {
 		/// Gets the default settings or null if none
 		/// </summary>
 		/// <returns></returns>
-		DefaultImageSettings GetDefaultImageSettings();
+		DefaultImageSettings? GetDefaultImageSettings();
 
 		/// <summary>
 		/// Returns true if the text view should use this instance's background image settings

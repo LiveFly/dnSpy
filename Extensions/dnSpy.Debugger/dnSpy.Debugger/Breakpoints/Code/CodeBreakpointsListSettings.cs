@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -76,8 +76,8 @@ namespace dnSpy.Debugger.Breakpoints.Code {
 			dbgDispatcherProvider.Dbg(() => ignoreSave = false);
 		}
 
-		void DbgCodeBreakpointsService_BreakpointsChanged(object sender, DbgCollectionChangedEventArgs<DbgCodeBreakpoint> e) => BreakpointsModified();
-		void DbgCodeBreakpointsService_BreakpointsModified(object sender, DbgBreakpointsModifiedEventArgs e) => BreakpointsModified();
+		void DbgCodeBreakpointsService_BreakpointsChanged(object? sender, DbgCollectionChangedEventArgs<DbgCodeBreakpoint> e) => BreakpointsModified();
+		void DbgCodeBreakpointsService_BreakpointsModified(object? sender, DbgBreakpointsModifiedEventArgs e) => BreakpointsModified();
 
 		void BreakpointsModified() {
 			dbgDispatcherProvider.VerifyAccess();
@@ -87,7 +87,7 @@ namespace dnSpy.Debugger.Breakpoints.Code {
 		}
 		bool ignoreSave;
 
-		void AppWindow_MainWindowClosed(object sender, EventArgs e) {
+		void AppWindow_MainWindowClosed(object? sender, EventArgs e) {
 			if (!saveBreakpoints)
 				return;
 			// Don't save temporary and hidden BPs. They should only be created by code, not by the user.

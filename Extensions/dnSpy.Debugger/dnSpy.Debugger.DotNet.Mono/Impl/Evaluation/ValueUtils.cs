@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -65,7 +65,7 @@ namespace dnSpy.Debugger.DotNet.Mono.Impl.Evaluation {
 			if (type.IsEnum)
 				return value;
 			var sm = value as StructMirror;
-			if (sm == null)
+			if (sm is null)
 				return value;
 			switch (DmdType.GetTypeCode(type)) {
 			case TypeCode.Boolean:

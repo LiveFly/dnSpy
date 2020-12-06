@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -64,7 +64,7 @@ namespace dnSpy.Debugger.Modules {
 
 		void IModuleLoader.LoadModules(DbgModule[] modules, DbgLoadModuleReferenceHandlerOptions options) {
 			uiDispatcher.VerifyAccess();
-			if (modules == null)
+			if (modules is null)
 				throw new ArgumentNullException(nameof(modules));
 			var hash = new HashSet<DbgModule>(modules);
 			foreach (var lz in dbgLoadModuleReferenceHandlers) {

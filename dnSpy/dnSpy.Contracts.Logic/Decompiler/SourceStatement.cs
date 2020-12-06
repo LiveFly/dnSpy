@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -19,13 +19,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace dnSpy.Contracts.Decompiler {
 	/// <summary>
 	/// Source statement
 	/// </summary>
 	public readonly struct SourceStatement : IEquatable<SourceStatement> {
-		internal static readonly IComparer<SourceStatement> SpanStartComparer = new SpanStartComparerImpl();
+		internal static readonly SpanStartComparerImpl SpanStartComparer = new SpanStartComparerImpl();
 		readonly ILSpan ilSpan;
 		readonly TextSpan textSpan;
 
@@ -39,8 +40,8 @@ namespace dnSpy.Contracts.Decompiler {
 		/// </summary>
 		public TextSpan TextSpan => textSpan;
 
-		sealed class SpanStartComparerImpl : IComparer<SourceStatement> {
-			public int Compare(SourceStatement x, SourceStatement y) => (int)(x.ilSpan.Start - y.ilSpan.Start);
+		internal sealed class SpanStartComparerImpl : IComparer<SourceStatement> {
+			public int Compare([AllowNull] SourceStatement x, [AllowNull] SourceStatement y) => (int)(x.ilSpan.Start - y.ilSpan.Start);
 		}
 
 		/// <summary>
@@ -81,7 +82,7 @@ namespace dnSpy.Contracts.Decompiler {
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public override bool Equals(object obj) => obj is SourceStatement && Equals((SourceStatement)obj);
+		public override bool Equals(object? obj) => obj is SourceStatement && Equals((SourceStatement)obj);
 
 		/// <summary>
 		/// GetHashCode()

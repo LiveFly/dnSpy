@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -105,7 +105,7 @@ namespace dnSpy.AsmEditor.Compiler.MDEditor {
 				if (tablesToIgnore[i])
 					continue;
 				var info = infos[i];
-				if (info != null && !info.IsEmpty) {
+				if (info is not null && !info.IsEmpty) {
 					rowCounts[i] = info.Rows;
 					stream.Write(info.Rows);
 				}
@@ -123,7 +123,7 @@ namespace dnSpy.AsmEditor.Compiler.MDEditor {
 				if (tablesToIgnore[i])
 					continue;
 				var info = infos[i];
-				if (info != null && !info.IsEmpty)
+				if (info is not null && !info.IsEmpty)
 					totalSize += (long)info.Rows * tableInfos[i].RowSize;
 			}
 
@@ -139,7 +139,7 @@ namespace dnSpy.AsmEditor.Compiler.MDEditor {
 				if (tablesToIgnore[i])
 					continue;
 				var info = infos[i];
-				if (info == null || info.IsEmpty)
+				if (info is null || info.IsEmpty)
 					continue;
 
 				var tableWriter = TableWriter.Create(info);
@@ -211,7 +211,7 @@ namespace dnSpy.AsmEditor.Compiler.MDEditor {
 				if (tablesToIgnore[i])
 					continue;
 				var info = infos[i];
-				if (info != null && !info.IsEmpty)
+				if (info is not null && !info.IsEmpty)
 					mask |= 1UL << i;
 			}
 			return mask;

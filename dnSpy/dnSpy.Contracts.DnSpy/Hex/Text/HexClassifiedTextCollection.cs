@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -46,7 +46,7 @@ namespace dnSpy.Contracts.Hex.Text {
 		/// </summary>
 		/// <param name="text">Text</param>
 		public HexClassifiedTextCollection(IEnumerable<HexClassifiedText> text) {
-			if (text == null)
+			if (text is null)
 				throw new ArgumentNullException(nameof(text));
 			this.text = text.ToArray();
 		}

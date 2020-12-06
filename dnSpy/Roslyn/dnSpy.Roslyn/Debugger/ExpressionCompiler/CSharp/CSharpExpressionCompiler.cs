@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -21,11 +21,11 @@ using System;
 using System.Collections.Immutable;
 using System.Threading;
 using dnlib.DotNet;
+using dnSpy.Contracts.Debugger.DotNet.Code;
 using dnSpy.Contracts.Debugger.DotNet.Evaluation;
 using dnSpy.Contracts.Debugger.DotNet.Evaluation.ExpressionCompiler;
 using dnSpy.Contracts.Debugger.DotNet.Text;
 using dnSpy.Contracts.Debugger.Evaluation;
-using dnSpy.Contracts.Decompiler;
 using dnSpy.Debugger.DotNet.Metadata;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -43,11 +43,11 @@ namespace dnSpy.Roslyn.Debugger.ExpressionCompiler.CSharp {
 			public CSharpMetadataContext MetadataContext;
 		}
 
-		protected override ImmutableArray<ImmutableArray<DSEEImportRecord>> GetImports(TypeDef declaringType, MethodDebugScope scope, out string defaultNamespaceName) {
+		protected override ImmutableArray<ImmutableArray<DSEEImportRecord>> GetImports(TypeDef declaringType, DbgMethodDebugScope scope, out string? defaultNamespaceName) {
 			var importRecordGroupBuilder = ImmutableArray.CreateBuilder<ImmutableArray<DSEEImportRecord>>();
 
 			var type = declaringType;
-			while (type.DeclaringType != null)
+			while (type.DeclaringType is not null)
 				type = type.DeclaringType;
 			var ns = UTF8String.ToSystemStringOrEmpty(type.Namespace);
 			int index = 0;
@@ -114,7 +114,7 @@ namespace dnSpy.Roslyn.Debugger.ExpressionCompiler.CSharp {
 			DbgDotNetText name;
 			if ((options & DbgEvaluationOptions.NoName) != 0)
 				name = DbgDotNetText.Empty;
-			else if (compileResult == null || errorMessage != null)
+			else if (errorMessage is not null)
 				name = CreateErrorName(expression);
 			else
 				name = GetExpressionText(state.MetadataContext.EvaluationContext, state.MetadataContext.Compilation, expression, cancellationToken);

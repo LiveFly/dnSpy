@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -53,7 +53,7 @@ namespace dnSpy.Contracts.Text {
 		/// </summary>
 		/// <param name="spanDataArray">Span and data collection</param>
 		public SpanDataCollection(SpanData<TData>[] spanDataArray) {
-			if (spanDataArray == null)
+			if (spanDataArray is null)
 				throw new ArgumentNullException(nameof(spanDataArray));
 #if DEBUG
 			for (int i = 1; i < spanDataArray.Length; i++) {

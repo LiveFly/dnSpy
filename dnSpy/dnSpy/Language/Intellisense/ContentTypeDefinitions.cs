@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -27,22 +27,22 @@ namespace dnSpy.Language.Intellisense {
 		[Export]
 		[Name(ContentTypes.CompletionItemText)]
 		[BaseDefinition(ContentTypes.Text)]
-		static readonly ContentTypeDefinition CompletionItemText;
+		static readonly ContentTypeDefinition? CompletionItemText;
 
 		[Export]
 		[Name(ContentTypes.CompletionDisplayText)]
 		[BaseDefinition(ContentTypes.CompletionItemText)]
-		static readonly ContentTypeDefinition CompletionDisplayText;
+		static readonly ContentTypeDefinition? CompletionDisplayText;
 
 		[Export]
 		[Name(ContentTypes.CompletionSuffix)]
 		[BaseDefinition(ContentTypes.CompletionItemText)]
-		static readonly ContentTypeDefinition CompletionSuffix;
+		static readonly ContentTypeDefinition? CompletionSuffix;
 
 		[Export]
 		[Name(ContentTypes.CompletionToolTip)]
 		[BaseDefinition(ContentTypes.Text)]
-		static readonly ContentTypeDefinition CompletionToolTip;
+		static readonly ContentTypeDefinition? CompletionToolTip;
 #pragma warning restore CS0169
 	}
 }

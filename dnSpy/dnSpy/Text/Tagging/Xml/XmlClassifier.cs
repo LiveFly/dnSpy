@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -129,7 +129,7 @@ namespace dnSpy.Text.Tagging.Xml {
 		public XmlSpanKind? GetNext() {
 			for (;;) {
 				var kind = GetNextCore();
-				if (kind == null)
+				if (kind is null)
 					break;
 				Debug.Assert(spanStart != snapshotPos);
 				if (spanStart == snapshotPos)

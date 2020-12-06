@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -33,7 +33,7 @@ namespace dnSpy.Contracts.Disassembly {
 		/// Constructor
 		/// </summary>
 		/// <param name="variables">Variables or null</param>
-		public X86NativeCodeInfo(X86Variable[] variables) =>
+		public X86NativeCodeInfo(X86Variable[]? variables) =>
 			Variables = variables ?? Array.Empty<X86Variable>();
 	}
 }

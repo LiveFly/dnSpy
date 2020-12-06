@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -44,7 +44,7 @@ namespace dnSpy.Contracts.Debugger.DotNet.Evaluation {
 		/// <summary>
 		/// Custom type info understood by the EE or null
 		/// </summary>
-		public readonly ReadOnlyCollection<byte> CustomTypeInfo;
+		public readonly ReadOnlyCollection<byte>? CustomTypeInfo;
 
 		/// <summary>
 		/// Custom type info ID
@@ -59,7 +59,7 @@ namespace dnSpy.Contracts.Debugger.DotNet.Evaluation {
 		/// <param name="id">Alias id</param>
 		/// <param name="customTypeInfoId">Custom type info ID</param>
 		/// <param name="customTypeInfo">Custom type info understood by the EE or null</param>
-		public DbgDotNetAliasInfo(DbgDotNetAliasInfoKind kind, DmdType type, uint id, Guid customTypeInfoId, ReadOnlyCollection<byte> customTypeInfo) {
+		public DbgDotNetAliasInfo(DbgDotNetAliasInfoKind kind, DmdType type, uint id, Guid customTypeInfoId, ReadOnlyCollection<byte>? customTypeInfo) {
 			Kind = kind;
 			Type = type ?? throw new ArgumentNullException(nameof(type));
 			Id = id;

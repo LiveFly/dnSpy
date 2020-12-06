@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -23,10 +23,10 @@ using dnlib.IO;
 namespace dnSpy.AsmEditor.Hex {
 	static class InstructionUtils {
 		public static ulong GetTotalMethodBodyLength(MethodDef md) {
-			if (md == null || md.RVA == 0)
+			if (md is null || md.RVA == 0)
 				return 0;
 			var mod = md.Module as ModuleDefMD;//TODO: Support CorModuleDef
-			if (mod == null)
+			if (mod is null)
 				return 0;
 
 			try {

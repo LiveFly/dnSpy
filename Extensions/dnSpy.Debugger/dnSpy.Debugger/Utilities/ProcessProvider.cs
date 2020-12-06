@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -32,7 +32,7 @@ namespace dnSpy.Debugger.Utilities {
 
 		public ProcessProvider() => toProcess = new Dictionary<int, Process>();
 
-		public Process GetProcess(int pid) {
+		public Process? GetProcess(int pid) {
 			if (!processesInitd)
 				ForceInitialize();
 

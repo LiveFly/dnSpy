@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -38,7 +38,7 @@ namespace dnSpy.Contracts.Debugger.AntiAntiDebug {
 		/// </summary>
 		/// <param name="context">Context</param>
 		/// <param name="errorMessage">Updated with an error message if it failed or null if it was successful</param>
-		void Hook(DbgNativeFunctionHookContext context, out string errorMessage);
+		void Hook(DbgNativeFunctionHookContext context, out string? errorMessage);
 	}
 
 	/// <summary>Metadata</summary>

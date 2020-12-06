@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -49,7 +49,7 @@ namespace dnSpy.Debugger.ToolWindows.Exceptions {
 		public DbgExceptionFormatterService ExceptionFormatterService { get; }
 		public SearchMatcher SearchMatcher { get; }
 
-		public ExceptionContext(UIDispatcher uiDispatcher, IClassificationFormatMap classificationFormatMap, ITextElementProvider textElementProvider, DbgExceptionSettingsService exceptionSettingsService, DbgExceptionFormatterService exceptionFormatterService, SearchMatcher searchMatcher) {
+		public ExceptionContext(UIDispatcher uiDispatcher, IClassificationFormatMap classificationFormatMap, ITextElementProvider textElementProvider, DbgExceptionSettingsService exceptionSettingsService, DbgExceptionFormatterService exceptionFormatterService, SearchMatcher searchMatcher, ExceptionFormatter formatter) {
 			UIDispatcher = uiDispatcher;
 			ClassificationFormatMap = classificationFormatMap;
 			TextElementProvider = textElementProvider;
@@ -57,6 +57,7 @@ namespace dnSpy.Debugger.ToolWindows.Exceptions {
 			ExceptionSettingsService = exceptionSettingsService;
 			ExceptionFormatterService = exceptionFormatterService;
 			SearchMatcher = searchMatcher;
+			Formatter = formatter;
 		}
 	}
 }

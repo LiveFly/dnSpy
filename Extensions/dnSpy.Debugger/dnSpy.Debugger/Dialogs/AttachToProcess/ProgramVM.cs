@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -50,11 +50,18 @@ namespace dnSpy.Debugger.Dialogs.AttachToProcess {
 
 		readonly AttachableProcessInfo attachableProcessInfo;
 
-		public ProgramVM(ProcessProvider processProvider, AttachProgramOptions attachProgramOptions, IAttachToProcessContext context) {
-			if (processProvider == null)
+		public static ProgramVM? Create(ProcessProvider processProvider, AttachProgramOptions attachProgramOptions, IAttachToProcessContext context) {
+			if (processProvider is null)
 				throw new ArgumentNullException(nameof(processProvider));
+			var attachableProcessInfo = AttachableProcessInfo.Create(processProvider, attachProgramOptions);
+			if (attachableProcessInfo is null)
+				return null;
+			return new ProgramVM(attachableProcessInfo, attachProgramOptions, context);
+		}
+
+		ProgramVM(AttachableProcessInfo attachableProcessInfo, AttachProgramOptions attachProgramOptions, IAttachToProcessContext context) {
 			AttachProgramOptions = attachProgramOptions ?? throw new ArgumentNullException(nameof(attachProgramOptions));
-			attachableProcessInfo = AttachableProcessInfo.Create(processProvider, attachProgramOptions);
+			this.attachableProcessInfo = attachableProcessInfo ?? throw new ArgumentNullException(nameof(attachableProcessInfo));
 			Context = context ?? throw new ArgumentNullException(nameof(context));
 		}
 

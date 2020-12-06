@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -50,7 +50,7 @@ namespace dnSpy.Roslyn.Intellisense.Completions {
 
 		public RoslynIntellisenseFilter(ImageReference imageReference, string toolTip, string accessKey, params string[] tags)
 			: base(imageReference, toolTip, accessKey, false, true) {
-			if (tags == null)
+			if (tags is null)
 				throw new ArgumentNullException(nameof(tags));
 			if (tags.Length == 0)
 				throw new ArgumentOutOfRangeException(nameof(tags));

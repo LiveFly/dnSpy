@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -149,17 +149,17 @@ namespace dnSpy.Contracts.Decompiler {
 		/// <summary>
 		/// Target
 		/// </summary>
-		public string Target { get; }
+		public string? Target { get; }
 
 		/// <summary>
 		/// Alias
 		/// </summary>
-		public string Alias { get; }
+		public string? Alias { get; }
 
 		/// <summary>
 		/// Extern alias
 		/// </summary>
-		public string ExternAlias { get; }
+		public string? ExternAlias { get; }
 
 		/// <summary>
 		/// Constructor
@@ -169,7 +169,7 @@ namespace dnSpy.Contracts.Decompiler {
 		/// <param name="alias">Alias</param>
 		/// <param name="externAlias">Extern alias</param>
 		/// <param name="importScopeKind">VB import scope kind</param>
-		public ImportInfo(ImportInfoKind targetKind, string target = null, string alias = null, string externAlias = null, VBImportScopeKind importScopeKind = VBImportScopeKind.None) {
+		public ImportInfo(ImportInfoKind targetKind, string? target = null, string? alias = null, string? externAlias = null, VBImportScopeKind importScopeKind = VBImportScopeKind.None) {
 			TargetKind = targetKind;
 			Target = target;
 			Alias = alias;

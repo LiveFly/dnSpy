@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -143,7 +143,7 @@ namespace dnSpy.Contracts.Hex {
 		/// </summary>
 		/// <param name="span"></param>
 		/// <returns></returns>
-		public bool OverlapsWith(HexSpan span) => Overlap(span) != null;
+		public bool OverlapsWith(HexSpan span) => Overlap(span) is not null;
 
 		/// <summary>
 		/// operator ==()
@@ -173,7 +173,7 @@ namespace dnSpy.Contracts.Hex {
 		/// </summary>
 		/// <param name="obj">Other instance</param>
 		/// <returns></returns>
-		public override bool Equals(object obj) => obj is HexSpan && Equals((HexSpan)obj);
+		public override bool Equals(object? obj) => obj is HexSpan && Equals((HexSpan)obj);
 
 		/// <summary>
 		/// GetHashCode()

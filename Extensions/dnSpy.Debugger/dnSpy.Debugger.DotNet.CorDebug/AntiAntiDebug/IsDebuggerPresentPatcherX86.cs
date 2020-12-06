@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -17,6 +17,7 @@
     along with dnSpy.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using dnSpy.Contracts.Debugger.AntiAntiDebug;
 using dnSpy.Contracts.Debugger.DotNet.CorDebug;
@@ -30,8 +31,8 @@ namespace dnSpy.Debugger.DotNet.CorDebug.AntiAntiDebug {
 		public IsDebuggerPresentPatcherX86(DbgNativeFunctionHookContext context, DbgCorDebugInternalRuntime runtime)
 			: base(context) => clrFilename = runtime.ClrFilename;
 
-		public bool TryPatchX86(out string errorMessage) {
-			var function = functionProvider.GetFunction(IsDebuggerPresentConstants.DllName, IsDebuggerPresentConstants.FuncName);
+		public bool TryPatchX86(string dllName, [NotNullWhen(false)] out string? errorMessage) {
+			var function = functionProvider.GetFunction(dllName, IsDebuggerPresentConstants.FuncName);
 			var clrDllName = Path.GetFileName(clrFilename);
 			if (!functionProvider.TryGetModuleAddress(clrDllName, out var clrAddress, out var clrEndAddress)) {
 				errorMessage = $"Couldn't get the address of {clrDllName}";
@@ -56,16 +57,16 @@ namespace dnSpy.Debugger.DotNet.CorDebug.AntiAntiDebug {
 			var return_0_instr = AddTargetId(Instruction.Create(II.Code.Xor_r32_rm32, Register.EAX, Register.EAX));
 
 			instructions.Add(Instruction.Create(II.Code.Cmp_rm32_imm32, new MemoryOperand(Register.ESP), (uint)clrAddress));
-			instructions.Add(Instruction.CreateBranch(II.Code.Jb_rel8_32, return_0_instr.IP64));
+			instructions.Add(Instruction.CreateBranch(II.Code.Jb_rel8_32, return_0_instr.IP));
 			instructions.Add(Instruction.Create(II.Code.Cmp_rm32_imm32, new MemoryOperand(Register.ESP), (uint)clrEndAddress - 1));
-			instructions.Add(Instruction.CreateBranch(II.Code.Ja_rel8_32, return_0_instr.IP64));
+			instructions.Add(Instruction.CreateBranch(II.Code.Ja_rel8_32, return_0_instr.IP));
 			instructions.Add(Instruction.CreateBranch(II.Code.Jmp_rel32_32, function.NewFunctionAddress));
 			//return_0:
 			instructions.Add(return_0_instr);
 			instructions.Add(Instruction.Create(II.Code.Retnd));
 
 			var block = new InstructionBlock(new CodeWriterImpl(function), instructions, function.NewCodeAddress);
-			if (!BlockEncoder.TryEncode(process.Bitness, block, out var encErrMsg)) {
+			if (!BlockEncoder.TryEncode(process.Bitness, block, out var encErrMsg, out _)) {
 				errorMessage = $"Failed to encode: {encErrMsg}";
 				return false;
 			}
@@ -74,8 +75,8 @@ namespace dnSpy.Debugger.DotNet.CorDebug.AntiAntiDebug {
 			return true;
 		}
 
-		public bool TryPatchX64(out string errorMessage) {
-			var function = functionProvider.GetFunction(IsDebuggerPresentConstants.DllName, IsDebuggerPresentConstants.FuncName);
+		public bool TryPatchX64(string dllName, [NotNullWhen(false)] out string? errorMessage) {
+			var function = functionProvider.GetFunction(dllName, IsDebuggerPresentConstants.FuncName);
 			var clrDllName = Path.GetFileName(clrFilename);
 			if (!functionProvider.TryGetModuleAddress(clrDllName, out var clrAddress, out var clrEndAddress)) {
 				errorMessage = $"Couldn't get the address of {clrDllName}";
@@ -110,10 +111,10 @@ namespace dnSpy.Debugger.DotNet.CorDebug.AntiAntiDebug {
 			instructions.Add(Instruction.Create(II.Code.Mov_r64_rm64, Register.RCX, new MemoryOperand(Register.RSP, 8)));
 			instructions.Add(Instruction.Create(II.Code.Mov_r64_imm64, Register.RAX, clrAddress));
 			instructions.Add(Instruction.Create(II.Code.Cmp_rm64_r64, Register.RCX, Register.RAX));
-			instructions.Add(Instruction.CreateBranch(II.Code.Jb_rel8_64, return_0_instr.IP64));
+			instructions.Add(Instruction.CreateBranch(II.Code.Jb_rel8_64, return_0_instr.IP));
 			instructions.Add(Instruction.Create(II.Code.Mov_r64_imm64, Register.RAX, clrEndAddress - 1));
 			instructions.Add(Instruction.Create(II.Code.Cmp_rm64_r64, Register.RCX, Register.RAX));
-			instructions.Add(Instruction.CreateBranch(II.Code.Ja_rel8_64, return_0_instr.IP64));
+			instructions.Add(Instruction.CreateBranch(II.Code.Ja_rel8_64, return_0_instr.IP));
 			instructions.Add(Instruction.Create(II.Code.Mov_r64_imm64, Register.RAX, function.NewFunctionAddress));
 			instructions.Add(Instruction.Create(II.Code.Pop_r64, Register.RCX));
 			instructions.Add(Instruction.Create(II.Code.Jmp_rm64, Register.RAX));
@@ -123,7 +124,7 @@ namespace dnSpy.Debugger.DotNet.CorDebug.AntiAntiDebug {
 			instructions.Add(Instruction.Create(II.Code.Retnq));
 
 			var block = new InstructionBlock(new CodeWriterImpl(function), instructions, function.NewCodeAddress);
-			if (!BlockEncoder.TryEncode(process.Bitness, block, out var encErrMsg)) {
+			if (!BlockEncoder.TryEncode(process.Bitness, block, out var encErrMsg, out _)) {
 				errorMessage = $"Failed to encode: {encErrMsg}";
 				return false;
 			}

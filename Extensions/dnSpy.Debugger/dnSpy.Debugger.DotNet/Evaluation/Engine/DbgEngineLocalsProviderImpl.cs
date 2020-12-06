@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -18,15 +18,16 @@
 */
 
 using System;
+using System.Diagnostics;
 using System.Linq;
 using dnSpy.Contracts.Debugger;
+using dnSpy.Contracts.Debugger.DotNet.Code;
 using dnSpy.Contracts.Debugger.DotNet.Evaluation;
 using dnSpy.Contracts.Debugger.DotNet.Evaluation.ExpressionCompiler;
 using dnSpy.Contracts.Debugger.DotNet.Text;
 using dnSpy.Contracts.Debugger.Engine.Evaluation;
 using dnSpy.Contracts.Debugger.Evaluation;
 using dnSpy.Contracts.Debugger.Text;
-using dnSpy.Contracts.Decompiler;
 using dnSpy.Debugger.DotNet.Evaluation.Engine.Interpreter;
 using dnSpy.Debugger.DotNet.Properties;
 
@@ -94,16 +95,16 @@ namespace dnSpy.Debugger.DotNet.Evaluation.Engine {
 
 		sealed class GetNodesState {
 			public readonly struct Key {
-				readonly int decompilerSettingsVersion;
+				readonly int debugInfoVersion;
 				// NOTE: DbgModule isn't part of this struct because the state is attached to the module.
 				readonly int methodToken;
 				readonly int methodVersion;
 				readonly DbgModuleReference[] moduleReferences;
-				readonly MethodDebugScope scope;
+				readonly DbgMethodDebugScope scope;
 				readonly DbgValueNodeEvaluationOptions valueNodeEvaluationOptions;
 				readonly DbgLocalsValueNodeEvaluationOptions localsValueNodeEvaluationOptions;
-				public Key(int decompilerSettingsVersion, int methodToken, int methodVersion, DbgModuleReference[] moduleReferences, MethodDebugScope scope, DbgValueNodeEvaluationOptions valueNodeEvaluationOptions, DbgLocalsValueNodeEvaluationOptions localsValueNodeEvaluationOptions) {
-					this.decompilerSettingsVersion = decompilerSettingsVersion;
+				public Key(int debugInfoVersion, int methodToken, int methodVersion, DbgModuleReference[] moduleReferences, DbgMethodDebugScope scope, DbgValueNodeEvaluationOptions valueNodeEvaluationOptions, DbgLocalsValueNodeEvaluationOptions localsValueNodeEvaluationOptions) {
+					this.debugInfoVersion = debugInfoVersion;
 					this.methodToken = methodToken;
 					this.methodVersion = methodVersion;
 					this.moduleReferences = moduleReferences;
@@ -116,26 +117,28 @@ namespace dnSpy.Debugger.DotNet.Evaluation.Engine {
 					moduleReferences == other.moduleReferences &&
 					methodToken == other.methodToken &&
 					methodVersion == other.methodVersion &&
-					decompilerSettingsVersion == other.decompilerSettingsVersion &&
+					debugInfoVersion == other.debugInfoVersion &&
 					valueNodeEvaluationOptions == other.valueNodeEvaluationOptions &&
 					localsValueNodeEvaluationOptions == other.localsValueNodeEvaluationOptions;
 			}
 			public Key CachedKey;
+#pragma warning disable CS8618 // Non-nullable field is uninitialized.
 			public ValueInfo[] CachedValueInfos;
 			public byte[] CachedAssemblyBytes;
-			public DbgDotNetILInterpreterState CachedILInterpreterState;
+#pragma warning restore CS8618 // Non-nullable field is uninitialized.
+			public DbgDotNetILInterpreterState? CachedILInterpreterState;
 			public int CachedDecompilerGeneratedCount;
 			public int CachedCompilerGeneratedCount;
 		}
 
 		DbgEngineLocalsValueNodeInfo[] GetNodesCore(DbgEvaluationInfo evalInfo, DbgValueNodeEvaluationOptions options, DbgLocalsValueNodeEvaluationOptions localsOptions) {
-			DbgEngineLocalsValueNodeInfo[] valueNodes = null;
+			DbgEngineLocalsValueNodeInfo[]? valueNodes = null;
 			try {
 				var module = evalInfo.Frame.Module;
-				if (module == null)
+				if (module is null)
 					return Array.Empty<DbgEngineLocalsValueNodeInfo>();
 				var languageDebugInfo = evalInfo.Context.TryGetLanguageDebugInfo();
-				if (languageDebugInfo == null)
+				if (languageDebugInfo is null)
 					return Array.Empty<DbgEngineLocalsValueNodeInfo>();
 				var methodDebugInfo = languageDebugInfo.MethodDebugInfo;
 
@@ -143,13 +146,14 @@ namespace dnSpy.Debugger.DotNet.Evaluation.Engine {
 				// in the same arguments so it won't get recreated every time the method gets called.
 				var info = dbgAliasProvider.GetAliases(evalInfo);
 				var refsResult = dbgModuleReferenceProvider.GetModuleReferences(evalInfo.Runtime, evalInfo.Frame, info.typeReferences);
-				if (refsResult.ErrorMessage != null)
+				if (refsResult.ErrorMessage is not null)
 					return new[] { CreateInternalErrorNode(evalInfo, refsResult.ErrorMessage) };
+				Debug2.Assert(refsResult.ModuleReferences is not null);
 
 				// Since we attach this to the module, the module doesn't have to be part of Key
 				var state = StateWithKey<GetNodesState>.GetOrCreate(module, this);
 				var localsOptionsKey = localsOptions & ~(DbgLocalsValueNodeEvaluationOptions.ShowCompilerGeneratedVariables | DbgLocalsValueNodeEvaluationOptions.ShowDecompilerGeneratedVariables);
-				var key = new GetNodesState.Key(methodDebugInfo.DecompilerSettingsVersion,
+				var key = new GetNodesState.Key(methodDebugInfo.DebugInfoVersion,
 						methodDebugInfo.Method.MDToken.ToInt32(), languageDebugInfo.MethodVersion,
 						refsResult.ModuleReferences, MethodDebugScopeUtils.GetScope(methodDebugInfo.Scope, languageDebugInfo.ILOffset),
 						options, localsOptionsKey);
@@ -174,11 +178,11 @@ namespace dnSpy.Debugger.DotNet.Evaluation.Engine {
 					var compilationResult = expressionCompiler.CompileGetLocals(evalInfo, refsResult.ModuleReferences, evalOptions);
 					evalInfo.CancellationToken.ThrowIfCancellationRequested();
 					if (compilationResult.IsError)
-						return new[] { CreateInternalErrorNode(evalInfo, compilationResult.ErrorMessage) };
+						return new[] { CreateInternalErrorNode(evalInfo, compilationResult.ErrorMessage!) };
 
 					decompilerGeneratedCount = GetDecompilerGeneratedVariablesCount(methodDebugInfo.Scope, languageDebugInfo.ILOffset);
 
-					valueInfos = new ValueInfo[compilationResult.CompiledExpressions.Length + decompilerGeneratedCount];
+					valueInfos = new ValueInfo[compilationResult.CompiledExpressions!.Length + decompilerGeneratedCount];
 					int valueInfosIndex = 0;
 					compilerGeneratedCount = 0;
 					for (int i = 0; i < compilationResult.CompiledExpressions.Length; i++, valueInfosIndex++) {
@@ -213,7 +217,7 @@ namespace dnSpy.Debugger.DotNet.Evaluation.Engine {
 					if (valueInfos.Length != valueInfosIndex)
 						throw new InvalidOperationException();
 
-					assemblyBytes = compilationResult.Assembly;
+					assemblyBytes = compilationResult.Assembly!;
 					state.CachedKey = key;
 					state.CachedValueInfos = valueInfos;
 					state.CachedAssemblyBytes = assemblyBytes;
@@ -268,8 +272,8 @@ namespace dnSpy.Debugger.DotNet.Evaluation.Engine {
 				return valueNodes;
 			}
 			catch (Exception ex) {
-				if (valueNodes != null)
-					evalInfo.Runtime.Process.DbgManager.Close(valueNodes.Select(a => a.ValueNode).Where(a => a != null));
+				if (valueNodes is not null)
+					evalInfo.Runtime.Process.DbgManager.Close(valueNodes.Select(a => a.ValueNode).Where(a => a is not null));
 				if (!ExceptionUtils.IsInternalDebuggerError(ex))
 					throw;
 				return new[] { CreateInternalErrorNode(evalInfo, PredefinedEvaluationErrorMessages.InternalDebuggerError) };
@@ -279,7 +283,7 @@ namespace dnSpy.Debugger.DotNet.Evaluation.Engine {
 		DbgEngineLocalsValueNodeInfo CreateInternalErrorNode(DbgEvaluationInfo evalInfo, string errorMessage) =>
 			new DbgEngineLocalsValueNodeInfo(DbgLocalsValueNodeKind.Error, valueNodeFactory.CreateError(evalInfo, new DbgDotNetText(new DbgDotNetTextPart(DbgTextColor.Text, "<error>")), errorMessage, "<internal.error>", false));
 
-		static int GetDecompilerGeneratedVariablesCount(MethodDebugScope rootScope, uint offset) {
+		static int GetDecompilerGeneratedVariablesCount(DbgMethodDebugScope rootScope, uint offset) {
 			var scope = rootScope;
 			int count = 0;
 			for (;;) {

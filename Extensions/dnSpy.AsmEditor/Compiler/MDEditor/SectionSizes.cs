@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -23,7 +23,7 @@ using System;
 using System.Collections.Generic;
 
 namespace dnSpy.AsmEditor.Compiler.MDEditor {
-	struct SectionSizeInfo {
+	readonly struct SectionSizeInfo {
 		/// <summary>
 		/// Length of section
 		/// </summary>
@@ -48,7 +48,7 @@ namespace dnSpy.AsmEditor.Compiler.MDEditor {
 	/// <summary>
 	/// Calculates the optional header section sizes
 	/// </summary>
-	struct SectionSizes {
+	readonly struct SectionSizes {
 		public readonly uint SizeOfHeaders;
 		public readonly uint SizeOfImage;
 		public readonly uint BaseOfData, BaseOfCode;

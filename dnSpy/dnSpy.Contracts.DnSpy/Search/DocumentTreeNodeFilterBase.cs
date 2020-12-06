@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -36,14 +36,14 @@ namespace dnSpy.Contracts.Search {
 		public virtual DocumentTreeNodeFilterResult GetResult(MethodDef method) => new DocumentTreeNodeFilterResult();
 		public virtual DocumentTreeNodeFilterResult GetResult(TypeDef type) => new DocumentTreeNodeFilterResult();
 		public virtual DocumentTreeNodeFilterResult GetResult(ModuleRef modRef) => new DocumentTreeNodeFilterResult();
-		public virtual DocumentTreeNodeFilterResult GetResult(BaseTypeFolderNode node) => new DocumentTreeNodeFilterResult();
-		public virtual DocumentTreeNodeFilterResult GetResult(DerivedTypesFolderNode node) => new DocumentTreeNodeFilterResult();
-		public virtual DocumentTreeNodeFilterResult GetResult(ResourcesFolderNode node) => new DocumentTreeNodeFilterResult();
-		public virtual DocumentTreeNodeFilterResult GetResult(ResourceElementNode node) => new DocumentTreeNodeFilterResult();
-		public virtual DocumentTreeNodeFilterResult GetResult(ResourceNode node) => new DocumentTreeNodeFilterResult();
-		public virtual DocumentTreeNodeFilterResult GetResult(ReferencesFolderNode node) => new DocumentTreeNodeFilterResult();
-		public virtual DocumentTreeNodeFilterResult GetResult(DerivedTypeNode node) => new DocumentTreeNodeFilterResult();
-		public virtual DocumentTreeNodeFilterResult GetResult(BaseTypeNode node) => new DocumentTreeNodeFilterResult();
+		public virtual DocumentTreeNodeFilterResult GetResult(BaseTypeFolderNode? node) => new DocumentTreeNodeFilterResult();
+		public virtual DocumentTreeNodeFilterResult GetResult(DerivedTypesFolderNode? node) => new DocumentTreeNodeFilterResult();
+		public virtual DocumentTreeNodeFilterResult GetResult(ResourcesFolderNode? node) => new DocumentTreeNodeFilterResult();
+		public virtual DocumentTreeNodeFilterResult GetResult(ResourceElementNode? node) => new DocumentTreeNodeFilterResult();
+		public virtual DocumentTreeNodeFilterResult GetResult(ResourceNode? node) => new DocumentTreeNodeFilterResult();
+		public virtual DocumentTreeNodeFilterResult GetResult(ReferencesFolderNode? node) => new DocumentTreeNodeFilterResult();
+		public virtual DocumentTreeNodeFilterResult GetResult(DerivedTypeNode? node) => new DocumentTreeNodeFilterResult();
+		public virtual DocumentTreeNodeFilterResult GetResult(BaseTypeNode? node) => new DocumentTreeNodeFilterResult();
 		public virtual DocumentTreeNodeFilterResult GetResult(AssemblyRef asmRef) => new DocumentTreeNodeFilterResult();
 		public virtual DocumentTreeNodeFilterResult GetResult(AssemblyDef asm) => new DocumentTreeNodeFilterResult();
 		public virtual DocumentTreeNodeFilterResult GetResult(MethodDef method, Local local) => new DocumentTreeNodeFilterResult();

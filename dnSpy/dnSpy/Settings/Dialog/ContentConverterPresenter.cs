@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -76,10 +76,10 @@ namespace dnSpy.Settings.Dialog {
 
 		object CreateContent(object value) {
 			var ownerControl = OwnerControl;
-			if (ownerControl == null)
+			if (ownerControl is null)
 				return value;
 			var converter = ContentConverter;
-			if (converter == null)
+			if (converter is null)
 				return value;
 			return converter.Convert(value, ownerControl);
 		}

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -37,7 +37,10 @@ namespace dnSpy.Contracts.Debugger.DotNet.Text {
 		/// </summary>
 		/// <param name="color">Color</param>
 		/// <param name="text">Text</param>
-		public void Write(DbgTextColor color, string text) => list.Add(new DbgDotNetTextPart(color, text));
+		public void Write(DbgTextColor color, string? text) {
+			if (text is not null)
+				list.Add(new DbgDotNetTextPart(color, text));
+		}
 
 		/// <summary>
 		/// Creates a <see cref="DbgDotNetText"/>

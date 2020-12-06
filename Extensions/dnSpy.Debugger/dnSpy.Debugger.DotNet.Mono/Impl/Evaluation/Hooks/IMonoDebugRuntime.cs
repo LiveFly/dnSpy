@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -23,8 +23,8 @@ namespace dnSpy.Debugger.DotNet.Mono.Impl.Evaluation.Hooks {
 	}
 
 	interface IMonoDebugValueConverter {
-		char ToChar(object value);
-		int ToInt32(object value);
-		char[] ToCharArray(object value);
+		char ToChar(object? value);
+		int ToInt32(object? value);
+		char[]? ToCharArray(object? value);
 	}
 }

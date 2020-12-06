@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -65,7 +65,7 @@ namespace dnSpy.AsmEditor.Hex.Nodes {
 			output.Write(HeapKind == DotNetHeapKind.Unknown ? BoxedTextColor.HexStorageStreamNameInvalid : BoxedTextColor.HexStorageStreamName, storageStreamVM.RCNameVM.StringZ);
 		}
 
-		public MetadataTableRecordNode FindTokenNode(uint token) {
+		public MetadataTableRecordNode? FindTokenNode(uint token) {
 			if (HeapKind != DotNetHeapKind.Tables)
 				return null;
 			return ((TablesStreamNode)TreeNode.Children[0].Data).FindTokenNode(token);

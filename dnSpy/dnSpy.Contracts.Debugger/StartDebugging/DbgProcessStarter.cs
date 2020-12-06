@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -20,8 +20,25 @@
 using System;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace dnSpy.Contracts.Debugger.StartDebugging {
+	/// <summary>
+	/// Process starter result flags
+	/// </summary>
+	[Flags]
+	public enum ProcessStarterResult {
+		/// <summary>
+		/// No bit is set
+		/// </summary>
+		None					= 0,
+
+		/// <summary>
+		/// The file extension is not the normal extension
+		/// </summary>
+		WrongExtension			= 0x00000001,
+	}
+
 	/// <summary>
 	/// Starts a process without debugging
 	/// </summary>
@@ -30,8 +47,9 @@ namespace dnSpy.Contracts.Debugger.StartDebugging {
 		/// Checks if this instance supports starting the executable
 		/// </summary>
 		/// <param name="filename">Filename</param>
+		/// <param name="result">Contains extra information if it's a supported file</param>
 		/// <returns></returns>
-		public abstract bool IsSupported(string filename);
+		public abstract bool IsSupported(string filename, out ProcessStarterResult result);
 
 		/// <summary>
 		/// Starts the executable. Returns false and an error message if it failed or throws an exception
@@ -39,7 +57,7 @@ namespace dnSpy.Contracts.Debugger.StartDebugging {
 		/// <param name="filename">Filename</param>
 		/// <param name="error">Updated with an error message</param>
 		/// <returns></returns>
-		public abstract bool TryStart(string filename, out string error);
+		public abstract bool TryStart(string filename, [NotNullWhen(false)] out string? error);
 	}
 
 	/// <summary>Metadata</summary>
@@ -71,9 +89,9 @@ namespace dnSpy.Contracts.Debugger.StartDebugging {
 	/// </summary>
 	public static class PredefinedDbgProcessStarterOrders {
 		/// <summary>
-		/// .NET Core
+		/// .NET
 		/// </summary>
-		public const double DotNetCore = 1000000;
+		public const double DotNet = 1000000;
 
 		/// <summary>
 		/// Default process starter that calls <see cref="Process.Start(string)"/>

@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2014 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2014 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -31,7 +31,7 @@ namespace dnSpy.Text.AvalonEdit {
 		/// Creates a new RopeTextSource.
 		/// </summary>
 		public RopeTextSource(Rope<char> rope) {
-			if (rope == null)
+			if (rope is null)
 				throw new ArgumentNullException("rope");
 			this.rope = rope.Clone();
 		}

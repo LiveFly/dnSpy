@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -28,9 +28,9 @@ namespace dnSpy.Contracts.Debugger.StartDebugging.Dialog {
 		public static readonly double DotNetFramework = 100000;
 
 		/// <summary>
-		/// .NET Core debug engine
+		/// .NET debug engine
 		/// </summary>
-		public static readonly double DotNetCore = 101000;
+		public static readonly double DotNet = 101000;
 
 		/// <summary>
 		/// Unity debug engine (start executable)

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -23,9 +23,9 @@ namespace dnSpy.Debugger.DotNet.Metadata.Impl {
 	abstract class DmdFieldInfoBase : DmdFieldInfo {
 		sealed private protected override void YouCantDeriveFromThisClass() => throw new InvalidOperationException();
 
-		public sealed override DmdModule Module => DeclaringType.Module;
+		public sealed override DmdModule Module => DeclaringType!.Module;
 
-		public sealed override object GetValue(object context, object obj) => AppDomain.LoadField(context, this, obj);
-		public sealed override void SetValue(object context, object obj, object value, DmdBindingFlags invokeAttr) => AppDomain.StoreField(context, this, obj, value);
+		public sealed override object? GetValue(object? context, object? obj) => AppDomain.LoadField(context, this, obj);
+		public sealed override void SetValue(object? context, object? obj, object? value, DmdBindingFlags invokeAttr) => AppDomain.StoreField(context, this, obj, value);
 	}
 }

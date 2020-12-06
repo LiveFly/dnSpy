@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -100,7 +100,7 @@ namespace dnSpy.Debugger.ToolWindows.Exceptions {
 		public ICommand AddConditionCommand => new RelayCommand(a => AddCondition());
 
 		public EditExceptionConditionsVM(IEnumerable<DbgExceptionConditionSettings> condSettings) {
-			if (condSettings == null)
+			if (condSettings is null)
 				throw new ArgumentNullException(nameof(condSettings));
 			conditionsList = new ObservableCollection<ExceptionConditionVM>(condSettings.Select(a => new ExceptionConditionVM(this, a)));
 			for (int i = 0; i < conditionsList.Count; i++)

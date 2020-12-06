@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -46,7 +46,7 @@ namespace dnSpy.Documents.Tabs.Dialogs {
 		}
 		TabVM[] selectedItems = Array.Empty<TabVM>();
 
-		public object SelectedItem {
+		public object? SelectedItem {
 			get => selectedItem;
 			set {
 				if (selectedItem != value) {
@@ -56,9 +56,9 @@ namespace dnSpy.Documents.Tabs.Dialogs {
 				}
 			}
 		}
-		object selectedItem;
+		object? selectedItem;
 
-		public string SaveText {
+		public string? SaveText {
 			get => saveText;
 			set {
 				if (saveText != value) {
@@ -67,7 +67,7 @@ namespace dnSpy.Documents.Tabs.Dialogs {
 				}
 			}
 		}
-		string saveText;
+		string? saveText;
 
 		public IClassificationFormatMap ClassificationFormatMap { get; }
 		public ITextElementProvider TextElementProvider { get; }
@@ -112,17 +112,17 @@ namespace dnSpy.Documents.Tabs.Dialogs {
 				SelectedItem = tabsList.Count == 0 ? null : tabsList[0];
 		}
 
-		public void Activate(TabVM vm) {
-			if (vm == null)
+		public void Activate(TabVM? vm) {
+			if (vm is null)
 				return;
 			LastActivated = vm;
 			documentTabService.SetFocus(vm.Tab);
 		}
 
-		public TabVM LastActivated {
+		public TabVM? LastActivated {
 			get => lastActivated;
 			set => lastActivated = value;
 		}
-		TabVM lastActivated;
+		TabVM? lastActivated;
 	}
 }

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -38,10 +38,10 @@ namespace dndbg.Engine {
 		public int VolatileThreadId => CorThread.VolatileThreadId;
 		public bool HasExited { get; private set; }
 
-		public DnAppDomain AppDomainOrNull {
+		public DnAppDomain? AppDomain {
 			get {
 				var comAppDomain = CorThread.AppDomain;
-				return comAppDomain == null ? null : Process.TryGetValidAppDomain(comAppDomain.RawObject);
+				return comAppDomain is null ? null : Process.TryGetValidAppDomain(comAppDomain.RawObject);
 			}
 		}
 

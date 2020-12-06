@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -23,13 +23,13 @@ namespace dnSpy.Contracts.Disassembly.Viewer {
 	/// </summary>
 	public abstract class DisassemblyContentProviderFactory {
 		/// <summary>
-		/// Creates a <see cref="DisassemblyContentProvider"/> that can be passed to <see cref="DisassemblyViewerService.Show(DisassemblyContentProvider, string)"/>
+		/// Creates a <see cref="DisassemblyContentProvider"/> that can be passed to <see cref="DisassemblyViewerService.Show(DisassemblyContentProvider)"/>
 		/// </summary>
 		/// <param name="code">Native code</param>
 		/// <param name="formatterOptions">Options</param>
 		/// <param name="symbolResolver">Symbol resolver or null</param>
 		/// <param name="header">Header comment added at the top of the document or null. This can contain multiple lines</param>
 		/// <returns></returns>
-		public abstract DisassemblyContentProvider Create(NativeCode code, DisassemblyContentFormatterOptions formatterOptions, ISymbolResolver symbolResolver, string header);
+		public abstract DisassemblyContentProvider Create(NativeCode code, DisassemblyContentFormatterOptions formatterOptions, ISymbolResolver? symbolResolver, string? header);
 	}
 }

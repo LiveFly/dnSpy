@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -25,7 +25,7 @@ using Microsoft.VisualStudio.Text.Editor;
 namespace dnSpy.Text.Settings {
 	abstract class GeneralAppSettingsPageBase : AppSettingsPage {
 		public sealed override string Title => dnSpy_Resources.GeneralSettings;
-		public sealed override object UIObject => this;
+		public sealed override object? UIObject => this;
 
 		public bool UseVirtualSpaceEnabled => UseVirtualSpace || !WordWrap;
 		public bool WordWrapEnabled => WordWrap || !UseVirtualSpace;

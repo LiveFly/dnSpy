@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -31,15 +31,15 @@ namespace dnSpy.Debugger.DotNet.Mono.Dialogs.DebugProgram {
 
 		public override void InitializePreviousOptions(StartDebuggingOptions options) {
 			var dncOptions = options as MonoConnectStartDebuggingOptions;
-			if (dncOptions == null)
+			if (dncOptions is null)
 				return;
 			Initialize(dncOptions);
 		}
 
-		public override void InitializeDefaultOptions(string filename, string breakKind, StartDebuggingOptions options) =>
+		public override void InitializeDefaultOptions(string filename, string breakKind, StartDebuggingOptions? options) =>
 			Initialize(GetDefaultOptions(filename, breakKind, options));
 
-		MonoConnectStartDebuggingOptions GetDefaultOptions(string filename, string breakKind, StartDebuggingOptions options) {
+		MonoConnectStartDebuggingOptions GetDefaultOptions(string filename, string breakKind, StartDebuggingOptions? options) {
 			if (options is MonoConnectStartDebuggingOptions connectOptions)
 				return connectOptions;
 			return CreateOptions(breakKind);
@@ -54,7 +54,7 @@ namespace dnSpy.Debugger.DotNet.Mono.Dialogs.DebugProgram {
 
 		public override StartDebuggingOptionsInfo GetOptions() {
 			var options = GetOptions(new MonoConnectStartDebuggingOptions());
-			return new StartDebuggingOptionsInfo(options);
+			return new StartDebuggingOptionsInfo(options, null, StartDebuggingOptionsInfoFlags.None);
 		}
 	}
 }

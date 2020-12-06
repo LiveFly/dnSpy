@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -142,10 +142,10 @@
     <value>Приєднатись до Процесу</value>
   </data>
   <data name="Attach_UseDnSpy32" xml:space="preserve">
-    <value>Використовуйте dnSpy.exe для приєднання до 64-біт процесів</value>
+    <value>Використовуйте 64-біт dnSpy для приєднання до 64-біт процесів</value>
   </data>
   <data name="Attach_UseDnSpy64" xml:space="preserve">
-    <value>Використовуйте dnSpy-x86.exe для приєднання до 32-біт процесів</value>
+    <value>Використовуйте 32-біт dnSpy для приєднання до 32-біт процесів</value>
   </data>
   <data name="BreakCommand" xml:space="preserve">
     <value>Перервати Усе</value>
@@ -525,7 +525,7 @@
     <value>Ctrl+{0}</value>
   </data>
   <data name="ShortCutKeyDelete" xml:space="preserve">
-    <value>Видалити</value>
+    <value>Del</value>
   </data>
   <data name="ShortCutKeyEnter" xml:space="preserve">
     <value>Enter</value>
@@ -585,7 +585,7 @@
     <value>Показати тип повернення</value>
   </data>
   <data name="ShowTokensCommand" xml:space="preserve">
-    <value>Показувати токени</value>
+    <value>Показати токени</value>
   </data>
   <data name="ShowIntrinsicTypeKeywordsCommand" xml:space="preserve">
     <value>Показати ключові слова вбудованих типів</value>
@@ -816,7 +816,7 @@
     <value>_Вікна</value>
   </data>
   <data name="OutputCommand" xml:space="preserve">
-    <value>Вив_ід</value>
+    <value>_Вивід</value>
   </data>
   <data name="ShortCutKeyCtrlAltW_DIGIT" xml:space="preserve">
     <value>Ctrl+Alt+W, {0}</value>
@@ -933,7 +933,7 @@
     <value>Виключення</value>
   </data>
   <data name="FindCommand" xml:space="preserve">
-    <value>Пошук</value>
+    <value>_Пошук</value>
   </data>
   <data name="Exceptions_NoMatch" xml:space="preserve">
     <value>Немає типів виключень, що відповідають умові пошуку.</value>
@@ -1353,7 +1353,7 @@
     <value>Ctrl+V</value>
   </data>
   <data name="ClearAllCommand" xml:space="preserve">
-    <value>Очистити все</value>
+    <value>Очистити Все</value>
   </data>
   <data name="DeleteWatchCommand" xml:space="preserve">
     <value>В_идалити watch</value>
@@ -1501,5 +1501,32 @@
   </data>
   <data name="ShortCutKeyAlt8" xml:space="preserve">
     <value>Alt+8</value>
+  </data>
+  <data name="DbgSettings_IgnoreUnhandledExceptions" xml:space="preserve">
+    <value>Ігнорувати необроблені виключення</value>
+  </data>
+  <data name="RunWithInvalidExtension" xml:space="preserve">
+    <value>Ви впевнені, що бажаєте запустити цей файл без вірного розширення?</value>
+  </data>
+  <data name="DebugWithInvalidExtension" xml:space="preserve">
+    <value>Ви впевнені, що хочете відлагоджувати файл без вірного розширення?</value>
+  </data>
+  <data name="Processes_NoMatch" xml:space="preserve">
+    <value>Жоден процесс не відповідає пошуковому запиту.</value>
+  </data>
+  <data name="Processes_Search" xml:space="preserve">
+    <value>Пошук</value>
+  </data>
+  <data name="Processes_ResetSearchSettings_ToolTip" xml:space="preserve">
+    <value>Скинути усі критерії пошуку та показати усі процеси</value>
+  </data>
+  <data name="Processes_Search_ToolTip" xml:space="preserve">
+    <value>Пошук процесу</value>
+  </data>
+  <data name="DbgSettings_FocusDebuggerWhenProcessBreaks" xml:space="preserve">
+    <value>Винести dnSpy на перідній фон, коли спрацює точка зупинки в дебагері</value>
+  </data>
+  <data name="Column_LoadModule" xml:space="preserve">
+    <value>Зааантажити</value>
   </data>
 </root>

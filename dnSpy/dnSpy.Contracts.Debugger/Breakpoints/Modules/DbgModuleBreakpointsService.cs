@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -42,7 +42,7 @@ namespace dnSpy.Contracts.Debugger.Breakpoints.Modules {
 		/// <summary>
 		/// Raised when breakpoints are modified
 		/// </summary>
-		public abstract event EventHandler<DbgBreakpointsModifiedEventArgs> BreakpointsModified;
+		public abstract event EventHandler<DbgBreakpointsModifiedEventArgs>? BreakpointsModified;
 
 		/// <summary>
 		/// Gets all breakpoints
@@ -52,7 +52,7 @@ namespace dnSpy.Contracts.Debugger.Breakpoints.Modules {
 		/// <summary>
 		/// Raised when <see cref="Breakpoints"/> is changed
 		/// </summary>
-		public abstract event EventHandler<DbgCollectionChangedEventArgs<DbgModuleBreakpoint>> BreakpointsChanged;
+		public abstract event EventHandler<DbgCollectionChangedEventArgs<DbgModuleBreakpoint>>? BreakpointsChanged;
 
 		/// <summary>
 		/// Adds a breakpoint

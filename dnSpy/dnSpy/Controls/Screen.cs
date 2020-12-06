@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -86,11 +86,11 @@ namespace dnSpy.Controls {
 		/// Constructor
 		/// </summary>
 		/// <param name="o">Dependency object attached somewhere in a <see cref="Window"/> or the <see cref="Window"/> object itself</param>
-		public Screen(DependencyObject o) {
+		public Screen(DependencyObject? o) {
 			var helper = GetHelper(o);
 			IsValid = false;
 			info = default;
-			if (helper != null) {
+			if (helper is not null) {
 				var hMonitor = MonitorFromWindow(helper.Handle, MONITOR_DEFAULTTONEAREST);
 				info.cbSize = MONITORINFOEX.SIZE;
 				if (!GetMonitorInfo(hMonitor, ref info))
@@ -100,11 +100,11 @@ namespace dnSpy.Controls {
 			}
 		}
 
-		static WindowInteropHelper GetHelper(DependencyObject o) {
-			if (o == null)
+		static WindowInteropHelper? GetHelper(DependencyObject? o) {
+			if (o is null)
 				return null;
 			var win = Window.GetWindow(o);
-			if (win == null)
+			if (win is null)
 				return null;
 			var helper = new WindowInteropHelper(win);
 			if (helper.Handle == IntPtr.Zero)

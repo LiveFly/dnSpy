@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -39,7 +39,7 @@ namespace dnSpy.Roslyn.Intellisense.SignatureHelp {
 		public void AugmentSignatureHelpSession(ISignatureHelpSession session, IList<ISignature> signatures) =>
 			SignatureHelpSession.TryGetSession(session)?.AugmentSignatureHelpSession(signatures);
 
-		public ISignature GetBestMatch(ISignatureHelpSession session) =>
+		public ISignature? GetBestMatch(ISignatureHelpSession session) =>
 			SignatureHelpSession.TryGetSession(session)?.GetBestMatch();
 
 		public void Dispose() { }

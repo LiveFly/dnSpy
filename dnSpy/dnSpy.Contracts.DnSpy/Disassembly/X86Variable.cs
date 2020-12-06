@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -25,7 +25,7 @@ namespace dnSpy.Contracts.Disassembly {
 		/// <summary>
 		/// Name or null
 		/// </summary>
-		public string Name { get; }
+		public string? Name { get; }
 
 		/// <summary>
 		/// Argument/local index or &lt; 0
@@ -78,7 +78,7 @@ namespace dnSpy.Contracts.Disassembly {
 		/// <param name="locationKind">Variable kind</param>
 		/// <param name="register">Register or memory base register</param>
 		/// <param name="memoryOffset">Offset relative to <paramref name="register"/> if it's a memory location (<see cref="X86VariableLocationKind.Memory"/>)</param>
-		public X86Variable(string name, int index, bool isLocal, ulong liveAddress, uint liveLength, X86VariableLocationKind locationKind, X86Register register, int memoryOffset) {
+		public X86Variable(string? name, int index, bool isLocal, ulong liveAddress, uint liveLength, X86VariableLocationKind locationKind, X86Register register, int memoryOffset) {
 			Name = name;
 			Index = index;
 			IsLocal = isLocal;

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -83,7 +83,7 @@ namespace dnSpy.Contracts.Debugger.DotNet.Evaluation {
 				return true;
 			}
 			catch (TaskCanceledException) {
-				result = default;
+				result = default!;
 				return false;
 			}
 		}
@@ -92,13 +92,13 @@ namespace dnSpy.Contracts.Debugger.DotNet.Evaluation {
 		/// Executes code on the dispatcher thread
 		/// </summary>
 		/// <param name="callback">Code to execute</param>
-		public void Invoke(Action callback) => Invoke<object>(() => { callback(); return null; });
+		public void Invoke(Action callback) => Invoke<object?>(() => { callback(); return null; });
 
 		/// <summary>
 		/// Executes code on the dispatcher thread
 		/// </summary>
 		/// <param name="callback">Code to execute</param>
 		/// <returns></returns>
-		public bool TryInvoke(Action callback) => TryInvoke<object>(() => { callback(); return null; }, out _);
+		public bool TryInvoke(Action callback) => TryInvoke<object?>(() => { callback(); return null; }, out _);
 	}
 }

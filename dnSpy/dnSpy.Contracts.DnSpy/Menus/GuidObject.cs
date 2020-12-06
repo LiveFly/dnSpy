@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -25,7 +25,7 @@ namespace dnSpy.Contracts.Menus {
 	/// </summary>
 	public readonly struct GuidObject {
 		/// <summary>Object</summary>
-		public object Object { get; }
+		public object? Object { get; }
 
 		/// <summary>Guid of object</summary>
 		public Guid Guid { get; }
@@ -35,7 +35,7 @@ namespace dnSpy.Contracts.Menus {
 		/// </summary>
 		/// <param name="guid">Guid of object (eg. <see cref="MenuConstants.GUIDOBJ_WPF_TEXTVIEW_GUID"/>)</param>
 		/// <param name="obj">Object</param>
-		public GuidObject(string guid, object obj) {
+		public GuidObject(string guid, object? obj) {
 			Object = obj;
 			Guid = new Guid(guid);
 		}
@@ -45,7 +45,7 @@ namespace dnSpy.Contracts.Menus {
 		/// </summary>
 		/// <param name="guid">Guid of object (eg. <see cref="MenuConstants.GUIDOBJ_WPF_TEXTVIEW_GUID"/>)</param>
 		/// <param name="obj">Object</param>
-		public GuidObject(Guid guid, object obj) {
+		public GuidObject(Guid guid, object? obj) {
 			Object = obj;
 			Guid = guid;
 		}

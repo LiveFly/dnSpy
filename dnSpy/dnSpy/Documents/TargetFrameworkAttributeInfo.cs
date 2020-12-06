@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -22,7 +22,7 @@ using dnlib.DotNet;
 
 namespace dnSpy.Documents {
 	readonly struct TargetFrameworkAttributeInfo {
-		public bool IsDotNetCore => Framework == ".NETCoreApp";
+		public bool IsDotNet => Framework == ".NETCoreApp";
 		public readonly string Framework;
 		public readonly Version Version;
 		public readonly string Profile;
@@ -34,7 +34,7 @@ namespace dnSpy.Documents {
 
 		public static bool TryCreateTargetFrameworkInfo(ModuleDef module, out TargetFrameworkAttributeInfo info) {
 			var asm = module?.Assembly;
-			if (asm != null) {
+			if (asm is not null) {
 				if (asm.TryGetOriginalTargetFrameworkAttribute(out var framework, out var version, out var profile)) {
 					info = new TargetFrameworkAttributeInfo(framework, version, profile);
 					return true;

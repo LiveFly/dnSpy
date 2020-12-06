@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -27,8 +27,8 @@ namespace dnSpy.Text.Operations {
 		public bool CanRedo => State == UndoTransactionState.Undone;
 		public bool CanUndo => State == UndoTransactionState.Completed;
 		public ITextUndoHistory History => history;
-		public IMergeTextUndoTransactionPolicy MergePolicy { get; set; }
-		public ITextUndoTransaction Parent { get; }
+		public IMergeTextUndoTransactionPolicy? MergePolicy { get; set; }
+		public ITextUndoTransaction? Parent { get; }
 		public UndoTransactionState State { get; private set; }
 		public IList<ITextUndoPrimitive> UndoPrimitives => readOnlyUndoPrimitives;
 
@@ -42,7 +42,7 @@ namespace dnSpy.Text.Operations {
 		readonly List<ITextUndoPrimitive> undoPrimitives;
 		readonly ReadOnlyCollection<ITextUndoPrimitive> readOnlyUndoPrimitives;
 
-		public TextUndoTransaction(TextUndoHistory history, ITextUndoTransaction parent, string description) {
+		public TextUndoTransaction(TextUndoHistory history, ITextUndoTransaction? parent, string description) {
 			this.history = history ?? throw new ArgumentNullException(nameof(history));
 			Parent = parent;
 			undoPrimitives = new List<ITextUndoPrimitive>();
@@ -52,7 +52,7 @@ namespace dnSpy.Text.Operations {
 		}
 
 		public void AddUndo(ITextUndoPrimitive undo) {
-			if (undo == null)
+			if (undo is null)
 				throw new ArgumentNullException(nameof(undo));
 			if (State != UndoTransactionState.Open)
 				throw new InvalidOperationException();

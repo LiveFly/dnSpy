@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -42,7 +42,7 @@ namespace dnSpy.AsmEditor.Compiler {
 			: base(options, defToEdit as TypeDef ?? defToEdit.DeclaringType) {
 			this.defToEdit = defToEdit;
 			nonNestedTypeToEdit = defToEdit as TypeDef ?? defToEdit.DeclaringType;
-			while (nonNestedTypeToEdit.DeclaringType != null)
+			while (nonNestedTypeToEdit.DeclaringType is not null)
 				nonNestedTypeToEdit = nonNestedTypeToEdit.DeclaringType;
 			methodSourceStatement = statementsInMethodToEdit.Count == 0 ? (MethodSourceStatement?)null : statementsInMethodToEdit[0];
 			StartDecompile();
@@ -69,6 +69,6 @@ namespace dnSpy.AsmEditor.Compiler {
 		}
 
 		protected override void Import(ModuleImporter importer, CompilationResult result) =>
-			importer.Import(result.RawFile, result.DebugFile, nonNestedTypeToEdit);
+			importer.Import(result.RawFile!, result.DebugFile, nonNestedTypeToEdit);
 	}
 }

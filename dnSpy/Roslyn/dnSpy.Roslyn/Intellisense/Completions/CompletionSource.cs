@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -54,10 +54,10 @@ namespace dnSpy.Roslyn.Intellisense.Completions {
 		public void AugmentCompletionSession(ICompletionSession session, IList<CompletionSet> completionSets) {
 			var snapshot = session.TextView.TextSnapshot;
 			var triggerPoint = session.GetTriggerPoint(snapshot);
-			if (triggerPoint == null)
+			if (triggerPoint is null)
 				return;
 			var info = CompletionInfo.Create(snapshot);
-			if (info == null)
+			if (info is null)
 				return;
 
 			// This helps a little to speed up the code
@@ -66,7 +66,7 @@ namespace dnSpy.Roslyn.Intellisense.Completions {
 			session.Properties.TryGetProperty(typeof(CompletionTrigger), out CompletionTrigger completionTrigger);
 
 			var completionList = info.Value.CompletionService.GetCompletionsAsync(info.Value.Document, triggerPoint.Value.Position, completionTrigger).GetAwaiter().GetResult();
-			if (completionList == null)
+			if (completionList is null)
 				return;
 			Debug.Assert(completionList.Span.End <= snapshot.Length);
 			if (completionList.Span.End > snapshot.Length)

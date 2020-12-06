@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -25,7 +25,7 @@ using VSLI = Microsoft.VisualStudio.Language.Intellisense;
 
 namespace dnSpy.Hex.Intellisense {
 	abstract class HexQuickInfoPresenterBase : HexIntellisensePresenter, VSLI.IIntellisenseCommandTarget, INotifyPropertyChanged {
-		public event PropertyChangedEventHandler PropertyChanged { add { } remove { } }
+		public event PropertyChangedEventHandler? PropertyChanged { add { } remove { } }
 		public override HexIntellisenseSession Session => session;
 		public IList<object> QuickInfoContent => session.QuickInfoContent;
 
@@ -60,7 +60,7 @@ namespace dnSpy.Hex.Intellisense {
 			}
 		}
 
-		void Session_Dismissed(object sender, EventArgs e) {
+		void Session_Dismissed(object? sender, EventArgs e) {
 			session.Dismissed -= Session_Dismissed;
 			OnSessionDismissed();
 		}

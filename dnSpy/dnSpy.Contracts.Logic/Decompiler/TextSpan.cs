@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -110,7 +110,7 @@ namespace dnSpy.Contracts.Decompiler {
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public override bool Equals(object obj) => obj is TextSpan && Equals((TextSpan)obj);
+		public override bool Equals(object? obj) => obj is TextSpan && Equals((TextSpan)obj);
 
 		/// <summary>
 		/// GetHashCode()

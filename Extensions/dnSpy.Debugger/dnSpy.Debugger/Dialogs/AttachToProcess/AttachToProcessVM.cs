@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
@@ -38,10 +39,11 @@ using dnSpy.Debugger.Utilities;
 using Microsoft.VisualStudio.Text.Classification;
 
 namespace dnSpy.Debugger.Dialogs.AttachToProcess {
-	sealed class AttachToProcessVM : ViewModelBase {
+	sealed class AttachToProcessVM : ViewModelBase, IGridViewColumnDescsProvider, IComparer<ProgramVM> {
 		readonly ObservableCollection<ProgramVM> realAllItems;
 		public BulkObservableCollection<ProgramVM> AllItems { get; }
 		public ObservableCollection<ProgramVM> SelectedItems { get; }
+		public GridViewColumnDescs Descs { get; }
 
 		public string SearchToolTip => ToolTipHelper.AddKeyboardShortcut(dnSpy_Debugger_Resources.AttachToProcess_Search_ToolTip, dnSpy_Debugger_Resources.ShortCutKeyCtrlF);
 		public ICommand SearchHelpCommand => new RelayCommand(a => searchHelp());
@@ -50,14 +52,25 @@ namespace dnSpy.Debugger.Dialogs.AttachToProcess {
 		public string SearchHelpToolTip => ToolTipHelper.AddKeyboardShortcut(dnSpy_Debugger_Resources.SearchHelp_ToolTip, null);
 
 		public ICommand InfoLinkCommand => new RelayCommand(a => ShowInfoLinkPage());
-		public bool HasInfoLink => InfoLinkToolTip != null && infoLink != null;
-		public string InfoLinkToolTip { get; }
-		readonly string infoLink;
+		public bool HasInfoLink => InfoLinkToolTip is not null && infoLink is not null;
+		public string? InfoLinkToolTip { get; }
+		readonly string? infoLink;
 
 		public string Title { get; }
 
+		public override bool HasError => hasError;
+		bool hasError;
+
+		void UpdateHasError() {
+			var value = SelectedItems.Count == 0;
+			if (hasError != value) {
+				hasError = value;
+				HasErrorUpdated();
+			}
+		}
+
 		public bool HasMessageText => !string.IsNullOrEmpty(MessageText);
-		public string MessageText { get; }
+		public string? MessageText { get; }
 
 		public string FilterText {
 			get => filterText;
@@ -76,21 +89,21 @@ namespace dnSpy.Debugger.Dialogs.AttachToProcess {
 		readonly AttachProgramOptionsAggregatorFactory attachProgramOptionsAggregatorFactory;
 		readonly AttachToProcessContext attachToProcessContext;
 		readonly Action searchHelp;
-		readonly string[] providerNames;
-		AttachProgramOptionsAggregator attachProgramOptionsAggregator;
-		ProcessProvider processProvider;
+		readonly string[]? providerNames;
+		AttachProgramOptionsAggregator? attachProgramOptionsAggregator;
+		ProcessProvider? processProvider;
 
-		public AttachToProcessVM(ShowAttachToProcessDialogOptions options, UIDispatcher uiDispatcher, DbgManager dbgManager, DebuggerSettings debuggerSettings, ProgramFormatterProvider programFormatterProvider, IClassificationFormatMapService classificationFormatMapService, ITextElementProvider textElementProvider, AttachProgramOptionsAggregatorFactory attachProgramOptionsAggregatorFactory, Action searchHelp) {
-			if (options == null) {
+		public AttachToProcessVM(ShowAttachToProcessDialogOptions? options, UIDispatcher uiDispatcher, DbgManager dbgManager, DebuggerSettings debuggerSettings, ProgramFormatterProvider programFormatterProvider, IClassificationFormatMapService classificationFormatMapService, ITextElementProvider textElementProvider, AttachProgramOptionsAggregatorFactory attachProgramOptionsAggregatorFactory, Action searchHelp) {
+			if (options is null) {
 				options = new ShowAttachToProcessDialogOptions();
 				options.InfoLink = new AttachToProcessLinkInfo {
 					ToolTipMessage = dnSpy_Debugger_Resources.AttachToProcess_MakingAnImageEasierToDebug,
-					Url = "https://github.com/0xd4d/dnSpy/wiki/Making-an-Image-Easier-to-Debug",
+					Url = "https://github.com/dnSpy/dnSpy/wiki/Making-an-Image-Easier-to-Debug",
 				};
 			}
 			Title = GetTitle(options);
 			MessageText = GetMessage(options);
-			if (options.InfoLink != null) {
+			if (options.InfoLink is not null) {
 				var l = options.InfoLink.Value;
 				if (!string.IsNullOrEmpty(l.Url)) {
 					InfoLinkToolTip = l.ToolTipMessage;
@@ -102,19 +115,34 @@ namespace dnSpy.Debugger.Dialogs.AttachToProcess {
 			realAllItems = new ObservableCollection<ProgramVM>();
 			AllItems = new BulkObservableCollection<ProgramVM>();
 			SelectedItems = new ObservableCollection<ProgramVM>();
+			SelectedItems.CollectionChanged += (_, e) => { UpdateHasError(); };
 			this.uiDispatcher = uiDispatcher ?? throw new ArgumentNullException(nameof(uiDispatcher));
 			uiDispatcher.VerifyAccess();
 			this.dbgManager = dbgManager ?? throw new ArgumentNullException(nameof(dbgManager));
 			this.attachProgramOptionsAggregatorFactory = attachProgramOptionsAggregatorFactory ?? throw new ArgumentNullException(nameof(attachProgramOptionsAggregatorFactory));
 			var classificationFormatMap = classificationFormatMapService.GetClassificationFormatMap(AppearanceCategoryConstants.UIMisc);
-			attachToProcessContext = new AttachToProcessContext(classificationFormatMap, textElementProvider, new SearchMatcher(searchColumnDefinitions));
+			attachToProcessContext = new AttachToProcessContext(classificationFormatMap, textElementProvider, new SearchMatcher(searchColumnDefinitions), programFormatterProvider.Create());
 			this.searchHelp = searchHelp ?? throw new ArgumentNullException(nameof(searchHelp));
 
-			attachToProcessContext.Formatter = programFormatterProvider.Create();
 			attachToProcessContext.SyntaxHighlight = debuggerSettings.SyntaxHighlight;
 
+			Descs = new GridViewColumnDescs {
+				Columns = new GridViewColumnDesc[] {
+					new GridViewColumnDesc(AttachToProcessWindowColumnIds.Process, dnSpy_Debugger_Resources.Column_Process),
+					new GridViewColumnDesc(AttachToProcessWindowColumnIds.ProcessID, dnSpy_Debugger_Resources.Column_ProcessID),
+					new GridViewColumnDesc(AttachToProcessWindowColumnIds.ProcessTitle, dnSpy_Debugger_Resources.Column_ProcessTitle),
+					new GridViewColumnDesc(AttachToProcessWindowColumnIds.ProcessType, dnSpy_Debugger_Resources.Column_ProcessType),
+					new GridViewColumnDesc(AttachToProcessWindowColumnIds.ProcessArchitecture, dnSpy_Debugger_Resources.Column_ProcessArchitecture),
+					new GridViewColumnDesc(AttachToProcessWindowColumnIds.ProcessFilename, dnSpy_Debugger_Resources.Column_ProcessFilename),
+					new GridViewColumnDesc(AttachToProcessWindowColumnIds.ProcessCommandLine, dnSpy_Debugger_Resources.Column_ProcessCommandLine),
+				},
+			};
+			Descs.SortedColumnChanged += (a, b) => SortList();
+
+			UpdateHasError();
 			RefreshCore();
 		}
+
 		// Don't change the order of these instances without also updating input passed to SearchMatcher.IsMatchAll()
 		static readonly SearchColumnDefinition[] searchColumnDefinitions = new SearchColumnDefinition[] {
 			new SearchColumnDefinition(PredefinedTextClassifierTags.AttachToProcessWindowProcess, "p", dnSpy_Debugger_Resources.Column_Process),
@@ -133,8 +161,8 @@ namespace dnSpy.Debugger.Dialogs.AttachToProcess {
 			return s;
 		}
 
-		static string GetMessage(ShowAttachToProcessDialogOptions options) {
-			if (options.Message != null)
+		static string? GetMessage(ShowAttachToProcessDialogOptions options) {
+			if (options.Message is not null)
 				return options.Message;
 			if (!Environment.Is64BitOperatingSystem)
 				return null;
@@ -144,7 +172,7 @@ namespace dnSpy.Debugger.Dialogs.AttachToProcess {
 		public string GetSearchHelpText() => attachToProcessContext.SearchMatcher.GetHelpText();
 
 		public bool IsRefreshing => !CanRefresh;
-		bool CanRefresh => attachProgramOptionsAggregator == null;
+		bool CanRefresh => attachProgramOptionsAggregator is null;
 		void Refresh() {
 			uiDispatcher.VerifyAccess();
 			if (!CanRefresh)
@@ -168,7 +196,7 @@ namespace dnSpy.Debugger.Dialogs.AttachToProcess {
 			uiDispatcher.VerifyAccess();
 			processProvider?.Dispose();
 			processProvider = null;
-			if (attachProgramOptionsAggregator != null) {
+			if (attachProgramOptionsAggregator is not null) {
 				attachProgramOptionsAggregator.AttachProgramOptionsAdded -= AttachProgramOptionsAggregator_AttachProgramOptionsAdded;
 				attachProgramOptionsAggregator.Completed -= AttachProgramOptionsAggregator_Completed;
 				attachProgramOptionsAggregator.Dispose();
@@ -177,14 +205,17 @@ namespace dnSpy.Debugger.Dialogs.AttachToProcess {
 			}
 		}
 
-		void AttachProgramOptionsAggregator_AttachProgramOptionsAdded(object sender, AttachProgramOptionsAddedEventArgs e) {
+		void AttachProgramOptionsAggregator_AttachProgramOptionsAdded(object? sender, AttachProgramOptionsAddedEventArgs e) {
 			uiDispatcher.VerifyAccess();
 			if (attachProgramOptionsAggregator != sender)
 				return;
+			Debug2.Assert(processProvider is not null);
 			foreach (var options in e.AttachProgramOptions) {
 				if (!dbgManager.CanDebugRuntime(options.ProcessId, options.RuntimeId))
 					continue;
-				var vm = new ProgramVM(processProvider, options, attachToProcessContext);
+				var vm = ProgramVM.Create(processProvider, options, attachToProcessContext);
+				if (vm is null)
+					continue;
 				realAllItems.Add(vm);
 				if (IsMatch(vm, filterText)) {
 					int index = GetInsertionIndex(vm, AllItems);
@@ -194,12 +225,11 @@ namespace dnSpy.Debugger.Dialogs.AttachToProcess {
 		}
 
 		int GetInsertionIndex(ProgramVM vm, IList<ProgramVM> list) {
-			var comparer = ProgramVMComparer.Instance;
 			int lo = 0, hi = list.Count - 1;
 			while (lo <= hi) {
 				int index = (lo + hi) / 2;
 
-				int c = comparer.Compare(vm, list[index]);
+				int c = Compare(vm, list[index]);
 				if (c < 0)
 					hi = index - 1;
 				else if (c > 0)
@@ -210,21 +240,7 @@ namespace dnSpy.Debugger.Dialogs.AttachToProcess {
 			return hi + 1;
 		}
 
-		sealed class ProgramVMComparer : IComparer<ProgramVM> {
-			public static readonly ProgramVMComparer Instance = new ProgramVMComparer();
-			ProgramVMComparer() { }
-			public int Compare(ProgramVM x, ProgramVM y) {
-				var c = StringComparer.CurrentCultureIgnoreCase.Compare(x.Name, y.Name);
-				if (c != 0)
-					return c;
-				c = x.Id.CompareTo(y.Id);
-				if (c != 0)
-					return c;
-				return StringComparer.CurrentCultureIgnoreCase.Compare(x.RuntimeName, y.RuntimeName);
-			}
-		}
-
-		void AttachProgramOptionsAggregator_Completed(object sender, EventArgs e) {
+		void AttachProgramOptionsAggregator_Completed(object? sender, EventArgs e) {
 			uiDispatcher.VerifyAccess();
 			if (attachProgramOptionsAggregator != sender)
 				return;
@@ -242,10 +258,102 @@ namespace dnSpy.Debugger.Dialogs.AttachToProcess {
 			if (string.IsNullOrWhiteSpace(filterText))
 				filterText = string.Empty;
 			attachToProcessContext.SearchMatcher.SetSearchText(filterText);
+			SortList(filterText);
+			if (SelectedItems.Count == 0 && AllItems.Count > 0)
+				SelectedItems.Add(AllItems[0]);
+		}
 
+		void SortList() {
+			uiDispatcher.VerifyAccess();
+			SortList(filterText);
+		}
+ 
+		void SortList(string filterText) {
+			uiDispatcher.VerifyAccess();
 			var newList = new List<ProgramVM>(GetFilteredItems(filterText));
-			newList.Sort(ProgramVMComparer.Instance);
+			newList.Sort(this);
 			AllItems.Reset(newList);
+		}
+
+		public IEnumerable<ProgramVM> Sort(IEnumerable<ProgramVM> programs) {
+			uiDispatcher.VerifyAccess();
+			var list = new List<ProgramVM>(programs);
+			list.Sort(this);
+			return list;
+		}
+
+		public int Compare([AllowNull] ProgramVM x, [AllowNull] ProgramVM y) {
+			Debug.Assert(uiDispatcher.CheckAccess());
+			if ((object?)x == y)
+				return 0;
+			if (x is null)
+				return -1;
+			if (y is null)
+				return 1;
+			var (desc, dir) = Descs.SortedColumn;
+
+			int id;
+			if (desc is null || dir == GridViewSortDirection.Default) {
+				id = AttachToProcessWindowColumnIds.Default_Order;
+				dir = GridViewSortDirection.Ascending;
+			}
+			else
+				id = desc.Id;
+
+			int diff;
+			switch (id) {
+			case AttachToProcessWindowColumnIds.Default_Order:
+				diff = GetDefaultOrder(x, y);
+				break;
+
+			case AttachToProcessWindowColumnIds.Process:
+				diff = StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name);
+				break;
+
+			case AttachToProcessWindowColumnIds.ProcessID:
+				diff = x.Id - y.Id;
+				break;
+
+			case AttachToProcessWindowColumnIds.ProcessTitle:
+				diff = StringComparer.OrdinalIgnoreCase.Compare(x.Title, y.Title);
+				break;
+
+			case AttachToProcessWindowColumnIds.ProcessType:
+				diff = StringComparer.OrdinalIgnoreCase.Compare(x.RuntimeName, y.RuntimeName);
+				break;
+
+			case AttachToProcessWindowColumnIds.ProcessArchitecture:
+				diff = StringComparer.OrdinalIgnoreCase.Compare(x.Architecture, y.Architecture);
+				break;
+
+			case AttachToProcessWindowColumnIds.ProcessFilename:
+				diff = StringComparer.OrdinalIgnoreCase.Compare(x.Filename, y.Filename);
+				break;
+
+			case AttachToProcessWindowColumnIds.ProcessCommandLine:
+				diff = StringComparer.OrdinalIgnoreCase.Compare(x.CommandLine, y.CommandLine);
+				break;
+
+			default:
+				throw new InvalidOperationException();
+			}
+
+			if (diff == 0 && id != AttachToProcessWindowColumnIds.Default_Order)
+				diff = GetDefaultOrder(x, y);
+			Debug.Assert(dir == GridViewSortDirection.Ascending || dir == GridViewSortDirection.Descending);
+			if (dir == GridViewSortDirection.Descending)
+				diff = -diff;
+			return diff;
+		}
+
+		static int GetDefaultOrder(ProgramVM x, ProgramVM y) {
+			int c = StringComparer.CurrentCultureIgnoreCase.Compare(x.Name, y.Name);
+			if (c != 0)
+				return c;
+			c = x.Id - y.Id;
+			if (c != 0)
+				return c;
+			return c = StringComparer.CurrentCultureIgnoreCase.Compare(x.RuntimeName, y.RuntimeName);
 		}
 
 		IEnumerable<ProgramVM> GetFilteredItems(string filterText) {
@@ -329,19 +437,50 @@ namespace dnSpy.Debugger.Dialogs.AttachToProcess {
 			var sb = new DbgStringBuilderTextWriter();
 			var formatter = attachToProcessContext.Formatter;
 			foreach (var vm in programs) {
-				formatter.WriteProcess(sb, vm);
-				sb.Write(DbgTextColor.Text, "\t");
-				formatter.WritePid(sb, vm);
-				sb.Write(DbgTextColor.Text, "\t");
-				formatter.WriteTitle(sb, vm);
-				sb.Write(DbgTextColor.Text, "\t");
-				formatter.WriteType(sb, vm);
-				sb.Write(DbgTextColor.Text, "\t");
-				formatter.WriteMachine(sb, vm);
-				sb.Write(DbgTextColor.Text, "\t");
-				formatter.WritePath(sb, vm);
-				sb.Write(DbgTextColor.Text, "\t");
-				formatter.WriteCommandLine(sb, vm);
+				bool needTab = false;
+				foreach (var column in Descs.Columns) {
+					if (!column.IsVisible)
+						continue;
+					if (column.Name == string.Empty)
+						continue;
+
+					if (needTab)
+						sb.Write(DbgTextColor.Text, "\t");
+					switch (column.Id) {
+					case AttachToProcessWindowColumnIds.Process:
+						formatter.WriteProcess(sb, vm);
+						break;
+
+					case AttachToProcessWindowColumnIds.ProcessID:
+						formatter.WritePid(sb, vm);
+						break;
+
+					case AttachToProcessWindowColumnIds.ProcessTitle:
+						formatter.WriteTitle(sb, vm);
+						break;
+
+					case AttachToProcessWindowColumnIds.ProcessType:
+						formatter.WriteType(sb, vm);
+						break;
+
+					case AttachToProcessWindowColumnIds.ProcessArchitecture:
+						formatter.WriteMachine(sb, vm);
+						break;
+
+					case AttachToProcessWindowColumnIds.ProcessFilename:
+						formatter.WritePath(sb, vm);
+						break;
+
+					case AttachToProcessWindowColumnIds.ProcessCommandLine:
+						formatter.WriteCommandLine(sb, vm);
+						break;
+
+					default:
+						throw new InvalidOperationException();
+					}
+
+					needTab = true;
+				}
 				sb.Write(DbgTextColor.Text, Environment.NewLine);
 			}
 
@@ -355,7 +494,7 @@ namespace dnSpy.Debugger.Dialogs.AttachToProcess {
 		}
 
 		void ShowInfoLinkPage() {
-			if (infoLink != null)
+			if (infoLink is not null)
 				OpenWebPage(infoLink);
 		}
 

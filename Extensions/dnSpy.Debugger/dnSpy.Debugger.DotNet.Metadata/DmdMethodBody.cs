@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -168,14 +168,14 @@ namespace dnSpy.Debugger.DotNet.Metadata {
 		/// <summary>
 		/// Catch type
 		/// </summary>
-		public DmdType CatchType {
+		public DmdType? CatchType {
 			get {
 				if (Flags != DmdExceptionHandlingClauseOptions.Clause)
 					throw new InvalidOperationException();
 				return catchType;
 			}
 		}
-		readonly DmdType catchType;
+		readonly DmdType? catchType;
 
 		/// <summary>
 		/// Constructor
@@ -187,7 +187,7 @@ namespace dnSpy.Debugger.DotNet.Metadata {
 		/// <param name="handlerLength">Handler length</param>
 		/// <param name="filterOffset">Filter offset</param>
 		/// <param name="catchType">Catch type</param>
-		public DmdExceptionHandlingClause(DmdExceptionHandlingClauseOptions flags, int tryOffset, int tryLength, int handlerOffset, int handlerLength, int filterOffset, DmdType catchType) {
+		public DmdExceptionHandlingClause(DmdExceptionHandlingClauseOptions flags, int tryOffset, int tryLength, int handlerOffset, int handlerLength, int filterOffset, DmdType? catchType) {
 			Flags = flags;
 			TryOffset = tryOffset;
 			TryLength = tryLength;

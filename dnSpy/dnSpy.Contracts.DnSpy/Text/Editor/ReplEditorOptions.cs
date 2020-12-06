@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -43,7 +43,7 @@ namespace dnSpy.Contracts.Text.Editor {
 			get => primaryPrompt ?? DEFAULT_PRIMARY_PROMPT_TEXT;
 			set => primaryPrompt = value;
 		}
-		string primaryPrompt;
+		string? primaryPrompt;
 
 		/// <summary>
 		/// Secondary prompt text, default is <see cref="DEFAULT_SECONDARY_PROMPT_TEXT"/>
@@ -52,7 +52,7 @@ namespace dnSpy.Contracts.Text.Editor {
 			get => secondaryPrompt ?? DEFAULT_SECONDARY_PROMPT_TEXT;
 			set => secondaryPrompt = value;
 		}
-		string secondaryPrompt;
+		string? secondaryPrompt;
 
 		/// <summary>
 		/// All <see cref="ITextView"/> roles

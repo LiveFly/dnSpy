@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -31,7 +31,7 @@ namespace dnSpy.BackgroundImage {
 			public string DisplayName => dnSpy_Resources.BgImgDisplayName_Default;
 			public double UIOrder => double.PositiveInfinity;
 			public bool UserVisible => true;
-			public DefaultImageSettings GetDefaultImageSettings() => null;
+			public DefaultImageSettings? GetDefaultImageSettings() => null;
 			public bool IsSupported(ITextView textView) => true;
 			public bool IsSupported(HexView hexView) => true;
 		}
@@ -42,7 +42,7 @@ namespace dnSpy.BackgroundImage {
 			public string DisplayName => dnSpy_Resources.BgImgDisplayName_DocumentViewer;
 			public double UIOrder => BackgroundImageOptionDefinitionConstants.UIOrder_DocumentViewer;
 			public bool UserVisible => true;
-			public DefaultImageSettings GetDefaultImageSettings() => null;
+			public DefaultImageSettings? GetDefaultImageSettings() => null;
 			public bool IsSupported(ITextView textView) => textView.Roles.Contains(PredefinedDsTextViewRoles.DocumentViewer);
 			public bool IsSupported(HexView hexView) => false;
 		}
@@ -53,7 +53,7 @@ namespace dnSpy.BackgroundImage {
 			public string DisplayName => dnSpy_Resources.BgImgDisplayName_REPL;
 			public double UIOrder => BackgroundImageOptionDefinitionConstants.UIOrder_Repl;
 			public bool UserVisible => true;
-			public DefaultImageSettings GetDefaultImageSettings() => null;
+			public DefaultImageSettings? GetDefaultImageSettings() => null;
 			public bool IsSupported(ITextView textView) => textView.Roles.Contains(PredefinedDsTextViewRoles.ReplEditor);
 			public bool IsSupported(HexView hexView) => false;
 		}
@@ -64,7 +64,7 @@ namespace dnSpy.BackgroundImage {
 			public string DisplayName => dnSpy_Resources.BgImgDisplayName_CodeEditor;
 			public double UIOrder => BackgroundImageOptionDefinitionConstants.UIOrder_CodeEditor;
 			public bool UserVisible => true;
-			public DefaultImageSettings GetDefaultImageSettings() => null;
+			public DefaultImageSettings? GetDefaultImageSettings() => null;
 			public bool IsSupported(ITextView textView) => textView.Roles.Contains(PredefinedDsTextViewRoles.CodeEditor);
 			public bool IsSupported(HexView hexView) => false;
 		}
@@ -75,7 +75,7 @@ namespace dnSpy.BackgroundImage {
 			public string DisplayName => dnSpy_Resources.BgImgDisplayName_Logger;
 			public double UIOrder => BackgroundImageOptionDefinitionConstants.UIOrder_Logger;
 			public bool UserVisible => true;
-			public DefaultImageSettings GetDefaultImageSettings() => null;
+			public DefaultImageSettings? GetDefaultImageSettings() => null;
 			public bool IsSupported(ITextView textView) => textView.Roles.Contains(PredefinedDsTextViewRoles.LogEditor);
 			public bool IsSupported(HexView hexView) => false;
 		}
@@ -86,7 +86,7 @@ namespace dnSpy.BackgroundImage {
 			public string DisplayName => dnSpy_Resources.BgImgDisplayName_HexEditor;
 			public double UIOrder => BackgroundImageOptionDefinitionConstants.UIOrder_HexEditor;
 			public bool UserVisible => true;
-			public DefaultImageSettings GetDefaultImageSettings() => null;
+			public DefaultImageSettings? GetDefaultImageSettings() => null;
 			public bool IsSupported(ITextView textView) => false;
 			public bool IsSupported(HexView hexView) => true;
 		}

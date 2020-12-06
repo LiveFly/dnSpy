@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -31,14 +31,14 @@ namespace dnSpy.Hex.Files.DotNet {
 		public HexSpan VersionStringSpan { get; private set; }
 		public HexSpan StorageHeaderSpan { get; private set; }
 		public int StreamCount { get; private set; }
-		public StorageStreamHeader[] StorageStreamHeaders { get; private set; }
+		public StorageStreamHeader[]? StorageStreamHeaders { get; private set; }
 
 		DotNetMetadataHeaderReader(HexBufferFile file, HexSpan mdSpan) {
 			this.file = file ?? throw new ArgumentNullException(nameof(file));
 			MetadataSpan = mdSpan;
 		}
 
-		public static DotNetMetadataHeaderReader TryCreate(HexBufferFile file, HexSpan span) {
+		public static DotNetMetadataHeaderReader? TryCreate(HexBufferFile file, HexSpan span) {
 			if (span.Length < 0x14)
 				return null;
 			if (!file.Span.Contains(span))
@@ -67,7 +67,7 @@ namespace dnSpy.Hex.Files.DotNet {
 			var lastStreamOffset = MetadataSpan.Start;
 			for (int i = 0; i < StorageStreamHeaders.Length; i++) {
 				var stream = ReadStorageStreamHeader(pos, sb);
-				if (stream == null)
+				if (stream is null)
 					return false;
 				StorageStreamHeaders[i] = stream.Value;
 				pos = stream.Value.Span.End;

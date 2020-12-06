@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -27,7 +27,7 @@ namespace dnSpy.Hex.Intellisense {
 #pragma warning disable CS0169
 		[Export(typeof(HexSpaceReservationManagerDefinition))]
 		[VSUTIL.Name(HexIntellisenseSpaceReservationManagerNames.QuickInfoSpaceReservationManagerName)]
-		static readonly HexSpaceReservationManagerDefinition quickInfoSpaceReservationManagerDefinition;
+		static readonly HexSpaceReservationManagerDefinition? quickInfoSpaceReservationManagerDefinition;
 #pragma warning restore CS0169
 	}
 }

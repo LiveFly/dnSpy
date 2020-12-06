@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -351,8 +351,8 @@ namespace dnSpy.Text.Classification {
 				classificationTypeRegistryService.GetClassificationType(ThemeClassificationTypeNames.AsmHexBytes),
 			};
 			foreach (var ct in classificationTypes) {
-				Debug.Assert(ct != null);
-				if (ct == null)
+				Debug2.Assert(ct is not null);
+				if (ct is null)
 					throw new InvalidOperationException();
 			}
 		}

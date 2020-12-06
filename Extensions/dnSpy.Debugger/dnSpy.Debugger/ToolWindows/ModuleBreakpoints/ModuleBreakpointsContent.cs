@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -41,9 +41,9 @@ namespace dnSpy.Debugger.ToolWindows.ModuleBreakpoints {
 
 	[Export(typeof(IModuleBreakpointsContent))]
 	sealed class ModuleBreakpointsContent : IModuleBreakpointsContent {
-		public object UIObject => moduleBreakpointsControl;
-		public IInputElement FocusedElement => moduleBreakpointsControl.ListView;
-		public FrameworkElement ZoomElement => moduleBreakpointsControl;
+		public object? UIObject => moduleBreakpointsControl;
+		public IInputElement? FocusedElement => moduleBreakpointsControl.ListView;
+		public FrameworkElement? ZoomElement => moduleBreakpointsControl;
 		public ListView ListView => moduleBreakpointsControl.ListView;
 		public ModuleBreakpointsOperations Operations { get; }
 
@@ -99,7 +99,7 @@ namespace dnSpy.Debugger.ToolWindows.ModuleBreakpoints {
 			moduleBreakpointsControl.ListView.PreviewKeyDown += ListView_PreviewKeyDown;
 		}
 
-		void ListView_PreviewKeyDown(object sender, KeyEventArgs e) {
+		void ListView_PreviewKeyDown(object? sender, KeyEventArgs e) {
 			if (!e.Handled) {
 				// Use a KeyDown handler. If we add this as a key command to the listview, the textview
 				// (used when editing eg. module name) won't see the space.

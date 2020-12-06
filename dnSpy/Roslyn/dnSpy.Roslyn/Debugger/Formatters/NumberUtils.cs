@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -21,8 +21,8 @@ using System;
 
 namespace dnSpy.Roslyn.Debugger.Formatters {
 	static class NumberUtils {
-		public static bool TryConvertIntegerToUInt64ZeroExtend(object obj, out ulong result) {
-			if (obj == null) {
+		public static bool TryConvertIntegerToUInt64ZeroExtend(object? obj, out ulong result) {
+			if (obj is null) {
 				result = 0;
 				return false;
 			}

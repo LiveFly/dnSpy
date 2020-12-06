@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -26,7 +26,7 @@ using dnSpy.Contracts.Text.Editor;
 namespace dnSpy.Debugger.DotNet.CallStack.TextEditor {
 	[Export(typeof(DbgStackFrameGlyphTextMarkerLocationInfoProvider))]
 	sealed class DbgStackFrameGlyphTextMarkerLocationInfoProviderImpl : DbgStackFrameGlyphTextMarkerLocationInfoProvider {
-		public override GlyphTextMarkerLocationInfo Create(DbgStackFrame frame) {
+		public override GlyphTextMarkerLocationInfo? Create(DbgStackFrame frame) {
 			switch (frame.Location) {
 			case DbgDotNetCodeLocation loc:
 				switch (loc.ILOffsetMapping) {

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -70,10 +70,10 @@ namespace dndbg.Engine {
 	}
 
 	sealed class NameChangedDebuggerEventArgs : DebuggerEventArgs {
-		public DnAppDomain AppDomain { get; }
-		public DnThread Thread { get; }
+		public DnAppDomain? AppDomain { get; }
+		public DnThread? Thread { get; }
 
-		public NameChangedDebuggerEventArgs(DnAppDomain appDomain, DnThread thread) {
+		public NameChangedDebuggerEventArgs(DnAppDomain? appDomain, DnThread? thread) {
 			AppDomain = appDomain;
 			Thread = thread;
 		}

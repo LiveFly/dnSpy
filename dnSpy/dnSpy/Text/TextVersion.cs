@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -28,8 +28,8 @@ namespace dnSpy.Text {
 		public int VersionNumber => textImageVersion.VersionNumber;
 		public int ReiteratedVersionNumber => textImageVersion.ReiteratedVersionNumber;
 		public int Length => textImageVersion.Length;
-		public ITextVersion Next { get; private set; }
-		public INormalizedTextChangeCollection Changes => textImageVersion.Changes;
+		public ITextVersion? Next { get; private set; }
+		public INormalizedTextChangeCollection? Changes => textImageVersion.Changes;
 		public ITextImageVersion ImageVersion => textImageVersion;
 
 		readonly TextImageVersion textImageVersion;

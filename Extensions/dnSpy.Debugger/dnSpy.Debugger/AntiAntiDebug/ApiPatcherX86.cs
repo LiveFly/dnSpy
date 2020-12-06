@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -19,6 +19,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using dnSpy.Contracts.Debugger;
 using Iced.Intel;
 using II = Iced.Intel;
@@ -69,7 +70,7 @@ namespace dnSpy.Debugger.AntiAntiDebug {
 
 		void Initialize(Decoder decoder, ulong address) {
 			codeReader.Initialize(processMemoryBlockAllocator.Process, address);
-			decoder.InstructionPointer = address;
+			decoder.IP = address;
 		}
 
 		void GetJmpTarget(ref Instruction instr, out ulong jmpTarget, out bool jmpTargetIsIndirect) {
@@ -81,7 +82,7 @@ namespace dnSpy.Debugger.AntiAntiDebug {
 			case II.Code.Jmp_rm64:
 				if (instr.Op0Kind != OpKind.Memory)
 					return;
-				if (instr.IsIPRelativeMemoryOp) {
+				if (instr.IsIPRelativeMemoryOperand) {
 					jmpTarget = instr.IPRelativeMemoryAddress;
 					jmpTargetIsIndirect = true;
 					return;
@@ -130,7 +131,7 @@ namespace dnSpy.Debugger.AntiAntiDebug {
 		}
 
 		static bool ModifiesRegistersOrMemory(in InstructionInfo info) {
-			if (info.StackInstruction)
+			if (info.IsStackInstruction)
 				return true;
 
 			foreach (var regInfo in info.GetUsedRegisters()) {
@@ -179,7 +180,7 @@ namespace dnSpy.Debugger.AntiAntiDebug {
 				while (true) {
 					decoder.Decode(out var instr);
 					blockInstructions.Add(instr);
-					var info = instrInfoFactory.GetInfo(ref instr);
+					var info = instrInfoFactory.GetInfo(instr);
 
 					ulong jmpTarget;
 					bool jmpTargetIsIndirect;
@@ -218,7 +219,7 @@ namespace dnSpy.Debugger.AntiAntiDebug {
 						break;
 					}
 
-					uint currentSize = (uint)decoder.InstructionPointer - (uint)startAddress;
+					uint currentSize = (uint)decoder.IP - (uint)startAddress;
 					if (currentSize >= patchSize && instr.Code != II.Code.INVALID) {
 						blockAddress = startAddress;
 						return true;
@@ -287,7 +288,7 @@ namespace dnSpy.Debugger.AntiAntiDebug {
 			}
 			var arrayCodeWriter = new ArrayCodeWriterImpl((int)patchSize);
 			var block = new InstructionBlock(arrayCodeWriter, instructions, blockAddress);
-			if (!BlockEncoder.TryEncode(is64 ? 64 : 32, block, out errorMessage, options: BlockEncoderOptions.DontFixBranches))
+			if (!BlockEncoder.TryEncode(is64 ? 64 : 32, block, out errorMessage, out _, options: BlockEncoderOptions.DontFixBranches))
 				return new PatchAPIResult(errorMessage);
 
 			Debug.Assert((uint)arrayCodeWriter.Index == patchSize);
@@ -304,13 +305,13 @@ namespace dnSpy.Debugger.AntiAntiDebug {
 			public override void WriteByte(byte value) => memBlock.WriteByte(value);
 		}
 
-		bool TryCopyOriginalBlock(ProcessMemoryBlock memBlock, InstructionList blockInstructions, out string errorMessage) {
+		bool TryCopyOriginalBlock(ProcessMemoryBlock memBlock, InstructionList blockInstructions, [NotNullWhen(false)] out string? errorMessage) {
 			Debug.Assert(blockInstructions.Count != 0);
-			var targetAddr = blockInstructions[blockInstructions.Count - 1].NextIP64;
+			var targetAddr = blockInstructions[blockInstructions.Count - 1].NextIP;
 			blockInstructions.Add(Instruction.CreateBranch(is64 ? II.Code.Jmp_rel32_64 : II.Code.Jmp_rel32_32, targetAddr));
 			var codeWriter = new ProcessMemoryBlockCodeWriter(memBlock);
 			var block = new InstructionBlock(codeWriter, blockInstructions, memBlock.CurrentAddress);
-			return BlockEncoder.TryEncode(is64 ? 64 : 32, block, out errorMessage);
+			return BlockEncoder.TryEncode(is64 ? 64 : 32, block, out errorMessage, out _);
 		}
 	}
 }

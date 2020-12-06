@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -29,7 +29,6 @@
 // PERF is the same as copying a file since it just patches the data in memory, nothing is rewritten.
 
 using System;
-using System.Text;
 using dnlib.DotNet;
 using dnlib.DotNet.MD;
 using dnlib.IO;
@@ -113,7 +112,7 @@ namespace MakeEverythingPublic {
 			return false;
 		}
 
-		static bool ParseIVTBlob(ref DataReader reader, uint end, out string publicKeyString) {
+		static bool ParseIVTBlob(ref DataReader reader, uint end, out string? publicKeyString) {
 			publicKeyString = null;
 			if ((ulong)reader.Position + 2 > end)
 				return false;

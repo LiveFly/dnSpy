@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -25,7 +25,7 @@ namespace dnSpy.Scripting.Roslyn.CSharp {
 	static class ReplOptionsDefinitions {
 #pragma warning disable CS0169
 		[ExportReplOptionsDefinition("C#", ContentTypes.ReplCSharpRoslyn, AppSettingsConstants.GUID_REPL_CSHARP_ROSLYN)]
-		static readonly ReplOptionsDefinition csharpReplOptionsDefinition;
+		static readonly ReplOptionsDefinition? csharpReplOptionsDefinition;
 #pragma warning restore CS0169
 	}
 }

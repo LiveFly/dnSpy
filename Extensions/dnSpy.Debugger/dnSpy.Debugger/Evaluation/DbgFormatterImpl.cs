@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -37,8 +37,10 @@ namespace dnSpy.Debugger.Evaluation {
 			this.engineFormatter = engineFormatter ?? throw new ArgumentNullException(nameof(engineFormatter));
 		}
 
+		static void WriteError(IDbgTextWriter output) => output.Write(DbgTextColor.Error, "???");
+
 		public override void FormatExceptionName(DbgEvaluationContext context, IDbgTextWriter output, uint id) {
-			if (context == null)
+			if (context is null)
 				throw new ArgumentNullException(nameof(context));
 			if (!(context is DbgEvaluationContextImpl))
 				throw new ArgumentException();
@@ -46,13 +48,18 @@ namespace dnSpy.Debugger.Evaluation {
 				throw new ArgumentException();
 			if (context.Runtime.RuntimeKindGuid != runtimeKindGuid)
 				throw new ArgumentException();
-			if (output == null)
+			if (output is null)
 				throw new ArgumentNullException(nameof(output));
-			engineFormatter.FormatExceptionName(context, output, id);
+			try {
+				engineFormatter.FormatExceptionName(context, output, id);
+			}
+			catch (Exception ex) when (ExceptionUtils.IsInternalDebuggerError(ex)) {
+				WriteError(output);
+			}
 		}
 
 		public override void FormatStowedExceptionName(DbgEvaluationContext context, IDbgTextWriter output, uint id) {
-			if (context == null)
+			if (context is null)
 				throw new ArgumentNullException(nameof(context));
 			if (!(context is DbgEvaluationContextImpl))
 				throw new ArgumentException();
@@ -60,13 +67,18 @@ namespace dnSpy.Debugger.Evaluation {
 				throw new ArgumentException();
 			if (context.Runtime.RuntimeKindGuid != runtimeKindGuid)
 				throw new ArgumentException();
-			if (output == null)
+			if (output is null)
 				throw new ArgumentNullException(nameof(output));
-			engineFormatter.FormatStowedExceptionName(context, output, id);
+			try {
+				engineFormatter.FormatStowedExceptionName(context, output, id);
+			}
+			catch (Exception ex) when (ExceptionUtils.IsInternalDebuggerError(ex)) {
+				WriteError(output);
+			}
 		}
 
 		public override void FormatReturnValueName(DbgEvaluationContext context, IDbgTextWriter output, uint id) {
-			if (context == null)
+			if (context is null)
 				throw new ArgumentNullException(nameof(context));
 			if (!(context is DbgEvaluationContextImpl))
 				throw new ArgumentException();
@@ -74,13 +86,18 @@ namespace dnSpy.Debugger.Evaluation {
 				throw new ArgumentException();
 			if (context.Runtime.RuntimeKindGuid != runtimeKindGuid)
 				throw new ArgumentException();
-			if (output == null)
+			if (output is null)
 				throw new ArgumentNullException(nameof(output));
-			engineFormatter.FormatReturnValueName(context, output, id);
+			try {
+				engineFormatter.FormatReturnValueName(context, output, id);
+			}
+			catch (Exception ex) when (ExceptionUtils.IsInternalDebuggerError(ex)) {
+				WriteError(output);
+			}
 		}
 
 		public override void FormatObjectIdName(DbgEvaluationContext context, IDbgTextWriter output, uint id) {
-			if (context == null)
+			if (context is null)
 				throw new ArgumentNullException(nameof(context));
 			if (!(context is DbgEvaluationContextImpl))
 				throw new ArgumentException();
@@ -88,13 +105,18 @@ namespace dnSpy.Debugger.Evaluation {
 				throw new ArgumentException();
 			if (context.Runtime.RuntimeKindGuid != runtimeKindGuid)
 				throw new ArgumentException();
-			if (output == null)
+			if (output is null)
 				throw new ArgumentNullException(nameof(output));
-			engineFormatter.FormatObjectIdName(context, output, id);
+			try {
+				engineFormatter.FormatObjectIdName(context, output, id);
+			}
+			catch (Exception ex) when (ExceptionUtils.IsInternalDebuggerError(ex)) {
+				WriteError(output);
+			}
 		}
 
-		public override void FormatFrame(DbgEvaluationInfo evalInfo, IDbgTextWriter output, DbgStackFrameFormatterOptions options, DbgValueFormatterOptions valueOptions, CultureInfo cultureInfo) {
-			if (evalInfo == null)
+		public override void FormatFrame(DbgEvaluationInfo evalInfo, IDbgTextWriter output, DbgStackFrameFormatterOptions options, DbgValueFormatterOptions valueOptions, CultureInfo? cultureInfo) {
+			if (evalInfo is null)
 				throw new ArgumentNullException(nameof(evalInfo));
 			if (!(evalInfo.Context is DbgEvaluationContextImpl))
 				throw new ArgumentException();
@@ -102,17 +124,22 @@ namespace dnSpy.Debugger.Evaluation {
 				throw new ArgumentException();
 			if (evalInfo.Context.Runtime.RuntimeKindGuid != runtimeKindGuid)
 				throw new ArgumentException();
-			if (output == null)
+			if (output is null)
 				throw new ArgumentNullException(nameof(output));
 			var frameImpl = evalInfo.Frame as DbgStackFrameImpl;
-			if (frameImpl == null)
+			if (frameImpl is null)
 				throw new ArgumentException();
-			if (!frameImpl.TryFormat(evalInfo.Context, output, options, valueOptions, cultureInfo, evalInfo.CancellationToken))
-				engineFormatter.FormatFrame(evalInfo, output, options, valueOptions, cultureInfo);
+			try {
+				if (!frameImpl.TryFormat(evalInfo.Context, output, options, valueOptions, cultureInfo, evalInfo.CancellationToken))
+					engineFormatter.FormatFrame(evalInfo, output, options, valueOptions, cultureInfo);
+			}
+			catch (Exception ex) when (ExceptionUtils.IsInternalDebuggerError(ex)) {
+				WriteError(output);
+			}
 		}
 
-		public override void FormatValue(DbgEvaluationInfo evalInfo, IDbgTextWriter output, DbgValue value, DbgValueFormatterOptions options, CultureInfo cultureInfo) {
-			if (evalInfo == null)
+		public override void FormatValue(DbgEvaluationInfo evalInfo, IDbgTextWriter output, DbgValue value, DbgValueFormatterOptions options, CultureInfo? cultureInfo) {
+			if (evalInfo is null)
 				throw new ArgumentNullException(nameof(evalInfo));
 			if (!(evalInfo.Context is DbgEvaluationContextImpl))
 				throw new ArgumentException();
@@ -120,19 +147,24 @@ namespace dnSpy.Debugger.Evaluation {
 				throw new ArgumentException();
 			if (evalInfo.Context.Runtime.RuntimeKindGuid != runtimeKindGuid)
 				throw new ArgumentException();
-			if (output == null)
+			if (output is null)
 				throw new ArgumentNullException(nameof(output));
-			if (value == null)
+			if (value is null)
 				throw new ArgumentNullException(nameof(value));
 			if (!(value is DbgValueImpl valueImpl))
 				throw new ArgumentException();
 			if (value.Runtime.RuntimeKindGuid != runtimeKindGuid)
 				throw new ArgumentException();
-			engineFormatter.FormatValue(evalInfo, output, valueImpl.EngineValue, options, cultureInfo);
+			try {
+				engineFormatter.FormatValue(evalInfo, output, valueImpl.EngineValue, options, cultureInfo);
+			}
+			catch (Exception ex) when (ExceptionUtils.IsInternalDebuggerError(ex)) {
+				WriteError(output);
+			}
 		}
 
-		public override void FormatType(DbgEvaluationInfo evalInfo, IDbgTextWriter output, DbgValue value, DbgValueFormatterTypeOptions options, CultureInfo cultureInfo) {
-			if (evalInfo == null)
+		public override void FormatType(DbgEvaluationInfo evalInfo, IDbgTextWriter output, DbgValue value, DbgValueFormatterTypeOptions options, CultureInfo? cultureInfo) {
+			if (evalInfo is null)
 				throw new ArgumentNullException(nameof(evalInfo));
 			if (!(evalInfo.Context is DbgEvaluationContextImpl))
 				throw new ArgumentException();
@@ -140,15 +172,20 @@ namespace dnSpy.Debugger.Evaluation {
 				throw new ArgumentException();
 			if (evalInfo.Context.Runtime.RuntimeKindGuid != runtimeKindGuid)
 				throw new ArgumentException();
-			if (output == null)
+			if (output is null)
 				throw new ArgumentNullException(nameof(output));
-			if (value == null)
+			if (value is null)
 				throw new ArgumentNullException(nameof(value));
 			if (!(value is DbgValueImpl valueImpl))
 				throw new ArgumentException();
 			if (value.Runtime.RuntimeKindGuid != runtimeKindGuid)
 				throw new ArgumentException();
-			engineFormatter.FormatType(evalInfo, output, valueImpl.EngineValue, options, cultureInfo);
+			try {
+				engineFormatter.FormatType(evalInfo, output, valueImpl.EngineValue, options, cultureInfo);
+			}
+			catch (Exception ex) when (ExceptionUtils.IsInternalDebuggerError(ex)) {
+				WriteError(output);
+			}
 		}
 	}
 }

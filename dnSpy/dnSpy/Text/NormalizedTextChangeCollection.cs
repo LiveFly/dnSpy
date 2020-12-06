@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -21,6 +21,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.VisualStudio.Text;
 
@@ -88,7 +89,15 @@ namespace dnSpy.Text {
 
 		sealed class Comparer : IComparer<ITextChange> {
 			public static readonly Comparer Instance = new Comparer();
-			public int Compare(ITextChange x, ITextChange y) => x.OldPosition - y.OldPosition;
+			public int Compare([AllowNull] ITextChange x, [AllowNull] ITextChange y) {
+				if ((object?)x == y)
+					return 0;
+				if (x is null)
+					return -1;
+				if (y is null)
+					return 1;
+				return x.OldPosition - y.OldPosition;
+			}
 		}
 
 		public bool Contains(ITextChange item) => Array.IndexOf(changes, item) >= 0;

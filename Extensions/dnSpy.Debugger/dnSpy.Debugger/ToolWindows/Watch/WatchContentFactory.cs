@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -45,12 +45,12 @@ namespace dnSpy.Debugger.ToolWindows.Watch {
 
 		public override bool TryGetContent(int index, out WatchContent watchContent) {
 			watchContent = contents[index];
-			return watchContent != null;
+			return watchContent is not null;
 		}
 
 		public override WatchContent GetContent(int index) {
 			var content = contents[index];
-			if (content == null)
+			if (content is null)
 				contents[index] = content = new WatchContent(index, watchVariablesWindowValueNodesProviderService.Value.Get(index), wpfCommandService, variablesWindowVMFactory.Value);
 			return content;
 		}

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -65,7 +65,7 @@ namespace dnSpy.Contracts.Disassembly {
 		/// <summary>
 		/// Checks if this is the default instance
 		/// </summary>
-		public bool IsDefault => Symbol == null;
+		public bool IsDefault => Symbol is null;
 
 		/// <summary>
 		/// Symbol kind

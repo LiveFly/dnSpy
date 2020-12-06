@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -27,17 +27,17 @@ namespace dnSpy.Bookmarks.UI {
 		[Export]
 		[Name(ContentTypes.BookmarksWindow)]
 		[BaseDefinition(ContentTypes.Text)]
-		static readonly ContentTypeDefinition BookmarksWindow;
+		static readonly ContentTypeDefinition? BookmarksWindow;
 
 		[Export]
 		[Name(ContentTypes.BookmarksWindowName)]
 		[BaseDefinition(ContentTypes.Text)]
-		static readonly ContentTypeDefinition BookmarksWindowName;
+		static readonly ContentTypeDefinition? BookmarksWindowName;
 
 		[Export]
 		[Name(ContentTypes.BookmarksWindowLabels)]
 		[BaseDefinition(ContentTypes.Text)]
-		static readonly ContentTypeDefinition BookmarksWindowLabels;
+		static readonly ContentTypeDefinition? BookmarksWindowLabels;
 #pragma warning restore CS0169
 	}
 }

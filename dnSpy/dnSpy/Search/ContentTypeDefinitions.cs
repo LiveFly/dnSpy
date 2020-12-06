@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -27,7 +27,7 @@ namespace dnSpy.Search {
 		[Export]
 		[Name(ContentTypes.Search)]
 		[BaseDefinition(ContentTypes.Text)]
-		static readonly ContentTypeDefinition Search;
+		static readonly ContentTypeDefinition? Search;
 #pragma warning restore CS0169
 	}
 }

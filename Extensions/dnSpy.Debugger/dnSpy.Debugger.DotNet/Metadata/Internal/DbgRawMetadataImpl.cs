@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -76,7 +76,7 @@ namespace dnSpy.Debugger.DotNet.Metadata.Internal {
 		readonly int metadataSize;
 		readonly object lockObj;
 		GCHandle moduleBytesHandle;
-		readonly DbgProcess process;
+		readonly DbgProcess? process;
 		readonly ulong moduleAddress;
 		volatile int referenceCounter;
 		volatile bool disposed;
@@ -144,7 +144,7 @@ namespace dnSpy.Debugger.DotNet.Metadata.Internal {
 			process?.ReadMemory(moduleAddress, address.ToPointer(), size);
 		}
 
-		internal DbgRawMetadata TryAddRef() {
+		internal DbgRawMetadata? TryAddRef() {
 			lock (lockObj) {
 				if (disposed)
 					return null;
@@ -182,11 +182,11 @@ namespace dnSpy.Debugger.DotNet.Metadata.Internal {
 
 		internal void ForceDispose() {
 			GC.SuppressFinalize(this);
-			if (process != null && address != IntPtr.Zero && Interlocked.Exchange(ref freedAddress, 1) == 0) {
+			if (process is not null && address != IntPtr.Zero && Interlocked.Exchange(ref freedAddress, 1) == 0) {
 				bool b = NativeMethods.VirtualFree(address, IntPtr.Zero, NativeMethods.MEM_RELEASE);
 				Debug.Assert(b);
 			}
-			if (process == null) {
+			if (process is null) {
 				try {
 					if (moduleBytesHandle.IsAllocated)
 						moduleBytesHandle.Free();

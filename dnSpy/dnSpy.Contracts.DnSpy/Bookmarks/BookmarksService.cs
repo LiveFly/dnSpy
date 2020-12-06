@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -43,7 +43,7 @@ namespace dnSpy.Contracts.Bookmarks {
 		/// <summary>
 		/// Raised when bookmarks are modified
 		/// </summary>
-		public abstract event EventHandler<BookmarksModifiedEventArgs> BookmarksModified;
+		public abstract event EventHandler<BookmarksModifiedEventArgs>? BookmarksModified;
 
 		/// <summary>
 		/// Gets all bookmarks
@@ -53,14 +53,14 @@ namespace dnSpy.Contracts.Bookmarks {
 		/// <summary>
 		/// Raised when <see cref="Bookmarks"/> is changed
 		/// </summary>
-		public abstract event EventHandler<CollectionChangedEventArgs<Bookmark>> BookmarksChanged;
+		public abstract event EventHandler<CollectionChangedEventArgs<Bookmark>>? BookmarksChanged;
 
 		/// <summary>
 		/// Adds a bookmark. If the bookmark already exists, null is returned.
 		/// </summary>
 		/// <param name="bookmark">Bookmark info</param>
 		/// <returns></returns>
-		public Bookmark Add(BookmarkInfo bookmark) => Add(new[] { bookmark }).FirstOrDefault();
+		public Bookmark? Add(BookmarkInfo bookmark) => Add(new[] { bookmark }).FirstOrDefault();
 
 		/// <summary>
 		/// Adds bookmarks. Duplicate bookmarks are ignored.

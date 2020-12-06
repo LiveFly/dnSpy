@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -108,7 +108,7 @@ namespace dnSpy.Disassembly.Viewer {
 		public DisassemblyContentSettingsBase Clone() => CopyTo(new DisassemblyContentSettingsBase());
 
 		public DisassemblyContentSettingsBase CopyTo(DisassemblyContentSettingsBase other) {
-			if (other == null)
+			if (other is null)
 				throw new ArgumentNullException(nameof(other));
 			other.ShowInstructionAddress = ShowInstructionAddress;
 			other.ShowInstructionBytes = ShowInstructionBytes;
@@ -144,7 +144,7 @@ namespace dnSpy.Disassembly.Viewer {
 			PropertyChanged += OnPropertyChanged;
 		}
 
-		void OnPropertyChanged(object sender, PropertyChangedEventArgs e) => Save();
+		void OnPropertyChanged(object? sender, PropertyChangedEventArgs e) => Save();
 
 		void Save() {
 			var sect = settingsService.RecreateSection(SETTINGS_GUID);

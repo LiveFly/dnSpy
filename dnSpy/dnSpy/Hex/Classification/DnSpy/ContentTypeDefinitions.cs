@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -27,12 +27,12 @@ namespace dnSpy.Hex.Classification.DnSpy {
 		[Export]
 		[VSUTIL.Name(CT.ContentTypes.HexToolTip)]
 		[VSUTIL.BaseDefinition(CT.ContentTypes.Text)]
-		static readonly VSUTIL.ContentTypeDefinition HexToolTipContentTypeDefinition;
+		static readonly VSUTIL.ContentTypeDefinition? HexToolTipContentTypeDefinition;
 
 		[Export]
 		[VSUTIL.Name(CT.ContentTypes.DefaultHexToolTip)]
 		[VSUTIL.BaseDefinition(CT.ContentTypes.HexToolTip)]
-		static readonly VSUTIL.ContentTypeDefinition DefaultHexToolTipContentTypeDefinition;
+		static readonly VSUTIL.ContentTypeDefinition? DefaultHexToolTipContentTypeDefinition;
 #pragma warning restore CS0169
 	}
 }

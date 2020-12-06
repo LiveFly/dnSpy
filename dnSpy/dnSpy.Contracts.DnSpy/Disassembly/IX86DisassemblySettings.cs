@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -27,32 +27,32 @@ namespace dnSpy.Contracts.Disassembly {
 		/// <summary>
 		/// Prefixes are upper cased
 		/// </summary>
-		bool UpperCasePrefixes { get; set; }
+		bool UppercasePrefixes { get; set; }
 
 		/// <summary>
 		/// Mnemonics are upper cased
 		/// </summary>
-		bool UpperCaseMnemonics { get; set; }
+		bool UppercaseMnemonics { get; set; }
 
 		/// <summary>
 		/// Registers are upper cased
 		/// </summary>
-		bool UpperCaseRegisters { get; set; }
+		bool UppercaseRegisters { get; set; }
 
 		/// <summary>
 		/// Keywords are upper cased (eg. BYTE PTR, SHORT)
 		/// </summary>
-		bool UpperCaseKeywords { get; set; }
+		bool UppercaseKeywords { get; set; }
 
 		/// <summary>
-		/// Upper case other stuff, eg. {z}, {sae}, {rd-sae}
+		/// Upper case decorators, eg. {z}, {sae}, {rd-sae}
 		/// </summary>
-		bool UpperCaseOther { get; set; }
+		bool UppercaseDecorators { get; set; }
 
 		/// <summary>
 		/// Everything is upper cased, except numbers and their prefixes/suffixes
 		/// </summary>
-		bool UpperCaseAll { get; set; }
+		bool UppercaseAll { get; set; }
 
 		/// <summary>
 		/// Character index (0-based) where the first operand is formatted. Can be set to 0 to format it immediately after the mnemonic.
@@ -109,12 +109,12 @@ namespace dnSpy.Contracts.Disassembly {
 		/// <summary>
 		/// Hex number prefix or null/empty string, eg. "0x"
 		/// </summary>
-		string HexPrefix { get; set; }
+		string? HexPrefix { get; set; }
 
 		/// <summary>
 		/// Hex number suffix or null/empty string, eg. "h"
 		/// </summary>
-		string HexSuffix { get; set; }
+		string? HexSuffix { get; set; }
 
 		/// <summary>
 		/// Size of a digit group
@@ -124,12 +124,12 @@ namespace dnSpy.Contracts.Disassembly {
 		/// <summary>
 		/// Decimal number prefix or null/empty string
 		/// </summary>
-		string DecimalPrefix { get; set; }
+		string? DecimalPrefix { get; set; }
 
 		/// <summary>
 		/// Decimal number suffix or null/empty string
 		/// </summary>
-		string DecimalSuffix { get; set; }
+		string? DecimalSuffix { get; set; }
 
 		/// <summary>
 		/// Size of a digit group
@@ -139,12 +139,12 @@ namespace dnSpy.Contracts.Disassembly {
 		/// <summary>
 		/// Octal number prefix or null/empty string
 		/// </summary>
-		string OctalPrefix { get; set; }
+		string? OctalPrefix { get; set; }
 
 		/// <summary>
 		/// Octal number suffix or null/empty string
 		/// </summary>
-		string OctalSuffix { get; set; }
+		string? OctalSuffix { get; set; }
 
 		/// <summary>
 		/// Size of a digit group
@@ -154,12 +154,12 @@ namespace dnSpy.Contracts.Disassembly {
 		/// <summary>
 		/// Binary number prefix or null/empty string
 		/// </summary>
-		string BinaryPrefix { get; set; }
+		string? BinaryPrefix { get; set; }
 
 		/// <summary>
 		/// Binary number suffix or null/empty string
 		/// </summary>
-		string BinarySuffix { get; set; }
+		string? BinarySuffix { get; set; }
 
 		/// <summary>
 		/// Size of a digit group
@@ -169,18 +169,18 @@ namespace dnSpy.Contracts.Disassembly {
 		/// <summary>
 		/// Digit separator or null/empty string
 		/// </summary>
-		string DigitSeparator { get; set; }
+		string? DigitSeparator { get; set; }
 
 		/// <summary>
-		/// Use shortest possible hexadecimal/octal/binary numbers, eg. 0xA/0Ah instead of eg. 0x0000000A/0000000Ah.
-		/// This option has no effect on branch targets, use <see cref="ShortBranchNumbers"/>.
+		/// Add leading zeroes to hexadecimal/octal/binary numbers, eg. 0x0000000A/0000000Ah vs 0xA/0Ah.
+		/// This option has no effect on branch targets, use <see cref="BranchLeadingZeroes"/>.
 		/// </summary>
-		bool ShortNumbers { get; set; }
+		bool LeadingZeroes { get; set; }
 
 		/// <summary>
 		/// Use upper case hex digits
 		/// </summary>
-		bool UpperCaseHex { get; set; }
+		bool UppercaseHex { get; set; }
 
 		/// <summary>
 		/// Small hex numbers (-9 .. 9) are shown in decimal
@@ -188,7 +188,7 @@ namespace dnSpy.Contracts.Disassembly {
 		bool SmallHexNumbersInDecimal { get; set; }
 
 		/// <summary>
-		/// Add a leading zero to numbers if there's no prefix and the number begins with hex digits A-F, eg. Ah vs 0Ah
+		/// Add a leading zero to numbers if there's no prefix and the number starts with hex digits A-F, eg. Ah vs 0Ah
 		/// </summary>
 		bool AddLeadingZeroToHexNumbers { get; set; }
 
@@ -198,9 +198,9 @@ namespace dnSpy.Contracts.Disassembly {
 		NumberBase NumberBase { get; set; }
 
 		/// <summary>
-		/// Don't add leading zeroes to branch offsets, eg. 'je 123h' vs 'je 00000123h'. Used by call near, call far, jmp near, jmp far, jcc, loop, loopcc, xbegin
+		/// Add leading zeroes to branch offsets, eg. 'je 00000123h' vs 'je 123h'. Used by call near, call far, jmp near, jmp far, jcc, loop, loopcc, xbegin
 		/// </summary>
-		bool ShortBranchNumbers { get; set; }
+		bool BranchLeadingZeroes { get; set; }
 
 		/// <summary>
 		/// Show immediate operands as signed numbers, eg. 'mov eax,FFFFFFFF' vs 'mov eax,-1'
@@ -215,7 +215,7 @@ namespace dnSpy.Contracts.Disassembly {
 		/// <summary>
 		/// Sign extend memory displacements to the address size (16-bit, 32-bit, 64-bit), eg. 'mov al,[eax+12h]' vs 'mov al,[eax+00000012h]'
 		/// </summary>
-		bool SignExtendMemoryDisplacements { get; set; }
+		bool DisplacementLeadingZeroes { get; set; }
 
 		/// <summary>
 		/// Options that control if the memory size (eg. dword ptr) is shown or not.
@@ -242,5 +242,40 @@ namespace dnSpy.Contracts.Disassembly {
 		/// Show the original value after the symbol name, eg. 'mov eax,[myfield (12345678)]' vs 'mov eax,[myfield]'
 		/// </summary>
 		bool ShowSymbolAddress { get; set; }
+
+		/// <summary>
+		/// If true, the formatter doesn't add '%' to registers, eg. %eax vs eax
+		/// </summary>
+		bool GasNakedRegisters { get; set; }
+
+		/// <summary>
+		/// Shows the mnemonic size suffix, eg. 'mov %eax,%ecx' vs 'movl %eax,%ecx'
+		/// </summary>
+		bool GasShowMnemonicSizeSuffix { get; set; }
+
+		/// <summary>
+		/// Add a space after the comma if it's a memory operand, eg. '(%eax,%ecx,2)' vs '(%eax, %ecx, 2)'
+		/// </summary>
+		bool GasSpaceAfterMemoryOperandComma { get; set; }
+
+		/// <summary>
+		/// Add a DS segment override even if it's not present. Used if it's 16/32-bit code and mem op is a displ, eg. 'mov eax,[12345678]' vs 'mov eax,ds:[12345678]'
+		/// </summary>
+		bool MasmAddDsPrefix32 { get; set; }
+
+		/// <summary>
+		/// Show symbols in brackets, eg. '[ecx+symbol]' vs 'symbol[ecx]' and '[symbol]' vs 'symbol'
+		/// </summary>
+		bool MasmSymbolDisplInBrackets { get; set; }
+
+		/// <summary>
+		/// Show displacements in brackets, eg. '[ecx+1234h]' vs '1234h[ecx]'
+		/// </summary>
+		bool MasmDisplInBrackets { get; set; }
+
+		/// <summary>
+		/// Shows byte, word, dword or qword if it's a sign extended immediate operand value, eg. 'or rcx,-1' vs 'or rcx,byte -1'
+		/// </summary>
+		bool NasmShowSignExtendedImmediateSize { get; set; }
 	}
 }

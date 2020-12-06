@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -47,6 +47,17 @@ namespace dnSpy.Contracts.Documents.TreeView {
 		PropertyTreeNodeGroupType,
 		ResourceTreeNodeGroup,
 		ResourceElementTreeNodeGroup,
+		TypeReferenceTreeNodeGroupTypeReferences,
+		TypeSpecsFolderTreeNodeGroupTypeReference,
+		MethodReferencesFolderTreeNodeGroupTypeReference,
+		PropertyReferencesFolderTreeNodeGroupTypeReference,
+		EventReferencesFolderTreeNodeGroupTypeReference,
+		FieldReferencesFolderTreeNodeGroupTypeReference,
+		TypeSpecTreeNodeGroupTypeSpecsFolder,
+		MethodReferenceTreeNodeGroupMethodReferencesFolder,
+		PropertyReferenceTreeNodeGroupPropertyReferencesFolder,
+		EventReferenceTreeNodeGroupEventReferencesFolder,
+		FieldReferenceTreeNodeGroupFieldReferencesFolder,
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 	}
 }

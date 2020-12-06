@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -24,8 +24,8 @@ using dnSpy.Debugger.DotNet.Metadata;
 
 namespace dnSpy.Debugger.DotNet.CorDebug.Impl.Evaluation {
 	static class SyntheticValueFactory {
-		static DmdType TryGetType(DmdAppDomain appDomain, object value) {
-			if (value == null)
+		static DmdType? TryGetType(DmdAppDomain appDomain, object value) {
+			if (value is null)
 				return null;
 
 			var type = value.GetType();
@@ -54,7 +54,7 @@ namespace dnSpy.Debugger.DotNet.CorDebug.Impl.Evaluation {
 			return null;
 		}
 
-		public static DbgDotNetValue TryCreateSyntheticValue(DmdType type, object constant) {
+		public static DbgDotNetValue? TryCreateSyntheticValue(DmdType type, object? constant) {
 			switch (DmdType.GetTypeCode(type)) {
 			case TypeCode.Boolean:
 				if (constant is bool)
@@ -117,7 +117,7 @@ namespace dnSpy.Debugger.DotNet.CorDebug.Impl.Evaluation {
 				break;
 
 			case TypeCode.String:
-				if (constant is string || constant == null)
+				if (constant is string || constant is null)
 					return new SyntheticValue(type, new DbgDotNetRawValue(DbgSimpleValueType.StringUtf16, constant));
 				break;
 
@@ -136,7 +136,7 @@ namespace dnSpy.Debugger.DotNet.CorDebug.Impl.Evaluation {
 							return new SyntheticValue(type, new DbgDotNetRawValue(DbgSimpleValueType.Ptr64, constant));
 					}
 				}
-				else if (constant == null && !type.IsValueType)
+				else if (constant is null && !type.IsValueType)
 					return new SyntheticNullValue(type);
 				break;
 			}

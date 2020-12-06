@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -43,17 +43,17 @@ namespace dnSpy.MainApp {
 		protected sealed override object CachedContextKey => ContextKey;
 		static readonly object ContextKey = new object();
 
-		protected sealed override ToolWindowGroupContext CreateContext(IMenuItemContext context) => CreateContextInternal(context);
+		protected sealed override ToolWindowGroupContext? CreateContext(IMenuItemContext context) => CreateContextInternal(context);
 
 		readonly IDsToolWindowService toolWindowService;
 
 		protected CtxMenuToolWindowGroupCommand(IDsToolWindowService toolWindowService) => this.toolWindowService = toolWindowService;
 
-		protected ToolWindowGroupContext CreateContextInternal(IMenuItemContext context) {
+		protected ToolWindowGroupContext? CreateContextInternal(IMenuItemContext context) {
 			if (context.CreatorObject.Guid != new Guid(MenuConstants.GUIDOBJ_TOOLWINDOW_TABCONTROL_GUID))
 				return null;
 			var twg = context.Find<IToolWindowGroup>();
-			if (twg == null || !toolWindowService.Owns(twg))
+			if (twg is null || !toolWindowService.Owns(twg))
 				return null;
 			return new ToolWindowGroupContext(toolWindowService, twg);
 		}

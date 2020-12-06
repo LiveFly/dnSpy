@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -38,7 +38,10 @@ namespace dnSpy.Debugger.Text {
 
 		public void Clear() => result.Clear();
 
-		public void Write(DbgTextColor color, string text) => result.Add(new ClassifiedText(color, text));
+		public void Write(DbgTextColor color, string? text) {
+			if (text is not null)
+				result.Add(new ClassifiedText(color, text));
+		}
 
 		public bool Equals(ClassifiedTextCollection collection) {
 			if (collection.IsDefault)

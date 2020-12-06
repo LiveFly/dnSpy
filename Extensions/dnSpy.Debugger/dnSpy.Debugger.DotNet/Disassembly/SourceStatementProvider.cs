@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -35,13 +35,13 @@ namespace dnSpy.Debugger.DotNet.Disassembly {
 		public (string line, TextSpan span) GetStatement(int ilOffset) {
 			var text = this.text;
 			var debugInfo = this.debugInfo;
-			if (text == null || debugInfo == null)
+			if (text is null || debugInfo is null)
 				return default;
 
 			var lastStatement = this.lastStatement;
 			var stmt = debugInfo.GetSourceStatementByCodeOffset((uint)ilOffset);
 			this.lastStatement = stmt;
-			if (stmt == null)
+			if (stmt is null)
 				return default;
 			if (lastStatement == stmt)
 				return default;

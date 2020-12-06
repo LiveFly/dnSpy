@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -28,25 +28,25 @@ namespace dnSpy.Roslyn.Intellisense.Completions {
 		[Export]
 		[Name(RoslynContentTypes.CompletionItemTextRoslyn)]
 		[BaseDefinition(ContentTypes.CompletionItemText)]
-		static readonly ContentTypeDefinition CompletionItemTextRoslyn;
+		static readonly ContentTypeDefinition? CompletionItemTextRoslyn;
 
 		[Export]
 		[Name(RoslynContentTypes.CompletionDisplayTextRoslyn)]
 		[BaseDefinition(ContentTypes.CompletionDisplayText)]
 		[BaseDefinition(RoslynContentTypes.CompletionItemTextRoslyn)]
-		static readonly ContentTypeDefinition CompletionDisplayTextRoslyn;
+		static readonly ContentTypeDefinition? CompletionDisplayTextRoslyn;
 
 		[Export]
 		[Name(RoslynContentTypes.CompletionSuffixRoslyn)]
 		[BaseDefinition(ContentTypes.CompletionSuffix)]
 		[BaseDefinition(RoslynContentTypes.CompletionItemTextRoslyn)]
-		static readonly ContentTypeDefinition CompletionSuffixRoslyn;
+		static readonly ContentTypeDefinition? CompletionSuffixRoslyn;
 
 		[Export]
 		[Name(RoslynContentTypes.CompletionToolTipRoslyn)]
 		[BaseDefinition(ContentTypes.CompletionToolTip)]
 		[BaseDefinition(RoslynContentTypes.RoslynTaggedText)]
-		static readonly ContentTypeDefinition CompletionToolTipRoslyn;
+		static readonly ContentTypeDefinition? CompletionToolTipRoslyn;
 #pragma warning restore CS0169
 	}
 }

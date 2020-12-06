@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -46,8 +46,8 @@ namespace dnSpy.Debugger.Impl {
 		public override DbgProcessState State => state;
 		DbgProcessState state;
 
-		public override event EventHandler IsRunningChanged;
-		public override event EventHandler DelayedIsRunningChanged;
+		public override event EventHandler? IsRunningChanged;
+		public override event EventHandler? DelayedIsRunningChanged;
 		public override bool IsRunning {
 			get {
 				lock (lockObj)
@@ -79,7 +79,7 @@ namespace dnSpy.Debugger.Impl {
 		static bool StringArrayEquals(IList<string> a, IList<string> b) {
 			if (a == b)
 				return true;
-			if (a == null || b == null)
+			if (a is null || b is null)
 				return false;
 			if (a.Count != b.Count)
 				return false;
@@ -104,7 +104,7 @@ namespace dnSpy.Debugger.Impl {
 		}
 		readonly List<EngineInfo> engineInfos;
 
-		public override event EventHandler<DbgCollectionChangedEventArgs<DbgRuntime>> RuntimesChanged;
+		public override event EventHandler<DbgCollectionChangedEventArgs<DbgRuntime>>? RuntimesChanged;
 		public override DbgRuntime[] Runtimes {
 			get {
 				lock (lockObj) {
@@ -118,7 +118,7 @@ namespace dnSpy.Debugger.Impl {
 			}
 		}
 
-		public override event EventHandler<DbgCollectionChangedEventArgs<DbgThread>> ThreadsChanged;
+		public override event EventHandler<DbgCollectionChangedEventArgs<DbgThread>>? ThreadsChanged;
 		public override DbgThread[] Threads {
 			get {
 				lock (lockObj)
@@ -156,6 +156,7 @@ namespace dnSpy.Debugger.Impl {
 			var info = GetProcessName(pid);
 			Filename = info.filename ?? string.Empty;
 			Name = info.name ?? string.Empty;
+			debugging = CalculateDebugging_NoLock();
 
 			new DelayedIsRunningHelper(this, dispatcher, RaiseDelayedIsRunningChanged_DbgThread);
 		}
@@ -167,7 +168,7 @@ namespace dnSpy.Debugger.Impl {
 		}
 
 		// DbgManager thread
-		void UpdateRuntime_DbgThread(DbgRuntimeImpl runtime) {
+		void UpdateRuntime_DbgThread(DbgRuntimeImpl? runtime) {
 			owner.Dispatcher.VerifyAccess();
 			lock (lockObj) {
 				var newCurrent = GetRuntime_NoLock(currentRuntime.Current, runtime);
@@ -176,8 +177,8 @@ namespace dnSpy.Debugger.Impl {
 			}
 		}
 
-		DbgRuntimeImpl GetRuntime_NoLock(DbgRuntimeImpl runtime, DbgRuntimeImpl defaultRuntime) {
-			if (runtime != null) {
+		DbgRuntimeImpl? GetRuntime_NoLock(DbgRuntimeImpl? runtime, DbgRuntimeImpl? defaultRuntime) {
+			if (runtime is not null) {
 				var info = engineInfos.First(a => a.Runtime == runtime);
 				if (info.IsPaused || owner.GetDelayedIsRunning_DbgThread(info.Engine) == false)
 					return runtime;
@@ -186,9 +187,9 @@ namespace dnSpy.Debugger.Impl {
 		}
 
 		// DbgManager thread
-		internal void SetPaused_DbgThread(DbgRuntimeImpl runtime) {
+		internal void SetPaused_DbgThread(DbgRuntimeImpl? runtime) {
 			owner.Dispatcher.VerifyAccess();
-			if (runtime == null)
+			if (runtime is null)
 				return;
 			lock (lockObj) {
 				var info = engineInfos.First(a => a.Runtime == runtime);
@@ -198,9 +199,9 @@ namespace dnSpy.Debugger.Impl {
 		}
 
 		// DbgManager thread
-		internal void SetRunning_DbgThread(DbgRuntimeImpl runtime) {
+		internal void SetRunning_DbgThread(DbgRuntimeImpl? runtime) {
 			owner.Dispatcher.VerifyAccess();
-			if (runtime == null)
+			if (runtime is null)
 				return;
 			lock (lockObj) {
 				var info = engineInfos.First(a => a.Runtime == runtime);
@@ -221,7 +222,7 @@ namespace dnSpy.Debugger.Impl {
 			}
 		}
 
-		internal DbgEngine TryGetEngine(DbgRuntime runtime) {
+		internal DbgEngine? TryGetEngine(DbgRuntime? runtime) {
 			lock (lockObj) {
 				foreach (var info in engineInfos) {
 					if (info.Runtime == runtime)
@@ -232,22 +233,22 @@ namespace dnSpy.Debugger.Impl {
 		}
 
 		bool IIsRunningProvider.IsDebugging => State != DbgProcessState.Terminated;
-		public event EventHandler IsDebuggingChanged;
+		public event EventHandler? IsDebuggingChanged;
 
-		public override event PropertyChangedEventHandler PropertyChanged;
+		public override event PropertyChangedEventHandler? PropertyChanged;
 		void OnPropertyChanged(string propName) {
 			DbgManager.Dispatcher.VerifyAccess();
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
 		}
 
-		static (string filename, string name) GetProcessName(int pid) {
-			string name = null;
-			string filename = null;
+		static (string? filename, string? name) GetProcessName(int pid) {
+			string? name = null;
+			string? filename = null;
 			try {
 				using (var p = Process.GetProcessById(pid)) {
 					name = p.ProcessName;
 					// Could throw
-					filename = p.MainModule.FileName;
+					filename = p.MainModule?.FileName;
 					name = Path.GetFileName(filename);
 				}
 			}
@@ -287,11 +288,13 @@ namespace dnSpy.Debugger.Impl {
 				return DbgOperatingSystem.MacOS;
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 				return DbgOperatingSystem.Linux;
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Create("FREEBSD")))
+				return DbgOperatingSystem.FreeBSD;
 			throw new InvalidOperationException("Unknown operating system");
 		}
 
 		public unsafe override void ReadMemory(ulong address, byte[] destination, int destinationIndex, int size) {
-			if (destination == null)
+			if (destination is null)
 				throw new ArgumentNullException(nameof(destination));
 			if (destinationIndex < 0)
 				throw new ArgumentOutOfRangeException(nameof(destinationIndex));
@@ -306,7 +309,7 @@ namespace dnSpy.Debugger.Impl {
 		}
 
 		public override void ReadMemory(ulong address, void* destination, int size) {
-			if (destination == null && size != 0)
+			if (destination is null && size != 0)
 				throw new ArgumentNullException(nameof(destination));
 			if (size < 0)
 				throw new ArgumentOutOfRangeException(nameof(size));
@@ -350,7 +353,7 @@ namespace dnSpy.Debugger.Impl {
 		unsafe void Clear(byte* destination, int size) => Memset.Clear(destination, 0, size);
 
 		public unsafe override void WriteMemory(ulong address, byte[] source, int sourceIndex, int size) {
-			if (source == null)
+			if (source is null)
 				throw new ArgumentNullException(nameof(source));
 			if (sourceIndex < 0)
 				throw new ArgumentOutOfRangeException(nameof(sourceIndex));
@@ -395,7 +398,7 @@ namespace dnSpy.Debugger.Impl {
 			}
 		}
 
-		void DbgRuntime_ThreadsChanged(object sender, DbgCollectionChangedEventArgs<DbgThread> e) {
+		void DbgRuntime_ThreadsChanged(object? sender, DbgCollectionChangedEventArgs<DbgThread> e) {
 			lock (lockObj) {
 				if (e.Added)
 					threads.AddRange(e.Objects);
@@ -455,8 +458,8 @@ namespace dnSpy.Debugger.Impl {
 				IsDebuggingChanged?.Invoke(this, EventArgs.Empty);
 		}
 
-		internal (DbgRuntimeImpl runtime, bool hasMoreRuntimes) Remove_DbgThread(DbgEngine engine) {
-			DbgRuntimeImpl runtime = null;
+		internal (DbgRuntimeImpl? runtime, bool hasMoreRuntimes) Remove_DbgThread(DbgEngine engine) {
+			DbgRuntimeImpl? runtime = null;
 			bool hasMoreRuntimes;
 			lock (lockObj) {
 				for (int i = 0; i < engineInfos.Count; i++) {
@@ -496,7 +499,7 @@ namespace dnSpy.Debugger.Impl {
 				ThreadsChanged?.Invoke(this, new DbgCollectionChangedEventArgs<DbgThread>(removedThreads, added: false));
 			if (raiseDebuggingChanged)
 				OnPropertyChanged(nameof(Debugging));
-			if (runtime != null)
+			if (runtime is not null)
 				RuntimesChanged?.Invoke(this, new DbgCollectionChangedEventArgs<DbgRuntime>(runtime, added: false));
 		}
 

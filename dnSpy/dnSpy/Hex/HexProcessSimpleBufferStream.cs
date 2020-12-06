@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -35,7 +35,7 @@ namespace dnSpy.Hex {
 		readonly bool isVolatile;
 		readonly HexPosition endAddress;
 
-		public HexProcessSimpleBufferStream(IntPtr hProcess, string name, bool isReadOnly, bool isVolatile) {
+		public HexProcessSimpleBufferStream(IntPtr hProcess, string? name, bool isReadOnly, bool isVolatile) {
 			this.hProcess = hProcess;
 			Span = GetDefaultSpan(hProcess);
 			Name = name ?? GetDefaultName(hProcess);

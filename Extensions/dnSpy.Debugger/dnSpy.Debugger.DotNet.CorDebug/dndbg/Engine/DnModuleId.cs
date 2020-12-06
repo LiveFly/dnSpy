@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -81,7 +81,7 @@ namespace dndbg.Engine {
 		/// <param name="isInMemory">true if it's an in-memory module</param>
 		/// <param name="nameOnly">true if <paramref name="asmFullName"/> is ignored</param>
 		public DnModuleId(string asmFullName, string moduleName, bool isDynamic, bool isInMemory, bool nameOnly) {
-			Debug.Assert(asmFullName == null || !asmFullName.Contains("\\:"));
+			Debug2.Assert(asmFullName is null || !asmFullName.Contains("\\:"));
 			this.asmFullName = asmFullName ?? string.Empty;
 			this.moduleName = moduleName ?? string.Empty;
 			flags = 0;
@@ -181,7 +181,7 @@ namespace dndbg.Engine {
 		/// </summary>
 		/// <param name="obj">Other instance</param>
 		/// <returns></returns>
-		public override bool Equals(object obj) => obj is DnModuleId other && Equals(other);
+		public override bool Equals(object? obj) => obj is DnModuleId other && Equals(other);
 
 		/// <summary>
 		/// GetHashCode()

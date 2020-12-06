@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -21,14 +21,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using dnSpy.Contracts.Debugger.StartDebugging;
 using dnSpy.Debugger.Properties;
 
 namespace dnSpy.Debugger.DbgUI {
 	abstract class DbgProcessStarterService {
-		public abstract bool CanStart(string filename);
-		public abstract bool TryStart(string filename, out string error);
+		public abstract bool CanStart(string filename, out ProcessStarterResult result);
+		public abstract bool TryStart(string filename, [NotNullWhen(false)] out string? error);
 	}
 
 	[Export(typeof(DbgProcessStarterService))]
@@ -39,18 +40,20 @@ namespace dnSpy.Debugger.DbgUI {
 		DbgProcessStarterServiceImpl([ImportMany] IEnumerable<Lazy<DbgProcessStarter, IDbgProcessStarterMetadata>> processStarters) =>
 			this.processStarters = processStarters.OrderBy(a => a.Metadata.Order).ToArray();
 
-		public override bool CanStart(string filename) {
-			if (filename == null)
+		public override bool CanStart(string filename, out ProcessStarterResult result) {
+			if (filename is null)
 				throw new ArgumentNullException(nameof(filename));
 			foreach (var lz in processStarters) {
-				if (lz.Value.IsSupported(filename))
+				if (lz.Value.IsSupported(filename, out result))
 					return true;
 			}
+
+			result = ProcessStarterResult.None;
 			return false;
 		}
 
-		public override bool TryStart(string filename, out string error) {
-			if (filename == null)
+		public override bool TryStart(string filename, [NotNullWhen(false)] out string? error) {
+			if (filename is null)
 				throw new ArgumentNullException(nameof(filename));
 			bool ok;
 			try {
@@ -63,15 +66,15 @@ namespace dnSpy.Debugger.DbgUI {
 			if (ok)
 				return true;
 
-			Debug.Assert(error != null);
-			if (error == null)
+			Debug2.Assert(error is not null);
+			if (error is null)
 				error = "<Unknown error>";
 			return false;
 		}
 
-		bool TryStartCore(string filename, out string error) {
+		bool TryStartCore(string filename, [NotNullWhen(false)] out string? error) {
 			foreach (var lz in processStarters) {
-				if (lz.Value.IsSupported(filename))
+				if (lz.Value.IsSupported(filename, out _))
 					return lz.Value.TryStart(filename, out error);
 			}
 

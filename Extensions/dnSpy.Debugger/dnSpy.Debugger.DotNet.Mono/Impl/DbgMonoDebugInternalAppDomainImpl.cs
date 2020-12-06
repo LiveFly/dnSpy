@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -27,7 +27,7 @@ namespace dnSpy.Debugger.DotNet.Mono.Impl {
 	sealed class DbgMonoDebugInternalAppDomainImpl : DbgDotNetInternalAppDomain {
 		public override DmdAppDomain ReflectionAppDomain { get; }
 		public override DbgAppDomain AppDomain => appDomain ?? throw new InvalidOperationException();
-		DbgAppDomain appDomain;
+		DbgAppDomain? appDomain;
 		public DbgMonoDebugInternalAppDomainImpl(DmdAppDomain reflectionAppDomain, AppDomainMirror monoAppDomain) {
 			ReflectionAppDomain = reflectionAppDomain ?? throw new ArgumentNullException(nameof(reflectionAppDomain));
 			reflectionAppDomain.GetOrCreateData(() => monoAppDomain);

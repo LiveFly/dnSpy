@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -33,15 +33,15 @@ namespace dnSpy.Debugger.DotNet.Mono.Impl {
 		DbgEngineProviderImpl(Lazy<DbgEngineImplDependencies> dbgEngineImplDependencies) =>
 			this.dbgEngineImplDependencies = dbgEngineImplDependencies;
 
-		public override DbgEngine Create(DbgManager dbgManager, DebugProgramOptions options) {
+		public override DbgEngine? Create(DbgManager dbgManager, DebugProgramOptions options) {
 			switch (options) {
-			case MonoStartDebuggingOptions _:
-			case MonoConnectStartDebuggingOptions _:
+			case MonoStartDebuggingOptions:
+			case MonoConnectStartDebuggingOptions:
 				return new DbgEngineImpl(dbgEngineImplDependencies.Value, dbgManager, MonoDebugRuntimeKind.Mono);
 
-			case UnityConnectStartDebuggingOptions _:
-			case UnityAttachToProgramOptions _:
-			case UnityStartDebuggingOptions _:
+			case UnityConnectStartDebuggingOptions:
+			case UnityAttachToProgramOptions:
+			case UnityStartDebuggingOptions:
 				return new DbgEngineImpl(dbgEngineImplDependencies.Value, dbgManager, MonoDebugRuntimeKind.Unity);
 			}
 

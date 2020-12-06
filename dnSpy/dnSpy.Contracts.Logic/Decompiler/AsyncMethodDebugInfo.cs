@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -33,7 +33,7 @@ namespace dnSpy.Contracts.Decompiler {
 		/// <summary>
 		/// Async method builder field or null
 		/// </summary>
-		public FieldDef BuilderFieldOrNull { get; }
+		public FieldDef? BuilderField { get; }
 
 		/// <summary>
 		/// Catch handler offset or <see cref="uint.MaxValue"/>. Only used if it's an async void method
@@ -52,9 +52,9 @@ namespace dnSpy.Contracts.Decompiler {
 		/// <param name="builderField">Async method builder field or null if it's unknown</param>
 		/// <param name="catchHandlerOffset">Catch handler offset or <see cref="uint.MaxValue"/>. Only used if it's a async void method</param>
 		/// <param name="setResultOffset">Offset of SetResult() call, or <see cref="uint.MaxValue"/> if it's unknown</param>
-		public AsyncMethodDebugInfo(AsyncStepInfo[] stepInfos, FieldDef builderField, uint catchHandlerOffset, uint setResultOffset) {
+		public AsyncMethodDebugInfo(AsyncStepInfo[] stepInfos, FieldDef? builderField, uint catchHandlerOffset, uint setResultOffset) {
 			StepInfos = stepInfos ?? throw new ArgumentNullException(nameof(stepInfos));
-			BuilderFieldOrNull = builderField;
+			BuilderField = builderField;
 			CatchHandlerOffset = catchHandlerOffset;
 			SetResultOffset = setResultOffset;
 		}

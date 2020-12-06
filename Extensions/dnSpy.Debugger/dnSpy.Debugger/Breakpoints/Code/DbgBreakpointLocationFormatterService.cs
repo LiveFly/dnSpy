@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -39,13 +39,13 @@ namespace dnSpy.Debugger.Breakpoints.Code {
 			this.dbgBreakpointLocationFormatterProviders = dbgBreakpointLocationFormatterProviders.ToArray();
 
 		public override DbgBreakpointLocationFormatter GetFormatter(DbgCodeLocation location) {
-			if (location == null)
+			if (location is null)
 				throw new ArgumentNullException(nameof(location));
 			var type = location.Type;
 			foreach (var lz in dbgBreakpointLocationFormatterProviders) {
 				if (Array.IndexOf(lz.Metadata.Types, type) >= 0) {
 					var formatter = lz.Value.Create(location);
-					if (formatter != null)
+					if (formatter is not null)
 						return formatter;
 				}
 			}

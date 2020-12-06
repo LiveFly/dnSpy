@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -83,8 +83,8 @@ namespace dnSpy.Hex.Files.DotNet {
 			};
 		}
 
-		public static DotNetCor20Data TryCreate(HexBufferFile file, HexPosition position) {
-			if (file == null)
+		public static DotNetCor20Data? TryCreate(HexBufferFile file, HexPosition position) {
+			if (file is null)
 				throw new ArgumentNullException(nameof(file));
 			if (!file.Span.Contains(position) || !file.Span.Contains(position + 0x48 - 1))
 				return null;

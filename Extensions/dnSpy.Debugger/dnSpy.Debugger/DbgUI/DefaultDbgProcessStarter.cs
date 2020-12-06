@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -17,18 +17,29 @@
     along with dnSpy.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using dnSpy.Contracts.Debugger.StartDebugging;
 
 namespace dnSpy.Debugger.DbgUI {
 	[ExportDbgProcessStarter(PredefinedDbgProcessStarterOrders.DefaultExe)]
 	sealed class DefaultDbgProcessStarter : DbgProcessStarter {
-		public override bool IsSupported(string filename) => PortableExecutableFileHelpers.IsExecutable(filename);
+		public override bool IsSupported(string filename, out ProcessStarterResult result) {
+			result = ProcessStarterResult.None;
 
-		public override bool TryStart(string filename, out string error) {
+			if (!PortableExecutableFileHelpers.IsExecutable(filename))
+				return false;
+
+			if (!StringComparer.OrdinalIgnoreCase.Equals(Path.GetExtension(filename), ".exe"))
+				result |= ProcessStarterResult.WrongExtension;
+			return true;
+		}
+
+		public override bool TryStart(string filename, [NotNullWhen(false)] out string? error) {
 			var startInfo = new ProcessStartInfo(filename);
-			startInfo.WorkingDirectory = Path.GetDirectoryName(filename);
+			startInfo.WorkingDirectory = Path.GetDirectoryName(filename)!;
 			startInfo.UseShellExecute = false;
 			Process.Start(startInfo);
 			error = null;

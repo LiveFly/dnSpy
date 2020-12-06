@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -41,7 +41,7 @@ namespace dnSpy.Contracts.Documents.TreeView {
 		/// </summary>
 		/// <param name="guid">Guid of node (<see cref="TreeNodeData.Guid"/>)</param>
 		/// <param name="name">Extra data if needed or null</param>
-		public NodePathName(Guid guid, string name = null) {
+		public NodePathName(Guid guid, string? name = null) {
 			Debug.Assert(guid != System.Guid.Empty);
 			Guid = guid;
 			Name = name ?? string.Empty;
@@ -59,7 +59,7 @@ namespace dnSpy.Contracts.Documents.TreeView {
 		/// </summary>
 		/// <param name="obj">Other instance</param>
 		/// <returns></returns>
-		public override bool Equals(object obj) {
+		public override bool Equals(object? obj) {
 			if (obj is NodePathName)
 				return Equals((NodePathName)obj);
 			return false;

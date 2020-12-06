@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -21,8 +21,8 @@ using System;
 
 namespace dnSpy.Debugger.AntiAntiDebug {
 	readonly struct PatchAPIResult {
-		public readonly string ErrorMessage;
-		public readonly ProcessMemoryBlock Block;
+		public readonly string? ErrorMessage;
+		public readonly ProcessMemoryBlock? Block;
 		public readonly ulong NewFunctionAddress;
 		public readonly SimpleAPIPatch SimplePatch;
 
@@ -34,7 +34,7 @@ namespace dnSpy.Debugger.AntiAntiDebug {
 		}
 
 		public PatchAPIResult(ProcessMemoryBlock block, ulong newFunctionAddress, SimpleAPIPatch simplePatch) {
-			if (simplePatch.Data == null)
+			if (simplePatch.Data is null)
 				throw new ArgumentException();
 			ErrorMessage = null;
 			Block = block ?? throw new ArgumentNullException(nameof(block));

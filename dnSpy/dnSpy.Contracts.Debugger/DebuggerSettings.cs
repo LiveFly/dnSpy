@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -30,7 +30,7 @@ namespace dnSpy.Contracts.Debugger {
 		/// <summary>
 		/// Raised when a property is changed
 		/// </summary>
-		public event PropertyChangedEventHandler PropertyChanged;
+		public event PropertyChangedEventHandler? PropertyChanged;
 
 		/// <summary>
 		/// Raises <see cref="PropertyChanged"/>
@@ -173,6 +173,11 @@ namespace dnSpy.Contracts.Debugger {
 		public abstract bool FocusActiveProcess { get; set; }
 
 		/// <summary>
+		/// Give focus to the debugger when eg. a breakpoint is hit
+		/// </summary>
+		public abstract bool FocusDebuggerWhenProcessBreaks { get; set; }
+
+		/// <summary>
 		/// Show return values in Locals window
 		/// </summary>
 		public abstract bool ShowReturnValues { get; set; }
@@ -201,5 +206,15 @@ namespace dnSpy.Contracts.Debugger {
 		/// Step over properties and operators
 		/// </summary>
 		public abstract bool StepOverPropertiesAndOperators { get; set; }
+
+		/// <summary>
+		/// Ignore unhandled exceptions
+		/// </summary>
+		public abstract bool IgnoreUnhandledExceptions { get; set; }
+
+		/// <summary>
+		/// Show the full string value even if it's a very long string
+		/// </summary>
+		public abstract bool FullString { get; set; }
 	}
 }

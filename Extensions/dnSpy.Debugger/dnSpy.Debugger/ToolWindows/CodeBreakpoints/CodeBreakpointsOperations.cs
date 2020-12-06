@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -101,10 +102,8 @@ namespace dnSpy.Debugger.ToolWindows.CodeBreakpoints {
 
 		BulkObservableCollection<CodeBreakpointVM> AllItems => codeBreakpointsVM.AllItems;
 		ObservableCollection<CodeBreakpointVM> SelectedItems => codeBreakpointsVM.SelectedItems;
-		//TODO: This should be view order
-		IEnumerable<CodeBreakpointVM> SortedSelectedItems => SelectedItems.OrderBy(a => a.Order);
-		//TODO: This should be view order
-		IEnumerable<CodeBreakpointVM> SortedAllItems => AllItems.OrderBy(a => a.Order);
+		IEnumerable<CodeBreakpointVM> SortedSelectedItems => codeBreakpointsVM.Sort(SelectedItems);
+		IEnumerable<CodeBreakpointVM> SortedAllItems => codeBreakpointsVM.Sort(AllItems);
 
 		[ImportingConstructor]
 		CodeBreakpointsOperationsImpl(ICodeBreakpointsVM codeBreakpointsVM, DbgCodeBreakpointDisplaySettings dbgCodeBreakpointDisplaySettings, Lazy<DbgCodeBreakpointsService> dbgCodeBreakpointsService, Lazy<DbgCodeLocationSerializerService> dbgCodeLocationSerializerService, Lazy<ISettingsServiceFactory> settingsServiceFactory, IPickFilename pickFilename, IMessageBoxService messageBoxService, Lazy<ShowCodeBreakpointSettingsService> showCodeBreakpointSettingsService, Lazy<DbgCodeBreakpointSerializerService> dbgCodeBreakpointSerializerService, Lazy<ReferenceNavigatorService> referenceNavigatorService, Lazy<DbgCodeBreakpointHitCountService> dbgCodeBreakpointHitCountService, Lazy<DbgShowNativeCodeService> dbgShowNativeCodeService) {
@@ -127,19 +126,50 @@ namespace dnSpy.Debugger.ToolWindows.CodeBreakpoints {
 			var output = new DbgStringBuilderTextWriter();
 			foreach (var vm in SortedSelectedItems) {
 				var formatter = vm.Context.Formatter;
-				formatter.WriteName(output, vm);
-				output.Write(DbgTextColor.Text, "\t");
-				formatter.WriteLabels(output, vm);
-				output.Write(DbgTextColor.Text, "\t");
-				formatter.WriteCondition(output, vm);
-				output.Write(DbgTextColor.Text, "\t");
-				formatter.WriteHitCount(output, vm);
-				output.Write(DbgTextColor.Text, "\t");
-				formatter.WriteFilter(output, vm);
-				output.Write(DbgTextColor.Text, "\t");
-				formatter.WriteWhenHit(output, vm);
-				output.Write(DbgTextColor.Text, "\t");
-				formatter.WriteModule(output, vm);
+				bool needTab = false;
+				foreach (var column in codeBreakpointsVM.Descs.Columns) {
+					if (!column.IsVisible)
+						continue;
+					if (column.Name == string.Empty)
+						continue;
+
+					if (needTab)
+						output.Write(DbgTextColor.Text, "\t");
+					switch (column.Id) {
+					case CodeBreakpointsColumnIds.Name:
+						formatter.WriteName(output, vm);
+						break;
+
+					case CodeBreakpointsColumnIds.Labels:
+						formatter.WriteLabels(output, vm);
+						break;
+
+					case CodeBreakpointsColumnIds.Condition:
+						formatter.WriteCondition(output, vm);
+						break;
+
+					case CodeBreakpointsColumnIds.HitCount:
+						formatter.WriteHitCount(output, vm);
+						break;
+
+					case CodeBreakpointsColumnIds.Filter:
+						formatter.WriteFilter(output, vm);
+						break;
+
+					case CodeBreakpointsColumnIds.WhenHit:
+						formatter.WriteWhenHit(output, vm);
+						break;
+
+					case CodeBreakpointsColumnIds.Module:
+						formatter.WriteModule(output, vm);
+						break;
+
+					default:
+						throw new InvalidOperationException();
+					}
+
+					needTab = true;
+				}
 				output.WriteLine();
 			}
 			var s = output.ToString();
@@ -225,6 +255,7 @@ namespace dnSpy.Debugger.ToolWindows.CodeBreakpoints {
 			var filename = pickFilename.GetFilename(null, "xml", PickFilenameConstants.XmlFilenameFilter);
 			if (!File.Exists(filename))
 				return;
+			Debug2.Assert(filename is not null);
 			var settingsService = settingsServiceFactory.Value.Create();
 			try {
 				settingsService.Open(filename);
@@ -282,7 +313,7 @@ namespace dnSpy.Debugger.ToolWindows.CodeBreakpoints {
 				SelectedItems[0].LabelsEditableValue.IsEditingValue = true;
 			else {
 				var newLabels = messageBoxService.Ask<string>(dnSpy_Debugger_Resources.EditLabelsMsgBoxLabel, SelectedItems[0].GetLabelsString(), dnSpy_Debugger_Resources.EditLabelsTitle);
-				if (newLabels != null) {
+				if (newLabels is not null) {
 					var labelsColl = CodeBreakpointVM.CreateLabelsCollection(newLabels);
 					dbgCodeBreakpointsService.Value.Modify(SelectedItems.Select(a => {
 						var bm = a.CodeBreakpoint;

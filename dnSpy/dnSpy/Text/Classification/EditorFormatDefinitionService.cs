@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -30,7 +30,7 @@ namespace dnSpy.Text.Classification {
 	interface IEditorFormatDefinitionService {
 		Lazy<EditorFormatDefinition, IEditorFormatMetadata>[] EditorFormatDefinitions { get; }
 		Lazy<EditorFormatDefinition, IClassificationFormatMetadata>[] ClassificationFormatDefinitions { get; }
-		EditorFormatDefinition GetDefinition(string key);
+		EditorFormatDefinition? GetDefinition(string key);
 	}
 
 	[Export(typeof(IEditorFormatDefinitionService))]
@@ -59,7 +59,7 @@ namespace dnSpy.Text.Classification {
 
 		static bool Filter(string s) => s != Priority.Low && s != Priority.Default && s != Priority.High;
 
-		public EditorFormatDefinition GetDefinition(string key) {
+		public EditorFormatDefinition? GetDefinition(string key) {
 			if (!toLazy.TryGetValue(key, out var lazy))
 				return null;
 			return lazy.Value;

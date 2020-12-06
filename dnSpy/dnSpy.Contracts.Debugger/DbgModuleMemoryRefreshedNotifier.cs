@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -28,7 +28,7 @@ namespace dnSpy.Contracts.Debugger {
 		/// Raised when the module's memory has been updated (eg. decrypted). The debugger will
 		/// try to reset all breakpoints.
 		/// </summary>
-		public abstract event EventHandler<ModulesRefreshedEventArgs> ModulesRefreshed;
+		public abstract event EventHandler<ModulesRefreshedEventArgs>? ModulesRefreshed;
 	}
 
 	/// <summary>

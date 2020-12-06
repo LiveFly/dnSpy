@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -42,7 +42,7 @@ namespace dnSpy.Contracts.Hex.Editor {
 		/// </summary>
 		/// <param name="position">Position</param>
 		/// <returns></returns>
-		public abstract object GetToolTip(HexPosition position);
+		public abstract object? GetToolTip(HexPosition position);
 
 		/// <summary>
 		/// Gets a reference or null. The reference can be used to look up a high level
@@ -50,7 +50,7 @@ namespace dnSpy.Contracts.Hex.Editor {
 		/// </summary>
 		/// <param name="position">Position</param>
 		/// <returns></returns>
-		public abstract object GetReference(HexPosition position);
+		public abstract object? GetReference(HexPosition position);
 	}
 
 	/// <summary>

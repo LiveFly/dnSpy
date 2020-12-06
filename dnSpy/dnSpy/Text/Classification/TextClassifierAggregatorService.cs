@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -38,14 +38,14 @@ namespace dnSpy.Text.Classification {
 		}
 
 		public ITextClassifierAggregator Create(IContentType contentType) {
-			if (contentType == null)
+			if (contentType is null)
 				throw new ArgumentNullException(nameof(contentType));
 			var list = new List<ITextClassifier>();
 			foreach (var lz in textClassifierProviders) {
 				if (!contentType.IsOfAnyType(lz.Metadata.ContentTypes))
 					continue;
 				var classifier = lz.Value.Create(contentType);
-				if (classifier != null)
+				if (classifier is not null)
 					list.Add(classifier);
 			}
 			return new TextClassifierAggregator(classificationTypeRegistryService, list);

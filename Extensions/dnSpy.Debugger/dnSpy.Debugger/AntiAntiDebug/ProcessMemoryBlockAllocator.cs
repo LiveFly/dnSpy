@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -40,7 +40,7 @@ namespace dnSpy.Debugger.AntiAntiDebug {
 				throw new DbgHookException($"Couldn't open process {process.Id} ({process.Name})");
 		}
 
-		ProcessMemoryBlockImpl GetCloseBlock(ulong moduleAddress, ulong moduleEndAddress) {
+		ProcessMemoryBlockImpl? GetCloseBlock(ulong moduleAddress, ulong moduleEndAddress) {
 			foreach (var mem in allocatedMemory) {
 				if (process.Architecture != DbgArchitecture.X64)
 					return mem;
@@ -72,7 +72,7 @@ namespace dnSpy.Debugger.AntiAntiDebug {
 
 		public ProcessMemoryBlock Allocate(ulong moduleAddress, ulong moduleEndAddress) {
 			var mem = GetCloseBlock(moduleAddress, moduleEndAddress);
-			if (mem != null)
+			if (mem is not null)
 				return mem;
 
 			IntPtr memPtr;

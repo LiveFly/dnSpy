@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -35,12 +35,13 @@ namespace dnSpy.Roslyn.Text {
 		/// </summary>
 		public static MefHostServices DefaultServices {
 			get {
-				if (defaultServices == null)
+				if (defaultServices is null)
 					Interlocked.CompareExchange(ref defaultServices, CreateDefaultServices(), null);
+				Debug2.Assert(defaultServices is not null);
 				return defaultServices;
 			}
 		}
-		static MefHostServices defaultServices;
+		static MefHostServices? defaultServices;
 
 		static MefHostServices CreateDefaultServices() {
 			var asms = new HashSet<Assembly>(MefHostServices.DefaultAssemblies);

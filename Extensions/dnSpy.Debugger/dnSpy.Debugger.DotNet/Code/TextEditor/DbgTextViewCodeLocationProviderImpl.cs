@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -43,10 +43,10 @@ namespace dnSpy.Debugger.DotNet.Code.TextEditor {
 
 		public override DbgTextViewBreakpointLocationResult? CreateLocation(IDocumentTab tab, ITextView textView, VirtualSnapshotPoint position) {
 			var documentViewer = tab.TryGetDocumentViewer();
-			if (documentViewer == null)
+			if (documentViewer is null)
 				return null;
 			var methodDebugService = documentViewer.GetMethodDebugService();
-			if (methodDebugService == null)
+			if (methodDebugService is null)
 				return null;
 			var methodStatements = methodDebugService.FindByTextPosition(position.Position, FindByTextPositionOptions.None);
 			if (methodStatements.Count == 0)

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -118,7 +118,7 @@ namespace dnSpy.Contracts.Controls {
 			get {
 				try {
 					// This can throw if an update was installed that removed support for the current
-					// OS, see https://github.com/0xd4d/dnSpy/issues/692
+					// OS, see https://github.com/dnSpy/dnSpy/issues/692
 					return Fonts.SystemFontFamilies;
 				}
 				catch {
@@ -210,14 +210,14 @@ namespace dnSpy.Contracts.Controls {
 					return false;
 				if (!gtf.AdvanceWidths.TryGetValue(glyphIndex, out double w))
 					return false;
-				if (width == null)
+				if (width is null)
 					width = w;
 				else if (width.Value != w)
 					return false;
 
 				if (!gtf.AdvanceHeights.TryGetValue(glyphIndex, out double h))
 					return false;
-				if (height == null)
+				if (height is null)
 					height = h;
 				else if (height.Value != h)
 					return false;

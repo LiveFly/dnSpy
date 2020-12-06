@@ -1,4 +1,4 @@
-﻿// Copied from Roslyn's SpecialType and WellKnownType enums
+// Copied from Roslyn's SpecialType and WellKnownType enums
 
 namespace dnSpy.Debugger.DotNet.Metadata {
 	/// <summary>
@@ -338,6 +338,7 @@ namespace dnSpy.Debugger.DotNet.Metadata {
 		System_Threading_Tasks_ValueTask,
 		System_Runtime_CompilerServices_AsyncIteratorMethodBuilder,
 		System_Threading_CancellationToken,
+		System_Collections_DictionaryEntry,
 
 		// When adding more types, update DmdWellKnownTypeUtils
 

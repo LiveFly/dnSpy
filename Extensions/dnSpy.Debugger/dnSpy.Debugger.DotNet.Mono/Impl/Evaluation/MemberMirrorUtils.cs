@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -35,7 +35,7 @@ namespace dnSpy.Debugger.DotNet.Mono.Impl.Evaluation {
 		}
 
 		public static FieldInfoMirror GetMonoField(TypeMirror monoType, DmdFieldInfo field) {
-			var fields = field.DeclaringType.DeclaredFields;
+			var fields = field.DeclaringType!.DeclaredFields;
 			int fieldIndex = GetIndex(fields, field);
 			return GetMonoField(monoType, fields, fieldIndex);
 		}

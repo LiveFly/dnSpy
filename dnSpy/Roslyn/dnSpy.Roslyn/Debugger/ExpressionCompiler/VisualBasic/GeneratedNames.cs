@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System;
 using System.Globalization;
@@ -12,7 +12,7 @@ namespace dnSpy.Roslyn.Debugger.ExpressionCompiler.VisualBasic {
 		/// <summary>
 		/// Try to parse the local name and return <paramref name="variableName"/> and <paramref name="index"/> if successful.
 		/// </summary>
-		public static bool TryParseStateMachineHoistedUserVariableName(string proxyName, out string variableName, out int index) {
+		public static bool TryParseStateMachineHoistedUserVariableName(string proxyName, out string? variableName, out int index) {
 			variableName = null;
 			index = 0;
 

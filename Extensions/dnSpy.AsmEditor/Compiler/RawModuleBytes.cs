@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -56,7 +56,7 @@ namespace dnSpy.AsmEditor.Compiler {
 		}
 
 		protected override void Dispose(bool disposing) {
-			if (pointer != null) {
+			if (pointer is not null) {
 				NativeMemoryAllocator.Free(pointer, size);
 				pointer = null;
 				size = 0;

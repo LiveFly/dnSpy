@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -30,6 +30,6 @@ namespace dnSpy.Contracts.Language.Intellisense {
 		/// </summary>
 		/// <param name="completion">Completion</param>
 		/// <returns></returns>
-		public static string TryGetFilterText(this Completion completion) => (completion as DsCompletion)?.FilterText ?? completion.DisplayText;
+		public static string? TryGetFilterText(this Completion completion) => (completion as DsCompletion)?.FilterText ?? completion.DisplayText;
 	}
 }

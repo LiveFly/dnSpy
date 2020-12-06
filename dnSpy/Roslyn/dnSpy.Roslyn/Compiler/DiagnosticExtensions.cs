@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -31,7 +31,7 @@ namespace dnSpy.Roslyn.Compiler {
 				var severity = d.Severity.ToCompilerDiagnosticSeverity();
 				var description = d.GetMessage();
 				var id = d.Id;
-				string filename;
+				string? filename;
 				LineLocationSpan? lineLocationSpan;
 				if (d.Location.IsInSource) {
 					var pos = d.Location.GetLineSpan();

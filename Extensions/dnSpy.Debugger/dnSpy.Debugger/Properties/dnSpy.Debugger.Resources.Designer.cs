@@ -19,7 +19,7 @@ namespace dnSpy.Debugger.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class dnSpy_Debugger_Resources {
@@ -151,7 +151,7 @@ namespace dnSpy.Debugger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use dnSpy.exe to attach to 64-bit processes.
+        ///   Looks up a localized string similar to Use 64-bit dnSpy to attach to 64-bit processes.
         /// </summary>
         public static string Attach_UseDnSpy32 {
             get {
@@ -160,7 +160,7 @@ namespace dnSpy.Debugger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use dnSpy-x86.exe to attach to 32-bit processes.
+        ///   Looks up a localized string similar to Use 32-bit dnSpy to attach to 32-bit processes.
         /// </summary>
         public static string Attach_UseDnSpy64 {
             get {
@@ -844,6 +844,15 @@ namespace dnSpy.Debugger.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Load.
+        /// </summary>
+        public static string Column_LoadModule {
+            get {
+                return ResourceManager.GetString("Column_LoadModule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Module.
         /// </summary>
         public static string Column_Module {
@@ -1213,6 +1222,15 @@ namespace dnSpy.Debugger.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bring dnSpy to the foreground when breaking in the debugger.
+        /// </summary>
+        public static string DbgSettings_FocusDebuggerWhenProcessBreaks {
+            get {
+                return ResourceManager.GetString("DbgSettings_FocusDebuggerWhenProcessBreaks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Group parameters and locals together.
         /// </summary>
         public static string DbgSettings_GroupParametersAndLocalsTogether {
@@ -1254,6 +1272,15 @@ namespace dnSpy.Debugger.Properties {
         public static string DbgSettings_IgnoreBreakInstructions {
             get {
                 return ResourceManager.GetString("DbgSettings_IgnoreBreakInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ignore unhandled exceptions.
+        /// </summary>
+        public static string DbgSettings_IgnoreUnhandledExceptions {
+            get {
+                return ResourceManager.GetString("DbgSettings_IgnoreUnhandledExceptions", resourceCulture);
             }
         }
         
@@ -1569,6 +1596,15 @@ namespace dnSpy.Debugger.Properties {
         public static string DebugWindows {
             get {
                 return ResourceManager.GetString("DebugWindows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to debug this file which doesn&apos;t have a valid extension?.
+        /// </summary>
+        public static string DebugWithInvalidExtension {
+            get {
+                return ResourceManager.GetString("DebugWithInvalidExtension", resourceCulture);
             }
         }
         
@@ -2713,6 +2749,42 @@ namespace dnSpy.Debugger.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No processes match your search filter..
+        /// </summary>
+        public static string Processes_NoMatch {
+            get {
+                return ResourceManager.GetString("Processes_NoMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset all search criteria so that all processes are shown.
+        /// </summary>
+        public static string Processes_ResetSearchSettings_ToolTip {
+            get {
+                return ResourceManager.GetString("Processes_ResetSearchSettings_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string Processes_Search {
+            get {
+                return ResourceManager.GetString("Processes_Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search for a process.
+        /// </summary>
+        public static string Processes_Search_ToolTip {
+            get {
+                return ResourceManager.GetString("Processes_Search_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Step Into.
         /// </summary>
         public static string Processes_StepIntoProcessToolTip {
@@ -2862,6 +2934,15 @@ namespace dnSpy.Debugger.Properties {
         public static string RunToCursorCommand {
             get {
                 return ResourceManager.GetString("RunToCursorCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to run this file which doesn&apos;t have a valid extension?.
+        /// </summary>
+        public static string RunWithInvalidExtension {
+            get {
+                return ResourceManager.GetString("RunWithInvalidExtension", resourceCulture);
             }
         }
         

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -68,7 +68,7 @@ namespace dndbg.Engine {
 			return CorAppDomain.RawObject.IsRunning(out int running) >= 0;
 		}
 
-		internal DnAssembly TryAdd(ICorDebugAssembly comAssembly) => assemblies.Add(comAssembly);
+		internal DnAssembly? TryAdd(ICorDebugAssembly? comAssembly) => assemblies.Add(comAssembly);
 
 		public DnAssembly[] Assemblies {
 			get {
@@ -79,20 +79,20 @@ namespace dndbg.Engine {
 			}
 		}
 
-		public DnAssembly TryGetAssembly(ICorDebugAssembly comAssembly) {
+		public DnAssembly? TryGetAssembly(ICorDebugAssembly? comAssembly) {
 			Debugger.DebugVerifyThread();
 			return assemblies.TryGet(comAssembly);
 		}
 
-		internal void AssemblyUnloaded(ICorDebugAssembly comAssembly) {
+		internal void AssemblyUnloaded(ICorDebugAssembly? comAssembly) {
 			var assembly = assemblies.TryGet(comAssembly);
-			if (assembly == null)
+			if (assembly is null)
 				return;
 			assembly.SetHasUnloaded();
 			assemblies.Remove(comAssembly);
 		}
 
-		public DnThread[] Threads => Process.Threads.Where(t => t.AppDomainOrNull == this).ToArray();
+		public DnThread[] Threads => Process.Threads.Where(t => t.AppDomain == this).ToArray();
 
 		public IEnumerable<DnModule> Modules {
 			get {

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -30,7 +30,7 @@ namespace dnSpy.Decompiler {
 		/// <param name="module">Module</param>
 		/// <returns></returns>
 		public static string GetArchString(ModuleDef module) {
-			if (module == null)
+			if (module is null)
 				return "???";
 
 			if (module.Machine.IsI386()) {

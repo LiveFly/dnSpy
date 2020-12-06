@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -232,7 +232,7 @@ namespace dnSpy.AsmEditor.Hex.PE {
 			field.Add(new BooleanHexBitField("Reserved 3F", 63));
 		}
 
-		public MetadataTableVM TryGetMetadataTable(Table table) {
+		public MetadataTableVM? TryGetMetadataTable(Table table) {
 			if ((uint)table >= (uint)metadataTables.Length)
 				return null;
 			return metadataTables[(int)table];

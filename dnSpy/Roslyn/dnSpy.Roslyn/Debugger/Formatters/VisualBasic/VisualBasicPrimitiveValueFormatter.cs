@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -29,7 +29,7 @@ namespace dnSpy.Roslyn.Debugger.Formatters.VisualBasic {
 	readonly struct VisualBasicPrimitiveValueFormatter {
 		readonly IDbgTextWriter output;
 		readonly ValueFormatterOptions options;
-		readonly CultureInfo cultureInfo;
+		readonly CultureInfo? cultureInfo;
 
 		const string Keyword_true = "True";
 		const string Keyword_false = "False";
@@ -47,8 +47,9 @@ namespace dnSpy.Roslyn.Debugger.Formatters.VisualBasic {
 		bool DigitSeparators => (options & ValueFormatterOptions.DigitSeparators) != 0;
 		bool NoStringQuotes => (options & ValueFormatterOptions.NoStringQuotes) != 0;
 		bool ShowTokens => (options & ValueFormatterOptions.Tokens) != 0;
+		bool FullString => (options & ValueFormatterOptions.FullString) != 0;
 
-		public VisualBasicPrimitiveValueFormatter(IDbgTextWriter output, ValueFormatterOptions options, CultureInfo cultureInfo) {
+		public VisualBasicPrimitiveValueFormatter(IDbgTextWriter output, ValueFormatterOptions options, CultureInfo? cultureInfo) {
 			this.output = output;
 			this.options = options;
 			this.cultureInfo = cultureInfo;
@@ -78,7 +79,7 @@ namespace dnSpy.Roslyn.Debugger.Formatters.VisualBasic {
 			if (!rawValue.HasRawValue)
 				return false;
 
-			if (rawValue.RawValue == null) {
+			if (rawValue.RawValue is null) {
 				OutputWrite(Keyword_null, DbgTextColor.Keyword);
 				return true;
 			}
@@ -227,7 +228,7 @@ namespace dnSpy.Roslyn.Debugger.Formatters.VisualBasic {
 
 		void WriteEnumField(DmdFieldInfo field) {
 			if (Edit) {
-				FormatType(field.ReflectedType);
+				FormatType(field.ReflectedType!);
 				OutputWrite(".", DbgTextColor.Operator);
 			}
 			OutputWrite(VisualBasicTypeFormatter.GetFormattedIdentifier(field.Name), DbgTextColor.EnumField);
@@ -316,8 +317,14 @@ namespace dnSpy.Roslyn.Debugger.Formatters.VisualBasic {
 		}
 
 		public void FormatString(string value) {
+			bool stringTooLong = !FullString && value.Length > ValueFormatterUtils.MaxStringLength;
+			if (stringTooLong)
+				value = value.Substring(0, ValueFormatterUtils.MaxStringLength);
+
 			if (NoStringQuotes) {
 				OutputWrite(value, DbgTextColor.DebuggerNoStringQuotesEval);
+				if (stringTooLong)
+					OutputWrite("[...]", DbgTextColor.DebuggerNoStringQuotesEval);
 				return;
 			}
 
@@ -381,6 +388,11 @@ namespace dnSpy.Roslyn.Debugger.Formatters.VisualBasic {
 					index++;
 					needSep = true;
 				}
+			}
+			if (stringTooLong) {
+				if (needSep)
+					WriteStringConcatOperator();
+				OutputWrite("\"" + "[...]" + "\"", DbgTextColor.String);
 			}
 		}
 

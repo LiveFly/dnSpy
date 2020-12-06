@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -32,7 +32,7 @@ namespace dnSpy.Debugger.Impl {
 			}
 
 			public bool Equals(ProcessKey other) => pid == other.pid && rid.Equals(other.rid);
-			public override bool Equals(object obj) => obj is ProcessKey other && Equals(other);
+			public override bool Equals(object? obj) => obj is ProcessKey other && Equals(other);
 			public override int GetHashCode() => pid ^ rid.GetHashCode();
 		}
 	}

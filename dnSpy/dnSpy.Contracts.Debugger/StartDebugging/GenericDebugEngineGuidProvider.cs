@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -63,13 +63,18 @@ namespace dnSpy.Contracts.Debugger.StartDebugging {
 	/// </summary>
 	public static class PredefinedGenericDebugEngineGuidProviderOrders {
 		/// <summary>
-		/// .NET Framework / .NET Core
+		/// .NET Framework / .NET
 		/// </summary>
-		public const double DotNet = 1000000;
+		public const double DotNetAny = 1000000;
 
 		/// <summary>
 		/// Unity
 		/// </summary>
-		public const double DotNetUnity = DotNet + 1;
+		public const double DotNetUnity = DotNetAny + 1;
+
+		/// <summary>
+		/// .NET
+		/// </summary>
+		public const double DotNet = DotNetAny + 2;
 	}
 }

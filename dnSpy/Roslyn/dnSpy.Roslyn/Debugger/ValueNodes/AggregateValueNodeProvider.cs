@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -42,7 +42,7 @@ namespace dnSpy.Roslyn.Debugger.ValueNodes {
 		public override ulong GetChildCount(DbgEvaluationInfo evalInfo) =>
 			providers[0].GetChildCount(evalInfo) + (uint)(providers.Length - 1);
 
-		public override DbgDotNetValueNode[] GetChildren(LanguageValueNodeFactory valueNodeFactory, DbgEvaluationInfo evalInfo, ulong index, int count, DbgValueNodeEvaluationOptions options, ReadOnlyCollection<string> formatSpecifiers) {
+		public override DbgDotNetValueNode[] GetChildren(LanguageValueNodeFactory valueNodeFactory, DbgEvaluationInfo evalInfo, ulong index, int count, DbgValueNodeEvaluationOptions options, ReadOnlyCollection<string>? formatSpecifiers) {
 			if (count == 0)
 				return Array.Empty<DbgDotNetValueNode>();
 
@@ -69,7 +69,7 @@ namespace dnSpy.Roslyn.Debugger.ValueNodes {
 				return res;
 			}
 			catch {
-				evalInfo.Context.Runtime.Process.DbgManager.Close(res.Where(a => a != null));
+				evalInfo.Context.Runtime.Process.DbgManager.Close(res.Where(a => a is not null));
 				throw;
 			}
 		}

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -29,7 +29,7 @@ namespace dnSpy.Roslyn.Debugger.Formatters.CSharp {
 	readonly struct CSharpPrimitiveValueFormatter {
 		readonly IDbgTextWriter output;
 		readonly ValueFormatterOptions options;
-		readonly CultureInfo cultureInfo;
+		readonly CultureInfo? cultureInfo;
 
 		const string Keyword_true = "true";
 		const string Keyword_false = "false";
@@ -46,8 +46,9 @@ namespace dnSpy.Roslyn.Debugger.Formatters.CSharp {
 		bool DigitSeparators => (options & ValueFormatterOptions.DigitSeparators) != 0;
 		bool NoStringQuotes => (options & ValueFormatterOptions.NoStringQuotes) != 0;
 		bool ShowTokens => (options & ValueFormatterOptions.Tokens) != 0;
+		bool FullString => (options & ValueFormatterOptions.FullString) != 0;
 
-		public CSharpPrimitiveValueFormatter(IDbgTextWriter output, ValueFormatterOptions options, CultureInfo cultureInfo) {
+		public CSharpPrimitiveValueFormatter(IDbgTextWriter output, ValueFormatterOptions options, CultureInfo? cultureInfo) {
 			this.output = output;
 			this.options = options;
 			this.cultureInfo = cultureInfo;
@@ -77,7 +78,7 @@ namespace dnSpy.Roslyn.Debugger.Formatters.CSharp {
 			if (!rawValue.HasRawValue)
 				return false;
 
-			if (rawValue.RawValue == null) {
+			if (rawValue.RawValue is null) {
 				OutputWrite(Keyword_null, DbgTextColor.Keyword);
 				return true;
 			}
@@ -212,7 +213,7 @@ namespace dnSpy.Roslyn.Debugger.Formatters.CSharp {
 
 		void WriteEnumField(DmdFieldInfo field) {
 			if (Edit) {
-				FormatType(field.ReflectedType);
+				FormatType(field.ReflectedType!);
 				OutputWrite(".", DbgTextColor.Operator);
 			}
 			OutputWrite(CSharpTypeFormatter.GetFormattedIdentifier(field.Name), DbgTextColor.EnumField);
@@ -354,17 +355,21 @@ namespace dnSpy.Roslyn.Debugger.Formatters.CSharp {
 		}
 
 		string ToFormattedString(string value, out bool isVerbatim) {
+			bool stringTooLong = !FullString && value.Length > ValueFormatterUtils.MaxStringLength;
+			if (stringTooLong)
+				value = value.Substring(0, ValueFormatterUtils.MaxStringLength);
+
 			if (CanUseVerbatimString(value)) {
 				isVerbatim = true;
-				return GetFormattedVerbatimString(value);
+				return GetFormattedVerbatimString(value, stringTooLong);
 			}
 			else {
 				isVerbatim = false;
-				return GetFormattedString(value);
+				return GetFormattedString(value, stringTooLong);
 			}
 		}
 
-		string GetFormattedString(string value) {
+		string GetFormattedString(string value, bool stringTooLong) {
 			var sb = ObjectCache.AllocStringBuilder();
 
 			sb.Append('"');
@@ -390,12 +395,14 @@ namespace dnSpy.Roslyn.Debugger.Formatters.CSharp {
 					break;
 				}
 			}
+			if (stringTooLong)
+				sb.Append("[...]");
 			sb.Append('"');
 
 			return ObjectCache.FreeAndToString(ref sb);
 		}
 
-		string GetFormattedVerbatimString(string value) {
+		string GetFormattedVerbatimString(string value, bool stringTooLong) {
 			var sb = ObjectCache.AllocStringBuilder();
 
 			sb.Append(VerbatimStringPrefix + "\"");
@@ -405,6 +412,8 @@ namespace dnSpy.Roslyn.Debugger.Formatters.CSharp {
 				else
 					sb.Append(c);
 			}
+			if (stringTooLong)
+				sb.Append("[...]");
 			sb.Append('"');
 
 			return ObjectCache.FreeAndToString(ref sb);

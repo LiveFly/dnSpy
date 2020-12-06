@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -27,7 +27,7 @@ using Microsoft.VisualStudio.Language.Intellisense;
 namespace dnSpy.Roslyn.Intellisense.Completions {
 	sealed class RoslynCompletion : DsCompletion, ICustomCommit {
 		public CompletionItem CompletionItem { get; }
-		public RoslynCompletionSet CompletionSet { get; set; }
+		public RoslynCompletionSet? CompletionSet { get; set; }
 
 		public override string Description {
 			// Need to return a non-empty string or no tooltip is shown
@@ -41,17 +41,17 @@ namespace dnSpy.Roslyn.Intellisense.Completions {
 
 		protected override ImageReference GetImageReference() => CompletionImageHelper.GetImageReference(CompletionItem.Tags) ?? default;
 
-		public override IEnumerable<CompletionIcon> AttributeIcons {
+		public override IEnumerable<CompletionIcon>? AttributeIcons {
 			get => GetAttributeIcons();
 			set { }
 		}
 
-		IEnumerable<CompletionIcon> GetAttributeIcons() {
+		IEnumerable<CompletionIcon>? GetAttributeIcons() {
 			if (CompletionItem.Tags.Contains(WellKnownTags.Warning))
 				return new[] { new DsCompletionIcon(DsImages.StatusWarning) };
 			return null;
 		}
 
-		void ICustomCommit.Commit() => CompletionSet.Commit(this);
+		void ICustomCommit.Commit() => CompletionSet!.Commit(this);
 	}
 }

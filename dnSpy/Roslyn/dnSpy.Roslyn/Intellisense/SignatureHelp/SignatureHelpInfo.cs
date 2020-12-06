@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -39,14 +39,14 @@ namespace dnSpy.Roslyn.Intellisense.SignatureHelp {
 		}
 
 		public static SignatureHelpInfo? Create(ITextSnapshot snapshot) {
-			if (snapshot == null)
+			if (snapshot is null)
 				throw new ArgumentNullException(nameof(snapshot));
 			var sourceText = snapshot.AsText();
 			var document = sourceText.GetOpenDocumentInCurrentContextWithChanges();
-			if (document == null)
+			if (document is null)
 				return null;
 			var signatureHelpService = SignatureHelpService.GetService(document);
-			if (signatureHelpService == null)
+			if (signatureHelpService is null)
 				return null;
 			return new SignatureHelpInfo(signatureHelpService, document, sourceText, snapshot);
 		}

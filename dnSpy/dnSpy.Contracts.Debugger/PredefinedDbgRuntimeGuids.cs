@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -35,14 +35,14 @@ namespace dnSpy.Contracts.Debugger {
 		public static readonly Guid DotNetFramework_Guid = new Guid(DotNetFramework);
 
 		/// <summary>
-		/// .NET Core
+		/// .NET
 		/// </summary>
-		public const string DotNetCore = "E0B4EB52-D1D9-42AB-B130-028CA31CF9F6";
+		public const string DotNet = "E0B4EB52-D1D9-42AB-B130-028CA31CF9F6";
 
 		/// <summary>
-		/// .NET Core
+		/// .NET
 		/// </summary>
-		public static readonly Guid DotNetCore_Guid = new Guid(DotNetCore);
+		public static readonly Guid DotNet_Guid = new Guid(DotNet);
 
 		/// <summary>
 		/// Unity

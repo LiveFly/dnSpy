@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -39,7 +39,7 @@ namespace dnSpy.Contracts.Debugger.Text.DnSpy {
 		/// </summary>
 		/// <param name="color">Color</param>
 		/// <param name="text">Text</param>
-		public void Write(object color, string text) =>
+		public void Write(object color, string? text) =>
 			writer.Write(ColorConverter.ToDebuggerColor(color), text);
 
 		/// <summary>
@@ -47,7 +47,7 @@ namespace dnSpy.Contracts.Debugger.Text.DnSpy {
 		/// </summary>
 		/// <param name="color">Color</param>
 		/// <param name="text">Text</param>
-		public void Write(TextColor color, string text) =>
+		public void Write(TextColor color, string? text) =>
 			Write(color.Box(), text);
 	}
 }

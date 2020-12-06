@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -36,7 +36,7 @@ namespace dnSpy.Debugger.DotNet.Mono.Dialogs.DebugProgram {
 					if (dd.VirtualAddress != 0 && dd.Size >= 0x48)
 						return null;
 
-					var dirName = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + "_Data");
+					var dirName = Path.Combine(Path.GetDirectoryName(filename)!, Path.GetFileNameWithoutExtension(filename) + "_Data");
 					if (!Directory.Exists(dirName))
 						return null;
 

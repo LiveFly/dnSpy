@@ -833,8 +833,8 @@
   <data name="AboutScreen_LoadedFiles" xml:space="preserve">
     <value>Загруженные файлы:</value>
   </data>
-  <data name="SearchWindow_SearchGacAssemblies" xml:space="preserve">
-    <value>Искать в сборках GAC</value>
+  <data name="SearchWindow_SearchFrameworkAssemblies" xml:space="preserve">
+    <value>Поиск в сборах фреймворка</value>
   </data>
   <data name="SearchWindow_Where_AllFiles" xml:space="preserve">
     <value>Все файлы</value>
@@ -1943,14 +1943,14 @@
   <data name="DisassemblySettings_ScaleBeforeIndex" xml:space="preserve">
     <value>Показывать масштаб перед индексным регистром</value>
   </data>
-  <data name="DisassemblySettings_ShortBranchNumbers" xml:space="preserve">
-    <value>Short numbers (branches)</value>
+  <data name="DisassemblySettings_BranchLeadingZeroes" xml:space="preserve">
+    <value>Добавить ведущие нули (переходы)</value>
   </data>
-  <data name="DisassemblySettings_ShortNumbers" xml:space="preserve">
-    <value>Короткие номера</value>
+  <data name="DisassemblySettings_LeadingZeroes" xml:space="preserve">
+    <value>Добавить нули спереди</value>
   </data>
   <data name="DisassemblySettings_ShowBranchSize" xml:space="preserve">
-    <value>Show branch size</value>
+    <value>Показать размер бренча</value>
   </data>
   <data name="DisassemblySettings_ShowInstructionAddress" xml:space="preserve">
     <value>Показывать адрес инструкции</value>
@@ -1962,10 +1962,10 @@
     <value>Показывать нулевые смещения</value>
   </data>
   <data name="DisassemblySettings_SignedImmediateOperands" xml:space="preserve">
-    <value>Signed numbers</value>
+    <value>Числа со знаком</value>
   </data>
   <data name="DisassemblySettings_SignedMemoryDisplacements" xml:space="preserve">
-    <value>Signed displacements</value>
+    <value>Перемещение со знаком</value>
   </data>
   <data name="DisassemblySettings_SmallHexNumbersInDecimal" xml:space="preserve">
     <value>Показывать небольшие числа как десятичные</value>
@@ -2007,7 +2007,7 @@
     <value>Синтаксис</value>
   </data>
   <data name="DisassemblySettings_NakedRegisters" xml:space="preserve">
-    <value>Naked registers</value>
+    <value>Голые регистры</value>
   </data>
   <data name="DisassemblySettings_ShowMnemonicSizeSuffix" xml:space="preserve">
     <value>Всегда показывать суффиксы размеров мнемоник</value>
@@ -2031,9 +2031,45 @@
     <value>Этот метод не оптимизирован</value>
   </data>
   <data name="DisassemblySettings_ShowSymbolAddress" xml:space="preserve">
-    <value>Show symbol address</value>
+    <value>Показать адрес символа</value>
   </data>
   <data name="Decompile_Timestamp" xml:space="preserve">
     <value>Время:</value>
+  </data>
+  <data name="UnknownValue" xml:space="preserve">
+    <value>&lt;Неизвестно&gt;</value>
+  </data>
+  <data name="TypeReferencesFolder" xml:space="preserve">
+    <value>Ссылки Типов</value>
+  </data>
+  <data name="TreeViewEventsFolder" xml:space="preserve">
+    <value>События</value>
+  </data>
+  <data name="TreeViewFieldsFolder" xml:space="preserve">
+    <value>Поля</value>
+  </data>
+  <data name="TreeViewMethodsFolder" xml:space="preserve">
+    <value>Методы</value>
+  </data>
+  <data name="TreeViewPropertiesFolder" xml:space="preserve">
+    <value>Свойства</value>
+  </data>
+  <data name="TreeViewTypesFolder" xml:space="preserve">
+    <value>Типы</value>
+  </data>
+  <data name="NumberBaseFormatString" xml:space="preserve">
+    <value>Базовый {0}:</value>
+  </data>
+  <data name="RawValue" xml:space="preserve">
+    <value>Исх. данные:</value>
+  </data>
+  <data name="RecentFilesCommand" xml:space="preserve">
+    <value>Последние Файлы</value>
+  </data>
+  <data name="ToolTip_Instruction" xml:space="preserve">
+    <value>Инструкции</value>
+  </data>
+  <data name="ToolTip_OpCode" xml:space="preserve">
+    <value>Опкод</value>
   </data>
 </root>

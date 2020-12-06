@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -30,7 +30,7 @@ namespace dnSpy.Roslyn.Compiler.CSharp {
 		public override Guid ParentGuid => new Guid(AppSettingsConstants.GUID_COMPILER);
 		public override Guid Guid => new Guid("1B13605D-F885-48F4-99A8-FCF39E281561");
 		public override string Title => "C#";
-		public override object UIObject => this;
+		public override object? UIObject => this;
 
 		public CSharpCompilerSettingsPage(CSharpCompilerSettingsBase compilerSettings) {
 			_global_compilerSettings = compilerSettings;

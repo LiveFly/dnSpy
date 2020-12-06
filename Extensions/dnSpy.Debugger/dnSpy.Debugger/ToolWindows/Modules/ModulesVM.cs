@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -23,6 +23,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using dnSpy.Contracts.Debugger;
 using dnSpy.Contracts.Debugger.Text;
@@ -35,19 +36,21 @@ using dnSpy.Debugger.UI;
 using Microsoft.VisualStudio.Text.Classification;
 
 namespace dnSpy.Debugger.ToolWindows.Modules {
-	interface IModulesVM {
+	interface IModulesVM : IGridViewColumnDescsProvider {
 		bool IsOpen { get; set; }
 		bool IsVisible { get; set; }
 		BulkObservableCollection<ModuleVM> AllItems { get; }
 		ObservableCollection<ModuleVM> SelectedItems { get; }
 		void ResetSearchSettings();
 		string GetSearchHelpText();
+		IEnumerable<ModuleVM> Sort(IEnumerable<ModuleVM> modules);
 	}
 
 	[Export(typeof(IModulesVM))]
-	sealed class ModulesVM : ViewModelBase, IModulesVM, ILazyToolWindowVM {
+	sealed class ModulesVM : ViewModelBase, IModulesVM, ILazyToolWindowVM, IComparer<ModuleVM> {
 		public BulkObservableCollection<ModuleVM> AllItems { get; }
 		public ObservableCollection<ModuleVM> SelectedItems { get; }
+		public GridViewColumnDescs Descs { get; }
 
 		public bool IsOpen {
 			get => lazyToolWindowVMHelper.IsOpen;
@@ -62,17 +65,17 @@ namespace dnSpy.Debugger.ToolWindows.Modules {
 		public object ProcessCollection => processes;
 		readonly ObservableCollection<SimpleProcessVM> processes;
 
-		public object SelectedProcess {
+		public object? SelectedProcess {
 			get => selectedProcess;
 			set {
 				if (selectedProcess != value) {
-					selectedProcess = (SimpleProcessVM)value;
+					selectedProcess = (SimpleProcessVM?)value;
 					OnPropertyChanged(nameof(SelectedProcess));
 					FilterList_UI(filterText, selectedProcess);
 				}
 			}
 		}
-		SimpleProcessVM selectedProcess;
+		SimpleProcessVM? selectedProcess;
 
 		public string FilterText {
 			get => filterText;
@@ -110,6 +113,7 @@ namespace dnSpy.Debugger.ToolWindows.Modules {
 		[ImportingConstructor]
 		ModulesVM(Lazy<DbgManager> dbgManager, DebuggerSettings debuggerSettings, UIDispatcher uiDispatcher, ModuleFormatterProvider moduleFormatterProvider, IClassificationFormatMapService classificationFormatMapService, ITextElementProvider textElementProvider) {
 			uiDispatcher.VerifyAccess();
+			selectedProcess = null!;
 			realAllItems = new List<ModuleVM>();
 			AllItems = new BulkObservableCollection<ModuleVM>();
 			SelectedItems = new ObservableCollection<ModuleVM>();
@@ -119,11 +123,28 @@ namespace dnSpy.Debugger.ToolWindows.Modules {
 			this.debuggerSettings = debuggerSettings;
 			lazyToolWindowVMHelper = new DebuggerLazyToolWindowVMHelper(this, uiDispatcher, dbgManager);
 			var classificationFormatMap = classificationFormatMapService.GetClassificationFormatMap(AppearanceCategoryConstants.UIMisc);
-			moduleContext = new ModuleContext(uiDispatcher, classificationFormatMap, textElementProvider, new SearchMatcher(searchColumnDefinitions)) {
+			moduleContext = new ModuleContext(uiDispatcher, classificationFormatMap, textElementProvider, new SearchMatcher(searchColumnDefinitions), moduleFormatterProvider.Create()) {
 				SyntaxHighlight = debuggerSettings.SyntaxHighlight,
-				Formatter = moduleFormatterProvider.Create(),
 			};
+			Descs = new GridViewColumnDescs {
+				Columns = new GridViewColumnDesc[] {
+					new GridViewColumnDesc(ModulesWindowColumnIds.Icon, string.Empty),
+					new GridViewColumnDesc(ModulesWindowColumnIds.Name, dnSpy_Debugger_Resources.Column_Name),
+					new GridViewColumnDesc(ModulesWindowColumnIds.OptimizedModule, dnSpy_Debugger_Resources.Column_OptimizedModule),
+					new GridViewColumnDesc(ModulesWindowColumnIds.DynamicModule, dnSpy_Debugger_Resources.Column_DynamicModule),
+					new GridViewColumnDesc(ModulesWindowColumnIds.InMemoryModule, dnSpy_Debugger_Resources.Column_InMemoryModule),
+					new GridViewColumnDesc(ModulesWindowColumnIds.Order, dnSpy_Debugger_Resources.Column_Order),
+					new GridViewColumnDesc(ModulesWindowColumnIds.Version, dnSpy_Debugger_Resources.Column_Version),
+					new GridViewColumnDesc(ModulesWindowColumnIds.Timestamp, dnSpy_Debugger_Resources.Column_Timestamp),
+					new GridViewColumnDesc(ModulesWindowColumnIds.Address, dnSpy_Debugger_Resources.Column_Address),
+					new GridViewColumnDesc(ModulesWindowColumnIds.Process, dnSpy_Debugger_Resources.Column_Process),
+					new GridViewColumnDesc(ModulesWindowColumnIds.AppDomain, dnSpy_Debugger_Resources.Column_AppDomain),
+					new GridViewColumnDesc(ModulesWindowColumnIds.Path, dnSpy_Debugger_Resources.Column_Path),
+				},
+			};
+			Descs.SortedColumnChanged += (a, b) => SortList();
 		}
+
 		// Don't change the order of these instances without also updating input passed to SearchMatcher.IsMatchAll()
 		static readonly SearchColumnDefinition[] searchColumnDefinitions = new SearchColumnDefinition[] {
 			new SearchColumnDefinition(PredefinedTextClassifierTags.ModulesWindowName, "n", dnSpy_Debugger_Resources.Column_Name),
@@ -266,17 +287,17 @@ namespace dnSpy.Debugger.ToolWindows.Modules {
 		}
 
 		// UI thread
-		void ClassificationFormatMap_ClassificationFormatMappingChanged(object sender, EventArgs e) {
+		void ClassificationFormatMap_ClassificationFormatMappingChanged(object? sender, EventArgs e) {
 			moduleContext.UIDispatcher.VerifyAccess();
 			RefreshThemeFields_UI();
 		}
 
 		// random thread
-		void DebuggerSettings_PropertyChanged(object sender, PropertyChangedEventArgs e) =>
+		void DebuggerSettings_PropertyChanged(object? sender, PropertyChangedEventArgs e) =>
 			UI(() => DebuggerSettings_PropertyChanged_UI(e.PropertyName));
 
 		// UI thread
-		void DebuggerSettings_PropertyChanged_UI(string propertyName) {
+		void DebuggerSettings_PropertyChanged_UI(string? propertyName) {
 			moduleContext.UIDispatcher.VerifyAccess();
 			if (propertyName == nameof(DebuggerSettings.UseHexadecimal))
 				RefreshHexFields_UI();
@@ -313,7 +334,7 @@ namespace dnSpy.Debugger.ToolWindows.Modules {
 		void UI(Action callback) => moduleContext.UIDispatcher.UI(callback);
 
 		// DbgManager thread
-		void DbgManager_ProcessesChanged(object sender, DbgCollectionChangedEventArgs<DbgProcess> e) {
+		void DbgManager_ProcessesChanged(object? sender, DbgCollectionChangedEventArgs<DbgProcess> e) {
 			if (e.Added) {
 				foreach (var p in e.Objects)
 					InitializeProcess_DbgThread(p);
@@ -341,7 +362,7 @@ namespace dnSpy.Debugger.ToolWindows.Modules {
 		}
 
 		// DbgManager thread
-		void DbgProcess_RuntimesChanged(object sender, DbgCollectionChangedEventArgs<DbgRuntime> e) {
+		void DbgProcess_RuntimesChanged(object? sender, DbgCollectionChangedEventArgs<DbgRuntime> e) {
 			if (e.Added) {
 				foreach (var r in e.Objects)
 					InitializeRuntime_DbgThread(r);
@@ -366,7 +387,7 @@ namespace dnSpy.Debugger.ToolWindows.Modules {
 		}
 
 		// DbgManager thread
-		void DbgRuntime_AppDomainsChanged(object sender, DbgCollectionChangedEventArgs<DbgAppDomain> e) {
+		void DbgRuntime_AppDomainsChanged(object? sender, DbgCollectionChangedEventArgs<DbgAppDomain> e) {
 			if (e.Added) {
 				foreach (var a in e.Objects)
 					InitializeAppDomain_DbgThread(a);
@@ -378,7 +399,7 @@ namespace dnSpy.Debugger.ToolWindows.Modules {
 					var coll = realAllItems;
 					for (int i = coll.Count - 1; i >= 0; i--) {
 						var moduleAppDomain = coll[i].Module.AppDomain;
-						if (moduleAppDomain == null)
+						if (moduleAppDomain is null)
 							continue;
 						foreach (var a in e.Objects) {
 							if (a == moduleAppDomain) {
@@ -393,7 +414,7 @@ namespace dnSpy.Debugger.ToolWindows.Modules {
 		}
 
 		// DbgManager thread
-		void DbgRuntime_ModulesChanged(object sender, DbgCollectionChangedEventArgs<DbgModule> e) {
+		void DbgRuntime_ModulesChanged(object? sender, DbgCollectionChangedEventArgs<DbgModule> e) {
 			if (e.Added)
 				UI(() => AddItems_UI(e.Objects));
 			else {
@@ -406,10 +427,10 @@ namespace dnSpy.Debugger.ToolWindows.Modules {
 		}
 
 		// DbgManager thread
-		void DbgAppDomain_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+		void DbgAppDomain_PropertyChanged(object? sender, PropertyChangedEventArgs e) {
 			if (e.PropertyName == nameof(DbgAppDomain.Name) || e.PropertyName == nameof(DbgAppDomain.Id)) {
 				UI(() => {
-					var appDomain = (DbgAppDomain)sender;
+					var appDomain = (DbgAppDomain)sender!;
 					foreach (var vm in realAllItems)
 						vm.RefreshAppDomainNames_UI(appDomain);
 				});
@@ -434,13 +455,12 @@ namespace dnSpy.Debugger.ToolWindows.Modules {
 		// UI thread
 		int GetInsertionIndex_UI(ModuleVM vm) {
 			Debug.Assert(moduleContext.UIDispatcher.CheckAccess());
-			var comparer = ModuleVMComparer.Instance;
 			var list = AllItems;
 			int lo = 0, hi = list.Count - 1;
 			while (lo <= hi) {
 				int index = (lo + hi) / 2;
 
-				int c = comparer.Compare(vm, list[index]);
+				int c = Compare(vm, list[index]);
 				if (c < 0)
 					hi = index - 1;
 				else if (c > 0)
@@ -452,29 +472,130 @@ namespace dnSpy.Debugger.ToolWindows.Modules {
 		}
 
 		// UI thread
-		void FilterList_UI(string filterText, SimpleProcessVM selectedProcess) {
+		void FilterList_UI(string filterText, SimpleProcessVM? selectedProcess) {
 			moduleContext.UIDispatcher.VerifyAccess();
 			if (string.IsNullOrWhiteSpace(filterText))
 				filterText = string.Empty;
 			moduleContext.SearchMatcher.SetSearchText(filterText);
+			SortList(filterText, selectedProcess);
+		}
 
+		// UI thread
+		void SortList() {
+			moduleContext.UIDispatcher.VerifyAccess();
+			SortList(filterText, selectedProcess);
+		}
+
+		// UI thread
+		void SortList(string filterText, SimpleProcessVM? selectedProcess) {
+			moduleContext.UIDispatcher.VerifyAccess();
 			var newList = new List<ModuleVM>(GetFilteredItems_UI(filterText, selectedProcess));
-			newList.Sort(ModuleVMComparer.Instance);
+			newList.Sort(this);
 			AllItems.Reset(newList);
 			InitializeNothingMatched(filterText, selectedProcess);
 		}
 
-		void InitializeNothingMatched() => InitializeNothingMatched(filterText, selectedProcess);
-		void InitializeNothingMatched(string filterText, SimpleProcessVM selectedProcess) =>
-			NothingMatched = AllItems.Count == 0 && !(string.IsNullOrWhiteSpace(filterText) && selectedProcess?.Process == null);
+		// UI thread
+		IEnumerable<ModuleVM> IModulesVM.Sort(IEnumerable<ModuleVM> modules) {
+			moduleContext.UIDispatcher.VerifyAccess();
+			var list = new List<ModuleVM>(modules);
+			list.Sort(this);
+			return list;
+		}
 
-		sealed class ModuleVMComparer : IComparer<ModuleVM> {
-			public static readonly IComparer<ModuleVM> Instance = new ModuleVMComparer();
-			public int Compare(ModuleVM x, ModuleVM y) => x.Order - y.Order;
+		void InitializeNothingMatched() => InitializeNothingMatched(filterText, selectedProcess);
+		void InitializeNothingMatched(string filterText, SimpleProcessVM? selectedProcess) =>
+			NothingMatched = AllItems.Count == 0 && string.IsNullOrWhiteSpace(filterText) && selectedProcess?.Process is not null;
+
+		public int Compare([AllowNull] ModuleVM x, [AllowNull] ModuleVM y) {
+			Debug.Assert(moduleContext.UIDispatcher.CheckAccess());
+			if ((object?)x == y)
+				return 0;
+			if (x is null)
+				return -1;
+			if (y is null)
+				return 1;
+			var (desc, dir) = Descs.SortedColumn;
+
+			int id;
+			if (desc is null || dir == GridViewSortDirection.Default) {
+				id = ModulesWindowColumnIds.Default_Order;
+				dir = GridViewSortDirection.Ascending;
+			}
+			else
+				id = desc.Id;
+
+			int diff;
+			switch (id) {
+			case ModulesWindowColumnIds.Default_Order:
+				diff = x.Order - y.Order;
+				break;
+
+			case ModulesWindowColumnIds.Icon:
+				Debug.Fail("Icon column can't be sorted");
+				diff = 0;
+				break;
+
+			case ModulesWindowColumnIds.Name:
+				diff = StringComparer.OrdinalIgnoreCase.Compare(GetName_UI(x), GetName_UI(y));
+				break;
+
+			case ModulesWindowColumnIds.OptimizedModule:
+				diff = Comparer<bool?>.Default.Compare(x.Module.IsOptimized, y.Module.IsOptimized);
+				break;
+
+			case ModulesWindowColumnIds.DynamicModule:
+				diff = Comparer<bool?>.Default.Compare(x.Module.IsDynamic, y.Module.IsDynamic);
+				break;
+
+			case ModulesWindowColumnIds.InMemoryModule:
+				diff = Comparer<bool?>.Default.Compare(x.Module.IsInMemory, y.Module.IsInMemory);
+				break;
+
+			case ModulesWindowColumnIds.Order:
+				diff = x.Module.Order - y.Module.Order;
+				break;
+
+			case ModulesWindowColumnIds.Version:
+				diff = new ModuleVersion(x.Module.Version).CompareTo(new ModuleVersion(y.Module.Version));
+				break;
+
+			case ModulesWindowColumnIds.Timestamp:
+				diff = Comparer<DateTime?>.Default.Compare(x.Module.Timestamp, y.Module.Timestamp);
+				break;
+
+			case ModulesWindowColumnIds.Address:
+				diff = x.Module.Address.CompareTo(y.Module.Address);
+				if (diff == 0)
+					diff = x.Module.Size.CompareTo(y.Module.Size);
+				break;
+
+			case ModulesWindowColumnIds.Process:
+				diff = StringComparer.OrdinalIgnoreCase.Compare(GetProcess_UI(x), GetProcess_UI(y));
+				break;
+
+			case ModulesWindowColumnIds.AppDomain:
+				diff = StringComparer.OrdinalIgnoreCase.Compare(GetAppDomain_UI(x), GetAppDomain_UI(y));
+				break;
+
+			case ModulesWindowColumnIds.Path:
+				diff = StringComparer.OrdinalIgnoreCase.Compare(x.Module.Filename, y.Module.Filename);
+				break;
+
+			default:
+				throw new InvalidOperationException();
+			}
+
+			if (diff == 0)
+				diff = x.Order - y.Order;
+			Debug.Assert(dir == GridViewSortDirection.Ascending || dir == GridViewSortDirection.Descending);
+			if (dir == GridViewSortDirection.Descending)
+				diff = -diff;
+			return diff;
 		}
 
 		// UI thread
-		IEnumerable<ModuleVM> GetFilteredItems_UI(string filterText, SimpleProcessVM selectedProcess) {
+		IEnumerable<ModuleVM> GetFilteredItems_UI(string filterText, SimpleProcessVM? selectedProcess) {
 			moduleContext.UIDispatcher.VerifyAccess();
 			foreach (var vm in realAllItems) {
 				if (IsMatch_UI(vm, filterText, selectedProcess))
@@ -483,9 +604,9 @@ namespace dnSpy.Debugger.ToolWindows.Modules {
 		}
 
 		// UI thread
-		bool IsMatch_UI(ModuleVM vm, string filterText, SimpleProcessVM selectedProcess) {
+		bool IsMatch_UI(ModuleVM vm, string filterText, SimpleProcessVM? selectedProcess) {
 			Debug.Assert(moduleContext.UIDispatcher.CheckAccess());
-			if (selectedProcess?.Process != null && selectedProcess.Process != vm.Module.Process)
+			if (selectedProcess?.Process is not null && selectedProcess.Process != vm.Module.Process)
 				return false;
 			// Common case check, we don't need to allocate any strings
 			if (filterText == string.Empty)
@@ -647,7 +768,7 @@ namespace dnSpy.Debugger.ToolWindows.Modules {
 					break;
 				}
 			}
-			if (selectedProcess == null || selectedProcess.Process == process)
+			if (selectedProcess is null || selectedProcess.Process == process)
 				SelectedProcess = processes.FirstOrDefault();
 		}
 
@@ -674,9 +795,15 @@ namespace dnSpy.Debugger.ToolWindows.Modules {
 		sealed class SimpleProcessVMComparer : IComparer<SimpleProcessVM> {
 			public static readonly SimpleProcessVMComparer Instance = new SimpleProcessVMComparer();
 			SimpleProcessVMComparer() { }
-			public int Compare(SimpleProcessVM x, SimpleProcessVM y) {
-				bool x1 = x.Process == null;
-				bool y1 = y.Process == null;
+			public int Compare([AllowNull] SimpleProcessVM x, [AllowNull] SimpleProcessVM y) {
+				if ((object?)x == y)
+					return 0;
+				if (x is null)
+					return -1;
+				if (y is null)
+					return 1;
+				bool x1 = x.Process is null;
+				bool y1 = y.Process is null;
 				if (x1 != y1) {
 					if (x1)
 						return -1;
@@ -685,7 +812,7 @@ namespace dnSpy.Debugger.ToolWindows.Modules {
 				else if (x1)
 					return 0;
 
-				int c = StringComparer.OrdinalIgnoreCase.Compare(x.Process.Name, y.Process.Name);
+				int c = StringComparer.OrdinalIgnoreCase.Compare(x.Process!.Name, y.Process!.Name);
 				if (c != 0)
 					return c;
 				return x.Process.Id.CompareTo(y.Process.Id);

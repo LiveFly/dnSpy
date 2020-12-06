@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -63,7 +63,7 @@ namespace dndbg.DotNet {
 			return data;
 		}
 
-		public byte[] ReadBytesUntilByte(byte b) {
+		public byte[]? ReadBytesUntilByte(byte b) {
 			var list = new List<byte>();
 			var origAddr = address;
 			const int MAX_BYTES_TO_CHECK = 0x10000;

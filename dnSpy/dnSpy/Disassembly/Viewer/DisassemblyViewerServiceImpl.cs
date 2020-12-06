@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -43,8 +43,8 @@ namespace dnSpy.Disassembly.Viewer {
 			settings = new DisassemblyViewerServiceSettingsImpl();
 		}
 
-		public override void Show(DisassemblyContentProvider contentProvider, bool newTab, string title) {
-			if (contentProvider == null)
+		public override void Show(DisassemblyContentProvider contentProvider, bool newTab) {
+			if (contentProvider is null)
 				throw new ArgumentNullException(nameof(contentProvider));
 
 			IDocumentTab tab;
@@ -52,7 +52,7 @@ namespace dnSpy.Disassembly.Viewer {
 				tab = documentTabService.OpenEmptyTab();
 			else
 				tab = documentTabService.GetOrCreateActiveTab();
-			var tabContent = new DisassemblyDocumentTabContent(documentViewerContentFactoryProvider, asmContentType, contentProvider, title);
+			var tabContent = new DisassemblyDocumentTabContent(documentViewerContentFactoryProvider, asmContentType, contentProvider);
 			tab.Show(tabContent, null, null);
 		}
 	}

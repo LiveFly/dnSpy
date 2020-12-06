@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -25,21 +25,21 @@ using dnSpy.Debugger.DotNet.CorDebug.Impl;
 
 namespace dnSpy.Debugger.DotNet.CorDebug.Steppers {
 	sealed class DbgDotNetStepperBreakpointImpl : DbgDotNetStepperBreakpoint {
-		public override event EventHandler<DbgDotNetStepperBreakpointEventArgs> Hit;
+		public override event EventHandler<DbgDotNetStepperBreakpointEventArgs>? Hit;
 
 		readonly DbgEngineImpl engine;
-		readonly DbgThread thread;
+		readonly DbgThread? thread;
 		readonly DnILCodeBreakpoint breakpoint;
 
-		public DbgDotNetStepperBreakpointImpl(DbgEngineImpl engine, DbgThread thread, DbgModule module, uint token, uint offset) {
+		public DbgDotNetStepperBreakpointImpl(DbgEngineImpl engine, DbgThread? thread, DbgModule module, uint token, uint offset) {
 			this.engine = engine ?? throw new ArgumentNullException(nameof(engine));
 			this.thread = thread;
 			engine.VerifyCorDebugThread();
 			breakpoint = engine.CreateBreakpointForStepper(module, token, offset, OnBreakpointHit);
 		}
 
-		bool OnBreakpointHit(CorThread thread) {
-			if (this.thread == null || engine.TryGetThread(thread) == this.thread) {
+		bool OnBreakpointHit(CorThread? thread) {
+			if (this.thread is null || engine.TryGetThread(thread) == this.thread) {
 				var currentThread = engine.TryGetThread(thread) ?? throw new InvalidOperationException();
 				var e = new DbgDotNetStepperBreakpointEventArgs(currentThread);
 				Hit?.Invoke(this, e);

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -24,15 +24,15 @@ using Microsoft.VisualStudio.Text;
 namespace dnSpy.Text {
 	sealed class SimpleTextImage : ITextImage {
 		readonly string text;
-		uint[] lineOffsets;
+		uint[]? lineOffsets;
 
 		public char this[int position] => text[position];
-		public ITextImageVersion Version => null;
+		public ITextImageVersion? Version => null;
 		public int Length => text.Length;
 
 		public int LineCount {
 			get {
-				if (lineOffsets == null)
+				if (lineOffsets is null)
 					lineOffsets = TextImageUtils.CreateLineOffsets(this);
 				return lineOffsets.Length;
 			}
@@ -47,7 +47,7 @@ namespace dnSpy.Text {
 		public ITextImage GetSubText(Span span) => new SimpleTextImage(GetText(span));
 
 		public TextImageLine GetLineFromLineNumber(int lineNumber) {
-			if (lineOffsets == null)
+			if (lineOffsets is null)
 				lineOffsets = TextImageUtils.CreateLineOffsets(this);
 			TextImageUtils.GetLineInfo(lineOffsets, lineNumber, Length, out int start, out int end, out int lineBreakLength);
 			return new TextImageLine(this, lineNumber, new Span(start, end - start), lineBreakLength);
@@ -58,7 +58,7 @@ namespace dnSpy.Text {
 		public int GetLineNumberFromPosition(int position) {
 			if ((uint)position > (uint)Length)
 				throw new ArgumentOutOfRangeException(nameof(position));
-			if (lineOffsets == null)
+			if (lineOffsets is null)
 				lineOffsets = TextImageUtils.CreateLineOffsets(this);
 			return TextImageUtils.GetLineNumberFromPosition(lineOffsets, position, Length);
 		}

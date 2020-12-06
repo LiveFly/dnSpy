@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -27,7 +27,7 @@ namespace dnSpy.AsmEditor.DnlibDialogs {
 		MethodOverride methodOverride;
 
 		public ICommand ReinitializeCommand => new RelayCommand(a => Reinitialize());
-		public string FullName => methodOverride.MethodDeclaration.ToString();
+		public string FullName => methodOverride.MethodDeclaration.ToString()!;
 
 		public IMethodDefOrRef MethodBody {
 			get => methodOverride.MethodBody;

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -36,7 +36,7 @@ namespace dnSpy.Debugger.DotNet.CorDebug.Dialogs.DebugProgram {
 
 		public override IEnumerable<StartDebuggingOptionsPage> Create(StartDebuggingOptionsPageContext context) {
 			yield return new DotNetFrameworkStartDebuggingOptionsPage(pickFilename, pickDirectory);
-			yield return new DotNetCoreStartDebuggingOptionsPage(pickFilename, pickDirectory);
+			yield return new DotNetStartDebuggingOptionsPage(pickFilename, pickDirectory);
 		}
 	}
 }

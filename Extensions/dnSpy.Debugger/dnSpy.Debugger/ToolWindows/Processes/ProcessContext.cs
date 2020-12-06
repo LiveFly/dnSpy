@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -19,6 +19,7 @@
 
 using dnSpy.Contracts.Debugger.Text.DnSpy;
 using dnSpy.Contracts.Text.Classification;
+using dnSpy.Contracts.ToolWindows.Search;
 using dnSpy.Debugger.UI;
 using Microsoft.VisualStudio.Text.Classification;
 
@@ -30,6 +31,7 @@ namespace dnSpy.Debugger.ToolWindows.Processes {
 		DbgTextClassifierTextColorWriter TextClassifierTextColorWriter { get; }
 		ProcessFormatter Formatter { get; }
 		bool SyntaxHighlight { get; }
+		SearchMatcher SearchMatcher { get; }
 	}
 
 	sealed class ProcessContext : IProcessContext {
@@ -39,12 +41,15 @@ namespace dnSpy.Debugger.ToolWindows.Processes {
 		public DbgTextClassifierTextColorWriter TextClassifierTextColorWriter { get; }
 		public ProcessFormatter Formatter { get; set; }
 		public bool SyntaxHighlight { get; set; }
+		public SearchMatcher SearchMatcher { get; }
 
-		public ProcessContext(UIDispatcher uiDispatcher, IClassificationFormatMap classificationFormatMap, ITextElementProvider textElementProvider) {
+		public ProcessContext(UIDispatcher uiDispatcher, IClassificationFormatMap classificationFormatMap, ITextElementProvider textElementProvider, SearchMatcher searchMatcher, ProcessFormatter formatter) {
 			UIDispatcher = uiDispatcher;
 			ClassificationFormatMap = classificationFormatMap;
 			TextElementProvider = textElementProvider;
 			TextClassifierTextColorWriter = new DbgTextClassifierTextColorWriter();
+			SearchMatcher = searchMatcher;
+			Formatter = formatter;
 		}
 	}
 }

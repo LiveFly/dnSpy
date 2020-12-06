@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -31,6 +31,6 @@ namespace dnSpy.Contracts.Debugger {
 		/// </summary>
 		/// <param name="runtime">Runtime</param>
 		/// <returns></returns>
-		public static bool IsDotNetRuntime(this DbgRuntime runtime) => runtime.Tags.Any(a => StringComparer.Ordinal.Equals(PredefinedDotNetDbgRuntimeTags.DotNet, a));
+		public static bool IsDotNetRuntime(this DbgRuntime runtime) => runtime.Tags.Any(a => StringComparer.Ordinal.Equals(PredefinedDotNetDbgRuntimeTags.DotNetBase, a));
 	}
 }

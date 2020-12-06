@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -30,7 +30,7 @@ namespace dnSpy.AsmEditor.Compiler.MDEditor {
 		readonly MetadataEditor mdEditor;
 		readonly MDWriterStream stream;
 		readonly List<PESection> sections;
-		PESection textSection;
+		PESection? textSection;
 		long dataDirPosition;
 
 		public MetadataEditor MetadataEditor => mdEditor;
@@ -90,12 +90,12 @@ namespace dnSpy.AsmEditor.Compiler.MDEditor {
 
 			sections.Add(textSection = new PESection(".text", 0x60000020));
 
-			StrongNameSignatureSectionData snData = null;
+			StrongNameSignatureSectionData? snData = null;
 			var cor20 = mdEditor.RealMetadata.ImageCor20Header;
 			if ((cor20.Flags & ComImageFlags.StrongNameSigned) != 0 && cor20.StrongNameSignature.Size != 0 && cor20.StrongNameSignature.VirtualAddress != 0)
 				snData = new StrongNameSignatureSectionData(cor20.StrongNameSignature.Size);
 
-			if (snData != null)
+			if (snData is not null)
 				textSection.SectionData.Add(snData);
 			var mdData = new DotNetMetadataSectionData(mdEditor);
 			textSection.SectionData.Add(new ImageCor20HeaderSectionData(mdData, snData));

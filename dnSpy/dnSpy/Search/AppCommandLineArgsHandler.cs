@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -43,17 +43,17 @@ namespace dnSpy.Search {
 			var loc = GetSearchLocation(args.SearchIn);
 			var typ = GetSearchType(args.SearchFor);
 
-			if (loc != null) {
+			if (loc is not null) {
 				show = true;
 				searchService.Value.SearchLocation = loc.Value;
 			}
 
-			if (typ != null) {
+			if (typ is not null) {
 				show = true;
 				searchService.Value.SearchType = typ.Value;
 			}
 
-			if (args.SearchText != null) {
+			if (args.SearchText is not null) {
 				show = true;
 				searchService.Value.SearchText = args.SearchText;
 			}

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -98,7 +98,7 @@ namespace dnSpy.Contracts.Debugger.Text.DnSpy {
 		}
 
 		public static DbgTextColor ToDebuggerColor(object color) {
-			if (color == null)
+			if (color is null)
 				throw new ArgumentNullException(nameof(color));
 			if (!toDebuggerColor.TryGetValue(color, out var debuggerColor)) {
 				Debug.Fail($"Couldn't convert color '{color}'");

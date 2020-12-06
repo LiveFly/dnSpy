@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -50,7 +50,7 @@ namespace dnSpy.Contracts.Command {
 		public static bool operator ==(KeyShortcut a, KeyShortcut b) => a.Equals(b);
 		public static bool operator !=(KeyShortcut a, KeyShortcut b) => !a.Equals(b);
 		public bool Equals(KeyShortcut other) => KeyInput1 == other.KeyInput1 && KeyInput2 == other.KeyInput2;
-		public override bool Equals(object obj) => obj is KeyShortcut && Equals((KeyShortcut)obj);
+		public override bool Equals(object? obj) => obj is KeyShortcut && Equals((KeyShortcut)obj);
 		public override int GetHashCode() => KeyInput1.GetHashCode() ^ KeyInput2.GetHashCode();
 		public override string ToString() => HasTwoKeyInputs ? $"{KeyInput1}, {KeyInput2}" : KeyInput1.ToString();
 	}

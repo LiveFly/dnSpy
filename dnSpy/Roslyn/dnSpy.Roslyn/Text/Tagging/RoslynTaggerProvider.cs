@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -38,7 +38,7 @@ namespace dnSpy.Roslyn.Text.Tagging {
 			this.roslynDocumentChangedService = roslynDocumentChangedService;
 		}
 
-		public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag =>
+		public ITagger<T>? CreateTagger<T>(ITextBuffer buffer) where T : ITag =>
 			new RoslynTagger(buffer, themeClassificationTypeService, roslynDocumentChangedService) as ITagger<T>;
 	}
 }

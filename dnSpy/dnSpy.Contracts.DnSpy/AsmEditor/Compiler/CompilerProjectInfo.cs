@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -32,7 +32,7 @@ namespace dnSpy.Contracts.AsmEditor.Compiler {
 		/// <summary>
 		/// The public key or null if none
 		/// </summary>
-		public byte[] PublicKey { get; }
+		public byte[]? PublicKey { get; }
 
 		/// <summary>
 		/// Assembly and module references
@@ -57,7 +57,7 @@ namespace dnSpy.Contracts.AsmEditor.Compiler {
 		/// <param name="assemblyReferences">Assembly and module references</param>
 		/// <param name="assemblyReferenceResolver">Reference resolver</param>
 		/// <param name="platform">Platform</param>
-		public CompilerProjectInfo(string assemblyName, byte[] publicKey, CompilerMetadataReference[] assemblyReferences, IAssemblyReferenceResolver assemblyReferenceResolver, TargetPlatform platform) {
+		public CompilerProjectInfo(string assemblyName, byte[]? publicKey, CompilerMetadataReference[] assemblyReferences, IAssemblyReferenceResolver assemblyReferenceResolver, TargetPlatform platform) {
 			AssemblyName = assemblyName ?? throw new ArgumentNullException(nameof(assemblyName));
 			PublicKey = publicKey;
 			AssemblyReferences = assemblyReferences ?? throw new ArgumentNullException(nameof(assemblyReferences));

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -21,11 +21,11 @@ using System.IO;
 
 namespace dnSpy.Debugger.DotNet.CorDebug.Impl {
 	static class PathUtils {
-		public static string NormalizeFilename(string filename) {
+		public static string? NormalizeFilename(string? filename) {
 			if (!File.Exists(filename))
 				return filename;
 			try {
-				return Path.GetFullPath(filename);
+				return Path.GetFullPath(filename!);
 			}
 			catch {
 			}

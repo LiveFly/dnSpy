@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -57,12 +57,12 @@ namespace dnSpy.Debugger.Exceptions {
 		}
 
 		public override void WriteName(IDbgTextWriter writer, DbgExceptionDefinition definition, bool includeDescription) {
-			if (writer == null)
+			if (writer is null)
 				throw new ArgumentNullException(nameof(writer));
-			if (definition.Id.Category == null)
+			if (definition.Id.Category is null)
 				throw new ArgumentException();
 			WriteNameCore(writer, definition);
-			if (includeDescription && definition.Description != null) {
+			if (includeDescription && definition.Description is not null) {
 				writer.Write(DbgTextColor.Text, " ");
 				WriteDescription(writer, definition);
 			}
@@ -112,7 +112,7 @@ namespace dnSpy.Debugger.Exceptions {
 		}
 
 		void WriteDescription(IDbgTextWriter writer, DbgExceptionDefinition definition) {
-			if (definition.Description == null)
+			if (definition.Description is null)
 				return;
 			writer.Write(DbgTextColor.Comment, "(");
 			writer.Write(DbgTextColor.Comment, definition.Description);

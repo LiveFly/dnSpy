@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -31,7 +31,7 @@ namespace dnSpy.AsmEditor.Compiler {
 		/// <summary>
 		/// New or existing type in target module
 		/// </summary>
-		public TypeDef TargetType { get; protected set; }
+		public TypeDef? TargetType { get; protected set; }
 	}
 
 	/// <summary>
@@ -94,7 +94,7 @@ namespace dnSpy.AsmEditor.Compiler {
 		internal MergeKind MergeKind { get; }
 
 		public bool IsEmpty =>
-			TargetType.IsGlobalModuleType &&
+			TargetType!.IsGlobalModuleType &&
 			NewOrExistingNestedTypes.Count == 0 &&
 			NewProperties.Count == 0 &&
 			NewEvents.Count == 0 &&

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -78,7 +78,7 @@ namespace dnSpy.Contracts.Metadata {
 		/// </summary>
 		/// <param name="obj">Object</param>
 		/// <returns></returns>
-		public override bool Equals(object obj) => obj is ModuleTokenId && Equals((ModuleTokenId)obj);
+		public override bool Equals(object? obj) => obj is ModuleTokenId && Equals((ModuleTokenId)obj);
 
 		/// <summary>
 		/// GetHashCode()

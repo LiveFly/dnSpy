@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -57,7 +57,7 @@ namespace dnSpy.AsmEditor.DnlibDialogs {
 			get {
 				var mask = GenericParamAttributes.VarianceMask;
 				return (attributes & ~mask) |
-					((GenericParamAttributes)((int)(GPVariance)GPVarianceVM.SelectedItem << 0) & GenericParamAttributes.VarianceMask);
+					((GenericParamAttributes)((int)(GPVariance)GPVarianceVM.SelectedItem! << 0) & GenericParamAttributes.VarianceMask);
 			}
 			set {
 				if (attributes != value) {
@@ -97,7 +97,7 @@ namespace dnSpy.AsmEditor.DnlibDialogs {
 				Attributes &= ~flag;
 		}
 
-		public string Name {
+		public string? Name {
 			get => name;
 			set {
 				if (name != value) {
@@ -107,7 +107,7 @@ namespace dnSpy.AsmEditor.DnlibDialogs {
 				}
 			}
 		}
-		UTF8String name;
+		UTF8String? name;
 
 		public UInt16VM Number { get; }
 		public TypeDefOrRefAndCAsVM<GenericParamConstraint> TypeDefOrRefAndCAsVM { get; }
@@ -116,7 +116,7 @@ namespace dnSpy.AsmEditor.DnlibDialogs {
 
 		readonly ModuleDef ownerModule;
 
-		public GenericParamVM(GenericParamOptions options, ModuleDef ownerModule, IDecompilerService decompilerService, TypeDef ownerType, MethodDef ownerMethod) {
+		public GenericParamVM(GenericParamOptions options, ModuleDef ownerModule, IDecompilerService decompilerService, TypeDef? ownerType, MethodDef? ownerMethod) {
 			this.ownerModule = ownerModule;
 			origOptions = options;
 			Number = new UInt16VM(a => { OnPropertyChanged(nameof(FullName)); HasErrorUpdated(); });
@@ -131,9 +131,9 @@ namespace dnSpy.AsmEditor.DnlibDialogs {
 				OwnerType = ownerType,
 				OwnerMethod = ownerMethod,
 			};
-			if (ownerType != null && ownerType.GenericParameters.Count == 0)
+			if (ownerType is not null && ownerType.GenericParameters.Count == 0)
 				typeSigCreatorOptions.CanAddGenericTypeVar = false;
-			if (ownerMethod != null && ownerMethod.GenericParameters.Count > 0)
+			if (ownerMethod is not null && ownerMethod.GenericParameters.Count > 0)
 				typeSigCreatorOptions.CanAddGenericMethodVar = true;
 			TypeSigCreator = new TypeSigCreatorVM(typeSigCreatorOptions);
 

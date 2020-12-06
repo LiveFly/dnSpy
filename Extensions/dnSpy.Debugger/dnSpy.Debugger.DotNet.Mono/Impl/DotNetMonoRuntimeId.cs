@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -22,10 +22,10 @@ using dnSpy.Contracts.Debugger;
 
 namespace dnSpy.Debugger.DotNet.Mono.Impl {
 	sealed class DotNetMonoRuntimeId : RuntimeId {
-		public string Address { get; set; }
+		public string? Address { get; set; }
 		public ushort Port { get; set; }
 
-		public override bool Equals(object obj) =>
+		public override bool Equals(object? obj) =>
 			obj is DotNetMonoRuntimeId other &&
 			StringComparer.OrdinalIgnoreCase.Equals(Address ?? string.Empty, other.Address ?? string.Empty) &&
 			Port == other.Port;

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -26,7 +26,7 @@ using dnSpy.Debugger.DotNet.CorDebug.Native;
 namespace dnSpy.Debugger.DotNet.CorDebug.Dialogs.AttachToProcess {
 	static class DebuggableProcesses {
 		static readonly int currentProcessId = Process.GetCurrentProcess().Id;
-		public static IEnumerable<Process> GetProcesses(int[] processIds, Func<Process, bool> isValidProcess, CancellationToken cancellationToken) {
+		public static IEnumerable<Process> GetProcesses(int[] processIds, Func<Process, bool>? isValidProcess, CancellationToken cancellationToken) {
 			var processes = GetProcesses(processIds);
 			try {
 				foreach (var process in processes) {
@@ -58,7 +58,7 @@ namespace dnSpy.Debugger.DotNet.CorDebug.Dialogs.AttachToProcess {
 					}
 					if (process.HasExited)
 						continue;
-					if (isValidProcess != null) {
+					if (isValidProcess is not null) {
 						if (!isValidProcess(process) || process.HasExited)
 							continue;
 					}

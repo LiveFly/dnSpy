@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -31,6 +31,6 @@ namespace dnSpy.AsmEditor.Compiler.MDEditor {
 		}
 
 		public override bool MustRewriteHeap() => false;
-		public override bool ExistsInMetadata => stream.StreamHeader != null;
+		public override bool ExistsInMetadata => stream.StreamHeader is not null;
 	}
 }

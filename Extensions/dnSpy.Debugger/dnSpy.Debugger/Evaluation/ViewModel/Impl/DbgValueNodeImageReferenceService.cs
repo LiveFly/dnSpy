@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -152,7 +152,7 @@ namespace dnSpy.Debugger.Evaluation.ViewModel.Impl {
 		}
 
 		public override ImageReference GetImageReference(string imageName) {
-			if (imageName == null)
+			if (imageName is null)
 				return ImageReference.None;
 			if (toImageReference.TryGetValue(imageName, out var imgRef))
 				return imgRef;

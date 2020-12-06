@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -22,43 +22,43 @@ using dnSpy.Debugger.DotNet.Metadata;
 
 namespace dnSpy.Roslyn.Debugger.Formatters {
 	static class KeyValuePairTypeUtils {
-		const string KeyFieldName = "key";
-		const string ValueFieldName = "value";
-
 		public static bool IsKeyValuePair(DmdType type) {
+			if (type.MetadataName != "KeyValuePair`2" || type.MetadataNamespace != "System.Collections.Generic")
+				return false;
 			if (!type.IsConstructedGenericType)
 				return false;
 			type = type.GetGenericTypeDefinition();
 			return type == type.AppDomain.GetWellKnownType(DmdWellKnownType.System_Collections_Generic_KeyValuePair_T2, isOptional: true);
 		}
 
-		public static (DmdFieldInfo keyField, DmdFieldInfo valueField) TryGetFields(DmdType type) {
+		public static (DmdFieldInfo? keyField, DmdFieldInfo? valueField) TryGetFields(DmdType type) {
 			Debug.Assert(IsKeyValuePair(type));
+			return TryGetFields(type, KnownMemberNames.KeyValuePair_Key_FieldName, KnownMemberNames.KeyValuePair_Value_FieldName);
+		}
 
-			DmdFieldInfo keyField = null;
-			DmdFieldInfo valueField = null;
+		public static (DmdFieldInfo? keyField, DmdFieldInfo? valueField) TryGetFields(DmdType type, string keyFieldName, string valueFieldName) {
+			DmdFieldInfo? keyField = null;
+			DmdFieldInfo? valueField = null;
 			var fields = type.DeclaredFields;
 			for (int i = 0; i < fields.Count; i++) {
 				var field = fields[i];
 				if (field.IsStatic || field.IsLiteral)
 					continue;
-				switch (field.Name) {
-				case KeyFieldName:
-					if ((object)keyField != null)
+				if (field.Name == keyFieldName) {
+					if (keyField is not null)
 						return (null, null);
 					keyField = field;
-					break;
-				case ValueFieldName:
-					if ((object)valueField != null)
+				}
+				else if (field.Name == valueFieldName) {
+					if (valueField is not null)
 						return (null, null);
 					valueField = field;
-					break;
-				default:
-					return (null, null);
 				}
+				else
+					return (null, null);
 			}
 
-			if ((object)keyField == null || (object)valueField == null)
+			if (keyField is null || valueField is null)
 				return (null, null);
 			return (keyField, valueField);
 		}

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -52,7 +52,7 @@ namespace dnSpy.Roslyn.Debugger.Formatters.VisualBasic {
 			{ "op_Explicit", "Narrowing Operator CType".Split(' ') },
 		};
 
-		public static string[] TryGetOperatorInfo(string name) {
+		public static string[]? TryGetOperatorInfo(string name) {
 			nameToOperatorName.TryGetValue(name, out var list);
 			return list;
 		}

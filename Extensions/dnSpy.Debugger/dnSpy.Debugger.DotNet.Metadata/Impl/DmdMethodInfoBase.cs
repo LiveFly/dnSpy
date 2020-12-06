@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -24,11 +24,11 @@ namespace dnSpy.Debugger.DotNet.Metadata.Impl {
 	abstract class DmdMethodInfoBase : DmdMethodInfo {
 		sealed private protected override void YouCantDeriveFromThisClass() => throw new InvalidOperationException();
 
-		public sealed override DmdModule Module => DeclaringType.Module;
+		public sealed override DmdModule Module => DeclaringType!.Module;
 		public sealed override DmdType ReturnType => GetMethodSignature().ReturnType;
 
 		public sealed override DmdMethodSignature GetMethodSignature(IList<DmdType> genericMethodArguments) {
-			if (genericMethodArguments == null)
+			if (genericMethodArguments is null)
 				throw new ArgumentNullException(nameof(genericMethodArguments));
 			if (!IsGenericMethodDefinition)
 				throw new ArgumentException();
@@ -41,9 +41,9 @@ namespace dnSpy.Debugger.DotNet.Metadata.Impl {
 		// Only overridden by DmdMethodDef and DmdMethodRef
 		private protected virtual DmdMethodSignature GetMethodSignatureCore(IList<DmdType> genericMethodArguments) => throw new InvalidOperationException();
 
-		public sealed override object Invoke(object context, object obj, DmdBindingFlags invokeAttr, object[] parameters) =>
+		public sealed override object? Invoke(object? context, object? obj, DmdBindingFlags invokeAttr, object?[]? parameters) =>
 			AppDomain.Invoke(context, this, obj, parameters);
 
-		internal abstract DmdMethodBody GetMethodBody(IList<DmdType> genericMethodArguments);
+		internal abstract DmdMethodBody? GetMethodBody(IList<DmdType> genericMethodArguments);
 	}
 }

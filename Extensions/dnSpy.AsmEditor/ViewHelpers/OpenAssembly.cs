@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -30,7 +30,7 @@ namespace dnSpy.AsmEditor.ViewHelpers {
 
 		public OpenAssembly(IDsDocumentService documentService) => this.documentService = documentService;
 
-		public IDsDocument Open() => Open(false).FirstOrDefault();
+		public IDsDocument? Open() => Open(false).FirstOrDefault();
 		public IDsDocument[] OpenMany() => Open(true);
 
 		IDsDocument[] Open(bool many) {
@@ -46,7 +46,7 @@ namespace dnSpy.AsmEditor.ViewHelpers {
 			foreach (var filename in dialog.FileNames) {
 				var info = DsDocumentInfo.CreateDocument(filename);
 				var file = documentService.TryGetOrCreate(info);
-				if (file != null)
+				if (file is not null)
 					list.Add(file);
 			}
 			return list.ToArray();

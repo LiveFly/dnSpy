@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -27,7 +27,7 @@ namespace dnSpy.Settings.Dialog {
 		[Export]
 		[Name(TreeViewContentTypes.TreeViewNodeAppSettings)]
 		[BaseDefinition(TreeViewContentTypes.TreeViewNode)]
-		static readonly ContentTypeDefinition TreeViewNodeAppSettings;
+		static readonly ContentTypeDefinition? TreeViewNodeAppSettings;
 #pragma warning restore CS0169
 	}
 }

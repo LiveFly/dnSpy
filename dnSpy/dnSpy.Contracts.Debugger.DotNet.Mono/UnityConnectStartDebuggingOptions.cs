@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -30,7 +30,7 @@ namespace dnSpy.Contracts.Debugger.DotNet.Mono {
 		/// <param name="other">Destination</param>
 		/// <returns></returns>
 		public UnityConnectStartDebuggingOptions CopyTo(UnityConnectStartDebuggingOptions other) {
-			if (other == null)
+			if (other is null)
 				throw new ArgumentNullException(nameof(other));
 			base.CopyTo(other);
 			return other;

@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -40,7 +40,7 @@ namespace dnSpy.Contracts.Search {
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 		public override DocumentTreeNodeFilterResult GetResult(AssemblyDef asm) {
-			if (assembly == null || asm != assembly)
+			if (assembly is null || asm != assembly)
 				return new DocumentTreeNodeFilterResult(FilterType.Hide, false);
 			return new DocumentTreeNodeFilterResult(FilterType.Visible, false);
 		}
@@ -48,7 +48,7 @@ namespace dnSpy.Contracts.Search {
 		public override DocumentTreeNodeFilterResult GetResult(ModuleDef mod) {
 			if (mod.Assembly != assembly)
 				return new DocumentTreeNodeFilterResult(FilterType.Hide, false);
-			if (assembly == null || assembly.ManifestModule != module) {
+			if (assembly is null || assembly.ManifestModule != module) {
 				if (mod != module)
 					return new DocumentTreeNodeFilterResult(FilterType.Hide, false);
 				return new DocumentTreeNodeFilterResult(FilterType.Visible, false);

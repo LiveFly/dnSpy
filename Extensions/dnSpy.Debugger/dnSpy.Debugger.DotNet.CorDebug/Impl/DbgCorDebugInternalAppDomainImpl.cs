@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -28,7 +28,7 @@ namespace dnSpy.Debugger.DotNet.CorDebug.Impl {
 		public override DmdAppDomain ReflectionAppDomain { get; }
 		public override DbgAppDomain AppDomain => appDomain ?? throw new InvalidOperationException();
 		internal DnAppDomain DnAppDomain { get; }
-		DbgAppDomain appDomain;
+		DbgAppDomain? appDomain;
 		public DbgCorDebugInternalAppDomainImpl(DmdAppDomain reflectionAppDomain, DnAppDomain dnAppDomain) {
 			ReflectionAppDomain = reflectionAppDomain ?? throw new ArgumentNullException(nameof(reflectionAppDomain));
 			DnAppDomain = dnAppDomain ?? throw new ArgumentNullException(nameof(dnAppDomain));

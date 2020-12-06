@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -28,7 +28,7 @@ namespace dnSpy.Debugger.DotNet.Mono.Impl.Attach {
 		/// <summary>
 		/// The IP address <c>mono.exe</c> is listening on or null / empty string to use <c>127.0.0.1</c>
 		/// </summary>
-		public string Address { get; set; }
+		public string? Address { get; set; }
 
 		/// <summary>
 		/// The port <c>mono.exe</c> is listening on
@@ -50,7 +50,7 @@ namespace dnSpy.Debugger.DotNet.Mono.Impl.Attach {
 		/// </summary>
 		/// <param name="other">Destination</param>
 		protected void CopyTo(MonoAttachToProgramOptionsBase other) {
-			if (other == null)
+			if (other is null)
 				throw new ArgumentNullException(nameof(other));
 			base.CopyTo(other);
 			other.Address = Address;

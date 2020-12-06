@@ -1,5 +1,5 @@
-﻿/*
-    Copyright (C) 2014-2018 de4dot@gmail.com
+/*
+    Copyright (C) 2014-2019 de4dot@gmail.com
 
     This file is part of dnSpy
 
@@ -21,7 +21,7 @@ using System;
 
 namespace dnSpy.Debugger.Breakpoints.Code.CondChecker {
 	readonly struct DbgCodeBreakpointCheckResult {
-		public string ErrorMessage { get; }
+		public string? ErrorMessage { get; }
 		public bool ShouldBreak { get; }
 
 		public DbgCodeBreakpointCheckResult(bool shouldBreak) {
